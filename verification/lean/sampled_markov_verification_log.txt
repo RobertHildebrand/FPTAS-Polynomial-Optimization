@@ -1,0 +1,13 @@
+Lean (version 4.34.0-rc2, arm64-apple-darwin24.6.0, commit 6a10ac8c22beadecabdbb0919c2b50214762f91d, Release)
+Mathlib: 85e3a25e006c35636f0e53b0e9296caca2685bc0
+
+'SampledMarkov.markov_difference' depends on axioms: [propext, Classical.choice, Quot.sound]
+'SampledMarkov.nearest_integer' depends on axioms: [propext, Classical.choice, Quot.sound]
+'SampledMarkov.sampled_sup_bound' depends on axioms: [propext, Classical.choice, Quot.sound]
+'SampledMarkov.second_difference_bound' depends on axioms: [propext, Classical.choice, Quot.sound]
+'SampledMarkov.sampled_markov' depends on axioms: [propext, Classical.choice, Quot.sound]
+'SampledMarkov.representative_at_minimum' depends on axioms: [propext, Classical.choice, Quot.sound]
+'SampledMarkov.representative_at_maximum' depends on axioms: [propext, Classical.choice, Quot.sound]
+'SampledMarkov.select_representative' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+PASS: 8 theorems; no custom axioms or sorryAx.

@@ -1,0 +1,27 @@
+Lean (version 4.34.0-rc2, arm64-apple-darwin24.6.0, commit 6a10ac8c22beadecabdbb0919c2b50214762f91d, Release)
+Mathlib: 85e3a25e006c35636f0e53b0e9296caca2685bc0
+FPTASCalculations.lean:115:4: warning: Try `simp at hy` instead of `simpa using hy`
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+FPTASCalculations.lean:120:4: warning: Try `simp at this` instead of `simpa using this`
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+
+'FPTASCalculations.interval_width' depends on axioms: [propext, Classical.choice, Quot.sound]
+'FPTASCalculations.slack_extrapolation' depends on axioms: [propext, Classical.choice, Quot.sound]
+'FPTASCalculations.sampled_sup_algebra' depends on axioms: [propext, Classical.choice, Quot.sound]
+'FPTASCalculations.second_difference_transfer' depends on axioms: [propext, Classical.choice, Quot.sound]
+'FPTASCalculations.refinement_error' depends on axioms: [propext, Classical.choice, Quot.sound]
+'FPTASCalculations.local_comparison' depends on axioms: [propext, Classical.choice, Quot.sound]
+'FPTASCalculations.uniform_model_error' depends on axioms: [propext, Classical.choice, Quot.sound]
+'FPTASCalculations.nonnegative_maximization' depends on axioms: [propext, Classical.choice, Quot.sound]
+'FPTASCalculations.ceiling_refinement' depends on axioms: [propext, Classical.choice, Quot.sound]
+'FPTASCalculations.cover_solve_select' depends on axioms: [propext, Classical.choice, Quot.sound]
+'FPTASCalculations.empty_candidates_iff' depends on axioms: [propext, Classical.choice, Quot.sound]
+'FPTASCalculations.representative_range_guarantee' depends on axioms: [propext, Classical.choice, Quot.sound]
+'FPTASCalculations.linear_slack_progression' depends on axioms: [propext, Classical.choice, Quot.sound]
+'FPTASCalculations.reflecting_cell_progression' depends on axioms: [propext, Classical.choice, Quot.sound]
+'FPTASCalculations.mixed_integer_progression' depends on axioms: [propext, Classical.choice, Quot.sound]
+'FPTASCalculations.integer_slack_gap' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+PASS: 16 theorems; no custom axioms or sorryAx.

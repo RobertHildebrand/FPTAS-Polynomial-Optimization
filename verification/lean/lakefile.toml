@@ -1,0 +1,12 @@
+name = "fptas_polynomial_optimization"
+version = "0.1.0"
+defaultTargets = ["FPTAS"]
+
+[[lean_lib]]
+name = "FPTAS"
+roots = ["FPTASCalculations", "SampledMarkov", "LineRestriction"]
+
+[[require]]
+name = "mathlib"
+scope = "leanprover-community"
+rev = "85e3a25e006c35636f0e53b0e9296caca2685bc0"
