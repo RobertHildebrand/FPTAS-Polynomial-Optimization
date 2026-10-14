@@ -52,7 +52,9 @@ We use $d$ for dimension, $D$ for total degree, and $\mathbf{x}_{\eps}$ for the 
 
 De Loera, Hemmecke, K\"oppe, and Weismantel established fully polynomial approximation schemes based on short rational generating functions, including nonnegative polynomial maximization and range-relative approximation of arbitrary polynomial objectives in fixed dimension \cite{DHKW06,DHKW08}. Del Pia gives a geometric range-relative approximation algorithm for bounded mixed-integer quadratic programs with fixed quadratic rank and fixed number of integer variables \cite{DelPia}. We give an alternative construction for the bounded, pure-integer problem. The purpose is to obtain a short proof using linear feasibility, with explicit dependence on the encoding length.
 
-Cook--Hartmann--Kannan--McDiarmid (CHKM) use a slack-based reflecting decomposition in their study of integer hulls \cite{CHKM}. Ari and Hildebrand formulate this geometry through symmetric displacement sets and use it in exact quadratic and cubic optimization \cite[Section~2]{AH}. We replace one-step reflection by a long arithmetic progression. At an integer minimizer, a symmetric second difference converts this geometry into a quadratic error bound in the reciprocal progression length. Related continuous sampling arguments based on Markov inequalities and norming meshes appear in Piazzon and Vianello~\cite{PV}; here the progression samples are feasible integer points, so the error is measured against the integer objective range.
+\emph{The common geometric ingredient is a decomposition by relative slack scales.} The dyadic reflecting sets of Cook--Hartmann--Kannan--McDiarmid (CHKM) are central to their integer-hull analysis~\cite{CHKM}. Symmetric displacement covers likewise underpin the quadratic and cubic algorithms of Ari and Hildebrand~\cite{AHIQP,AH}. In parallel work on exact integer quadratic programming, Wei explicitly uses dyadic grouping of constraint slacks to obtain regions supporting two-sided feasible moves~\cite[Section~1.1]{Wei}. These uses suggest that relative-slack decompositions are a useful common tool for polynomial integer optimization: they convert proximity measured against the constraints into feasible algebraic comparisons, without reference to objective coefficients.
+
+Here refinement strengthens one-step reflection to a long feasible arithmetic progression. Restricting a degree-$D$ polynomial to that progression and applying Markov's inequality then yields an objective-independent representative set that approximates both integer extrema; see Proposition~\ref{prop:extrema}. Thus the geometric cover serves all polynomial objectives of the prescribed degree simultaneously. The essential feature is multiplicative control of positive slacks, not the choice of base two: Remark~\ref{rem:slack-characterization} makes the connection to extrapolation exact. Related continuous sampling arguments based on Markov inequalities and norming meshes appear in Piazzon and Vianello~\cite{PV}; here the samples remain feasible integer points, so the error is measured against the integer objective range.
 
 \begin{center}
 \begin{tikzpicture}[
@@ -81,7 +83,9 @@ Cook--Hartmann--Kannan--McDiarmid (CHKM) use a slack-based reflecting decomposit
 \end{tikzpicture}
 \end{center}
 
-No local approximation to the objective is optimized. Instead, reflection controls the error at a global optimum, which is enough to justify the final selection. Section~\ref{sec:cover} proves this estimate, Section~\ref{sec:algorithm} gives the algorithm and its bit complexity, and Section~\ref{sec:conclusion} places the construction in a common cellwise approximation framework.
+No local approximation to the objective is optimized. Instead, reflection controls the error at a global optimum, which is enough to justify the final selection. Section~\ref{sec:cover} proves this estimate, Section~\ref{sec:algorithm} gives the algorithm and its bit complexity, and Section~\ref{sec:conclusion} discusses extensions and related decomposition methods.
+
+More broadly, the method follows a decompose--solve--select pattern: a local error bound on the cell containing an optimum transfers to the best returned candidate. For polynomial optimization, this permits other cell decompositions or tractable local models when suitable error estimates are available.
 
 The decomposition also connects to the geometric subdivision of Papadimitriou and Yannakakis~\cite{PY} and its use for affine slicing in Hildebrand, Weismantel, and Zemmer~\cite[Section~2]{HWZ}. Applying multiplicative bins to the slacks $s_i(\mathbf{x})=b_i-\mathbf a_i^\top\mathbf{x}$ gives the same relative-width property as our refined dyadic intervals: a bin $[a,(1+\delta)a]$ has width at most $\delta a$. Points in a common block therefore extend to feasible progressions of length $1/\delta$, with zero slacks handled separately. As in the proof of~\cite[Theorem~2.1]{HWZ}, the bins are pulled back to an arrangement in the original variable space $\R^d$; enumerating all combinations in the $m$-dimensional slack space would lose the fixed-dimensional complexity bound. Unlike the sliceable-objective framework of~\cite{HWZ}, our approximation argument uses Markov's inequality and measures error relative to the objective range.
 
@@ -103,7 +107,7 @@ Its running time is polynomial in the total input encoding size $\varphi$ and $1
 All complexity statements below count bit operations. The function $\poly$ denotes a polynomial with an absolute exponent, independent of $d,D,\eps$; different occurrences may denote different polynomials. Logs are base two unless indicated otherwise.
 
 \begin{theorem}[Polynomial approximation by reflecting cells]\label{thm:main}
-Let $P=\{\mathbf{x}\in\R^d:A\mathbf{x}\le\mathbf b\}$ be bounded, with $A\in\Z^{m\times d}$ and $\mathbf b\in\Z^m$, let $f\in\Z[x_1,\ldots,x_d]$, and put $D=\max\{1,\deg f\}$, with $D=1$ when $f=0$. For rational $0<\eps\le1$, let $\varphi=\langle A,\mathbf b,f,\eps\rangle$ be the total input encoding size.
+Let $d\ge1$ and let $P=\{\mathbf{x}\in\R^d:A\mathbf{x}\le\mathbf b\}$ be bounded, with $A\in\Z^{m\times d}$ and $\mathbf b\in\Z^m$, let $f\in\Z[x_1,\ldots,x_d]$, and put $D=\max\{1,\deg f\}$, with $D=1$ when $f=0$. For rational $0<\eps\le1$, let $\varphi=\langle A,\mathbf b,f,\eps\rangle$ be the total input encoding size.
 There is a deterministic algorithm that reports infeasibility or returns $\mathbf{x}_{\eps}\in P\cap\Z^d$ satisfying~\eqref{eq:guarantee}, in at most
 \begin{equation}\label{eq:runtime-coarse}
  \left(\frac{\varphi D}{\eps}\right)^{O(d)}
@@ -136,7 +140,7 @@ Corollary~\ref{cor:mixed} combines our integer algorithm with the grid reduction
 
 \paragraph{Comparison with prior algorithms.}
 
-The guarantee in~\eqref{eq:guarantee} is already provided by De Loera, Hemmecke, K\"oppe, and Weismantel~\cite{DHKW06,DHKW08}, whose generating-function algorithms run in time polynomial in the input length, numerical degree, and $1/\eps$ for fixed total dimension. Their integer nonnegative-maximization subroutine computes weighted lattice sums for $f^q$, with $q=O(1+\eps^{-1}\log N)$ and $N=|P\cap\Z^d|$; solution recovery uses further weighted sums on restricted polytopes~\cite[Section~3]{DHKW06}. Thus the work includes both Barvinok cone decomposition and subsequent symbolic calculations. A standard bound for the underlying lattice-point counting algorithm is $\langle A,\mathbf b\rangle^{O(d\log(d+1))}$~\cite[Theorem~2.3]{PakPanova}, whereas~\eqref{eq:runtime-coarse} gives $2^{O(d\log(d+1))}\varphi^{O(d)}$ for our entire algorithm when $D$ and $\eps$ are fixed. This compares available upper bounds, not a lower bound on their algorithm; the counting bound alone does not describe their full FPTAS. Their published analysis does not make all dimension-dependent exponents in the weighted-summation cost explicit. Our construction instead gives the explicit bound~\eqref{eq:runtime-coarse} through cell enumeration, integer linear feasibility, and exact polynomial evaluation, and produces a representative set independent of the objective coefficients. These differences do not establish practical superiority: our cell count can be large, while generating-function methods can benefit from small cone decompositions.
+The guarantee in~\eqref{eq:guarantee} is already provided by De Loera, Hemmecke, K\"oppe, and Weismantel~\cite{DHKW06,DHKW08}, whose generating-function algorithms run in time polynomial in the input length, numerical degree, and $1/\eps$ for fixed total dimension. Their integer nonnegative-maximization subroutine computes weighted lattice sums for $f^q$, with $q=O(1+\eps^{-1}\log N)$ and $N=|P\cap\Z^d|$; solution recovery uses further weighted sums on restricted polytopes~\cite[Section~3]{DHKW06}. Thus the work includes both Barvinok cone decomposition and subsequent symbolic calculations. A standard bound for the underlying lattice-point counting algorithm is $\langle A,\mathbf b\rangle^{O(d\log(d+1))}$~\cite[Theorem~2.3]{PakPanova}, whereas~\eqref{eq:runtime-coarse} gives $\varphi^{O(d)}$ for our entire algorithm when $D$ and $\eps$ are fixed. This compares available upper bounds, not a lower bound on their algorithm; the counting bound alone does not describe their full FPTAS. Their published analysis does not make all dimension-dependent exponents in the weighted-summation cost explicit. Our construction instead gives the explicit bound~\eqref{eq:runtime-coarse} through cell enumeration, integer linear feasibility, and exact polynomial evaluation, and produces a representative set independent of the objective coefficients. These differences do not establish practical superiority: our cell count can be large, while generating-function methods can benefit from small cone decompositions.
 
 Del Pia's construction shares the partition-and-solve structure, but uses different geometry~\cite[Sections~3--6]{DelPia}. After transforming the problem to spherical form, the aligned-vector case partitions the $k$ quadratic coordinates into uniform boxes and minimizes an affine underestimator on each box by MILP; the remaining cases use flatness-based recursion. It does not use geometric slack bins. Our representatives instead require only feasibility because the reflected sample at an integer minimizer controls the first-order contribution.
 
@@ -145,7 +149,7 @@ For fixed quadratic rank $k$ and integer dimension $p$, Del Pia~\cite[Propositio
  O(\eps^{-d/2})\ \text{integer feasibility calls},\qquad
  O(\eps^{-(d+1)/2})\ \text{enumeration LP tests}.
 \]
-The per-test arithmetic has polynomial dependence on $\langle\eps\rangle$ and $\log(1/\eps)$. The feasibility-call exponent matches $k/2$ when $k=d$, but the enumeration overhead remains and the rank-sensitive bound for $k<d$ is not recovered. Our construction instead applies to arbitrary degree and supplies one objective-independent representative set. Its dimension-dependent factor includes both the constraint normals and right-hand sides through $\tau$; the displayed bound is not a fixed-parameter tractability claim in $d$.
+The per-test arithmetic has polynomial dependence on the encoding length $\langle\eps\rangle$. The feasibility-call exponent matches $k/2$ when $k=d$, but the enumeration overhead remains and the rank-sensitive bound for $k<d$ is not recovered. Our construction instead applies to arbitrary degree and supplies one objective-independent representative set. Its dimension-dependent factor includes both the constraint normals and right-hand sides through their binary encoding lengths; the displayed bound is not a fixed-parameter tractability claim in $d$.
 
 \section{Reflecting cells and approximation}\label{sec:encoding}\label{sec:cover}
 
@@ -266,6 +270,20 @@ In particular, for $\mathbf{x},\mathbf{y}\in C$,
 For a varying slack, $|s_i(\mathbf{y})-s_i(\mathbf{x})|<b-a\le a/\ell$ and $s_i(\mathbf{x})>a=w_i$; for a constant slack the difference is zero. These inequalities give both inclusions row by row. The set $D_C$ is convex, symmetric, and contains zero, so it contains $t(\mathbf{y}-\mathbf{x})$ for $|t|\le\ell$. Also $D_C\subseteq P-\mathbf{x}$ for any $\mathbf{x}\in C$, hence it is bounded, as required for a symmetric displacement cover in~\cite[Definition~2.1]{AH}.
 \end{proof}
 
+\begin{remark}[Relative slacks characterize extrapolation]\label{rem:slack-characterization}
+Let $\mathbf{x},\mathbf y\in P$, set $\mathbf v=\mathbf y-\mathbf{x}$, and let $\ell>0$. The segments $\mathbf{x}+[-\ell,\ell]\mathbf v$ and $\mathbf y+[-\ell,\ell]\mathbf v$, centered at $\mathbf{x}$ and $\mathbf y$ respectively, both lie in $P$ if and only if, for every row $i$,
+\[
+ \ell\,|s_i(\mathbf y)-s_i(\mathbf{x})|
+ \le\min\{s_i(\mathbf{x}),s_i(\mathbf y)\}.
+\]
+Indeed, the minimum slack along the first segment is $s_i(\mathbf{x})-\ell|s_i(\mathbf y)-s_i(\mathbf{x})|$, and similarly for the second. For positive slacks the condition is equivalently
+\[
+ \frac{\max\{s_i(\mathbf{x}),s_i(\mathbf y)\}}
+ {\min\{s_i(\mathbf{x}),s_i(\mathbf y)\}}\le1+\frac1\ell;
+\]
+if either slack is zero, both must be zero. Thus multiplicative slack control is exactly the geometry needed for extrapolation about both points. Refined dyadic intervals enforce this condition with short rational descriptions, and integrality limits the number of relevant scales. The condition is independent of the objective: Proposition~\ref{prop:extrema} turns the resulting cover into a simultaneous approximation guarantee for every polynomial of degree at most $D$.
+\end{remark}
+
 The displacement property is the only geometric input to the approximation argument. To obtain an algorithm, we also need a short list of cells and a linear description suitable for integer feasibility. Including every face of the arrangement handles points on threshold hyperplanes; rounding strict slack bounds then preserves exactly the integer points in each face.
 
 \begin{lemma}[Number, encoding, and enumeration of cells]\label{lem:arrangement}
@@ -322,7 +340,7 @@ Set $q=p-(a+b)/2$ and $W=\|q\|_{\infty,[-\ell,\ell]}$. The scaled classical Mark
  W\le \frac{b-a}{2}+\frac{D^2}{2\ell}W,
  \qquad\text{and hence}\qquad W\le b-a.
 \]
-Applying Markov twice yields $\|p''\|_\infty\le B$, where $B=D^4(b-a)/\ell^2$. Thus $g(t)=Bt^2/2-p(t)$ is convex on $[-1,1]$. Its midpoint inequality gives $p(1)+p(-1)-2p(0)\le B$, and therefore
+Applying Markov twice to $q$ yields $\|p''\|_\infty\le B$, where $B=D^4(b-a)/\ell^2$. Thus $g(t)=Bt^2/2-p(t)$ is convex on $[-1,1]$. Its midpoint inequality gives $p(1)+p(-1)-2p(0)\le B$, and therefore
 \[
  p(1)-p(0)\le p(1)+p(-1)-2p(0)\le B.
 \]
@@ -334,9 +352,10 @@ The estimate is needed only on the cell containing a global minimizer, and holds
 \begin{proposition}[Representatives approximate extrema]\label{prop:extrema}
 Choose one integer representative from each integer-feasible retained cell, forming $Y$. If $P\cap\Z^d\ne\varnothing$ and $\ell\ge D^2$, then every real polynomial $f$ of degree at most $D$ satisfies
 \[
- 0\le\min_Y f-\min_{P\cap\Z^d} f\le\frac{D^4}{\ell^2}(f_{\max}-f_{\min}),
- \qquad
- 0\le\max_{P\cap\Z^d} f-\max_Y f\le\frac{D^4}{\ell^2}(f_{\max}-f_{\min}).
+\begin{aligned}
+ 0&\le\min_Y f-\min_{P\cap\Z^d} f\le\frac{D^4}{\ell^2}(f_{\max}-f_{\min}),\\
+ 0&\le\max_{P\cap\Z^d} f-\max_Y f\le\frac{D^4}{\ell^2}(f_{\max}-f_{\min}).
+\end{aligned}
 \]
 \end{proposition}
 \begin{proof}
@@ -422,7 +441,7 @@ $ f(1,t)=1+t^2+\tfrac12t$.}
 
 \section{Algorithm and complexity}\label{sec:algorithm}
 
-The preceding results lead directly to Algorithm~\ref{alg:sampling}: enumerate the refined cells, find one integer point in each nonempty cell, and compare the objective values at those points. The geometric work is independent of the objective coefficients. This is also why the representatives can be reused for different polynomials of degree at most $D$. A constant objective requires only one integer feasibility query; dimension zero is similarly immediate. Representatives can be processed as a stream, or saved as a universal set $Y$ for subsequent objectives.
+The preceding results lead directly to Algorithm~\ref{alg:sampling}: enumerate the refined cells, find one integer point in each nonempty cell, and compare the objective values at those points. The geometric work is independent of the objective coefficients. This is also why the representatives can be reused for different polynomials of degree at most $D$. For this purpose, the algorithm accepts any prescribed degree bound $D\ge\max\{1,\deg f\}$; Theorem~\ref{thm:main} uses the bound computed from $f$. A constant objective requires only one integer feasibility query; dimension zero is similarly immediate. Representatives can be processed as a stream, or saved as a universal set $Y$ for subsequent objectives.
 
 \begin{algorithm}[tbp]
 \centering
@@ -517,43 +536,46 @@ Applying Proposition~\ref{prop:extrema} to $-f$ gives $f_{\max}-f(\mathbf{x}_{\e
 Use the denominator-compatible grid reduction of~\cite[Sections~3--5]{DHKW08}, with Corollary~\ref{cor:max} as the integer nonnegative-maximization subroutine. Scaling each grid problem gives an integer problem of polynomial encoding size; clearing objective denominators preserves relative error. The reduction is independent of the particular integer FPTAS. For arbitrary-sign objectives, apply the range-estimation and shifting procedure of~\cite[Section~6]{DHKW08}, including its constant-objective case, and negate $f$ for minimization. Mixed-integer linear feasibility handles empty instances. For fixed total dimension, all reductions and subroutine calls have polynomial cost in $\varphi$ and $1/\eps$ under our unary-exponent convention. This establishes the corollary without lattice-point counting; the explicit bound~\eqref{eq:runtime-coarse} is asserted only for the pure-integer problem.
 \end{proof}
 
-\section{Conclusion: a common approximation framework}\label{sec:conclusion}
-The reflecting-cell algorithm is an instance of a broader construction: cover the feasible solutions by comparison regions, produce a feasible candidate for each region using a simpler local problem, and compare the candidates under the original objective. The regions need not be disjoint, and a candidate need not belong to its comparison region. This flexibility accommodates geometric slicing, approximate Pareto sets, budget enumeration, and local polynomial models. The framework below isolates their common correctness argument; it does not claim that the decomposition principle itself is new.
+\section{Discussion and extensions}\label{sec:conclusion}
+The main result concerns polynomial optimization: a refined reflecting cover and one integer-feasibility query per cell suffice for a range-relative FPTAS. Corollary~\ref{cor:mixed} supplies the mixed-integer extension through the established grid reduction. Table~\ref{tab:framework} places this construction alongside related decomposition and sampling methods; the common error-transfer principle is recorded in Appendix~\ref{app:comparison}.
 
+For polynomial objectives with additional structure, one can replace feasibility by optimization of a local surrogate $h_C$. If $|f-h_C|\le\delta_C$ on the feasible part of a cell and a feasible candidate minimizes $h_C$ there within additive error $\eta_C$, then selecting the best candidate gives error at most $2\delta_{C^*}+\eta_{C^*}$, where $C^*$ contains a global minimizer. Affine, convex, or quadratic surrogates are useful when their local optimization problems are tractable and their errors can be bounded relative to the global objective range. This includes the frozen-weight idea for sliceable objectives~\cite{HWZ} and affine models for quadratics~\cite{DelPia}. An FPTAS still requires polynomial bounds on the cover construction, local computations, and encoding sizes; the transfer inequality alone does not supply them.
+
+The reflecting argument also extends to polynomial optimization over a bounded set $K$ whenever an efficiently constructible polynomial-size cover of $K\cap\Z^d$ supports the same feasible integer progressions and admits efficient integer-feasibility queries. An outer polyhedral relaxation alone is insufficient, because reflected points may leave $K$; a suitable relaxation with exactly the same integer points would suffice. General convex sets need not admit such a cover: at a boundary lattice point of a strictly convex set, the reflection property forces its cell to contain no other lattice point. Extensions beyond polyhedra may therefore require different local error estimates or stronger local optimization oracles. These are conditions for further generalization, rather than additional FPTAS results established here.
+
+\begin{table}[tbp]
+\centering\small
+\renewcommand{\arraystretch}{1.18}
+\begin{tabular}{@{}p{.22\textwidth}p{.23\textwidth}p{.22\textwidth}p{.25\textwidth}@{}}
+\toprule
+Method & Comparison regions & Local procedure & Error certificate\\
+\midrule
+Reflecting cells (this paper) & Refined geometric slack cells & Integer feasibility, $h_C=0$ & Reflection and sampled Markov bound at an optimum\\
+Geometric product sampling & Multiplicative coordinate boxes & Feasible representative & Bounded variation of $\log f$\\
+Sliceable functions~\cite{HWZ} & Geometric affine slices & Optimize frozen-weight objective & Multiplicative sandwich, with sign conditions\\
+Approximate Pareto methods~\cite{PY,MSlowrank,MScombined} & Geometric threshold regions & Gap or dominance oracle & Coordinatewise dominance and aggregate scaling\\
+Product of two linear costs~\cite{GGR} & Geometric budget regions & Parametric LP and extreme-point recovery & Budget error and product comparison\\
+Quadratic mesh methods~\cite{DelPia,DelPiaSubdet} & Boxes after problem-specific preprocessing & MILP or ILP for affine model & Uniform residual bound relative to objective range\\
+Simplex grids and norming meshes~\cite{DKLP,DKLSV,PV} & Neighborhoods assigned to samples & Evaluate designated sample & Grid or norming estimate; second-order bounds where available\\
+\bottomrule
+\end{tabular}
+\caption{Related decomposition and sampling approaches. Each row retains the hypotheses and fixed parameters of the cited work. These connections do not assert identical partitions or approximation guarantees.}
+\label{tab:framework}
+\end{table}
+
+\appendix
+\section{A local comparison principle}\label{app:comparison}
 Let $\mathcal X$ denote an abstract feasible set and let $F$ be the objective to minimize. For maximization use $F=-f$; for strictly positive objectives, $F=\log f$ or $F=-\log f$ expresses multiplicative guarantees additively. These transformations are analytical: candidates may be compared using the original objective, without computing logarithms. A cover procedure supplies finitely many comparison regions $C$, admissible output sets $R_C\subseteq\mathcal X$, and surrogate functions $h_C$ defined on $(C\cap\mathcal X)\cup R_C$. Usually $R_C=C\cap\mathcal X$, but allowing a larger output set accommodates dominance oracles and rounding.
 
-\begin{algorithm}[tbp]
-\centering
-\begin{tikzpicture}
-\node[draw=cellblue!65,line width=.6pt,rounded corners=2pt,
-      fill=white,inner sep=12pt] {
-\begin{minipage}{.88\textwidth}
-\small
-{\color{cellblue}\bfseries Cover, solve, and select}\hfill{$\textsc{CoverSolve}$}
-\par\vspace{5pt}\hrule\vspace{7pt}
-\textbf{Input:} feasible-set description, objective, accuracy $\eps$, and cover and local-oracle procedures with the guarantees below.
-\par\vspace{7pt}
-\renewcommand{\arraystretch}{1.4}
-\begin{tabular}{@{}r@{\hspace{.8em}}p{.89\linewidth}@{}}
-{\color{cellblue}1} & Construct a finite cover $\mathcal X\subseteq\bigcup_{C\in\mathcal C}C$, with local data $(R_C,h_C,\eta_C)$; initialize $Y\gets\varnothing$.\\
-{\color{cellblue}2} & \textbf{for each} $C\in\mathcal C$ \textbf{do}\\
-{\color{cellblue}3} & \quad Invoke the local oracle. It either certifies $C\cap\mathcal X=\varnothing$, or returns $y_C\in R_C$ satisfying\\[-3pt]
- & \quad $\displaystyle h_C(y_C)\le\inf_{x\in C\cap\mathcal X}h_C(x)+\eta_C$.\\
-{\color{cellblue}4} & \quad If a candidate is returned, set $Y\gets Y\cup\{y_C\}$.\\
-{\color{cellblue}5} & \textbf{if} $Y=\varnothing$ \textbf{then return} \textsf{INFEASIBLE}.\\
-{\color{cellblue}6} & \textbf{return} $\widehat x\in\arg\min_{y\in Y}F(y)$.\\
-\end{tabular}
-\par\vspace{7pt}
-The cover and local accuracy are chosen by an error analysis; the algorithm does not need to know a global optimizer or the true objective range.
-\end{minipage}
-};
-\end{tikzpicture}
-\caption{A common algorithmic template. Feasibility, convex optimization, integer quadratic optimization, and dominance oracles are possible local procedures when their required guarantees and complexity are available.}
-\label{alg:cover-solve}
-\end{algorithm}
+Construct the finite cover and, for each region $C$, either certify $C\cap\mathcal X=\varnothing$ or return a feasible candidate $y_C\in R_C$ with
+\[
+ h_C(y_C)\le\inf_{x\in C\cap\mathcal X}h_C(x)+\eta_C.
+\]
+Report infeasibility if no candidate is returned; otherwise select a candidate with minimum $F$-value.
+
 
 \begin{proposition}[Local comparison principle]\label{prop:local-comparison}
-Suppose $\mathcal X\ne\varnothing$, $F$ attains its minimum at $x^*$, and the cover and local oracles in Algorithm~\ref{alg:cover-solve} satisfy their stated guarantees, with $\eta_C\ge0$. Suppose some $C^*\ni x^*$ satisfies, for every $y\in R_{C^*}$,
+Suppose $\mathcal X\ne\varnothing$, $F$ attains its minimum at $x^*$, and the cover and local oracles in the procedure above satisfy their stated guarantees, with $\eta_C\ge0$. Suppose some $C^*\ni x^*$ satisfies, for every $y\in R_{C^*}$,
 \[
  (F-h_{C^*})(y)-(F-h_{C^*})(x^*)\le\beta_{C^*}.
 \]
@@ -581,67 +603,21 @@ The algorithm has cost
 \]
 where comparison includes objective evaluation. An FPTAS follows only when these costs and all constructed descriptions are polynomial in the input size and $1/\eps$, for the fixed structural parameters, and the error bound gives the requested guarantee. The scale $\eps(f_{\max}-f_{\min})$ or a logarithmic multiplicative error may be used in the proof without being known numerically to the algorithm. Establishing effective covers, local oracles, and error certificates remains the substantive problem in each application.
 
-\begin{table}[tbp]
-\centering\small
-\renewcommand{\arraystretch}{1.18}
-\begin{tabular}{@{}p{.22\textwidth}p{.24\textwidth}p{.22\textwidth}p{.25\textwidth}@{}}
-\toprule
-Method & Comparison regions & Local procedure & Error certificate\\
-\midrule
-Reflecting cells (this paper) & Refined geometric slack cells & Integer feasibility, $h_C=0$ & Reflection and sampled Markov bound at an optimum\\
-Geometric product sampling & Multiplicative coordinate boxes & Feasible representative & Bounded variation of $\log f$\\
-Sliceable functions~\cite{HWZ} & Geometric affine slices & Optimize frozen-weight objective & Multiplicative sandwich, with sign conditions\\
-Approximate Pareto methods~\cite{PY,MSlowrank,MScombined} & Geometric threshold regions & Gap or dominance oracle & Coordinatewise dominance and aggregate scaling\\
-Product of two linear costs~\cite{GGR} & Geometric budget regions & Parametric LP and extreme-point recovery & Budget error and product comparison\\
-Quadratic mesh methods~\cite{DelPia,DelPiaSubdet} & Boxes after problem-specific preprocessing & MILP or ILP for affine model & Uniform residual bound relative to objective range\\
-Simplex grids and norming meshes~\cite{DKLP,DKLSV,PV} & Neighborhoods assigned to samples & Evaluate designated sample & Grid or norming estimate; second-order bounds where available\\
-\bottomrule
-\end{tabular}
-\caption{Instantiations of the cover-and-oracle viewpoint. Each row retains the hypotheses and fixed parameters of the cited work. The template organizes the transfer arguments; it does not replace their geometric or oracle analyses.}
-\label{tab:framework}
-\end{table}
-
-For approximate Pareto methods, the comparison region consists of points satisfying tightened component budgets, whereas an admissible output may satisfy only the relaxed budgets. Monotonicity and scaling of the aggregate objective then bound the loss; the candidate need not lie in the same geometric bin. In~\cite{GGR}, extreme-point recovery can likewise move a candidate outside the budget region while preserving the required product bound. Grid sampling fits by assigning each feasible comparison point to an appropriate sample; the published approximation estimate supplies the comparison at a global optimum. Table~\ref{tab:framework} therefore describes an interpretation of these methods within a common template, not a claim that they use identical partitions or guarantees.
-
-A uniform bound on the oscillation of $F-h_C$ is sufficient, but stronger than necessary. For our reflecting cells, take $F=f$ and $h_C=0$: feasibility is exact minimization of this constant surrogate, and Lemma~\ref{lem:markov} supplies $\beta_{C^*}=D^4(f_{\max}-f_{\min})/\ell^2$ on the optimum-containing cell. Del Pia instead uses affine underestimators with a uniform residual bound on each box~\cite[Proposition~3]{DelPia}. After spherical normalization, the quadratic interpolation error scales as curvature times squared box width, while aligned feasible vectors give a lower bound on the objective range proportional to the same curvature. This permits boxes of width proportional to $\sqrt\eps$ in the $k$ quadratic coordinates. When the aligned-vector condition fails, his method uses flatness-based recursion. Thus the boxes need not themselves support long feasible reflections.
-
-Multiplicative guarantees fit the same principle after a logarithmic change of objective, used only for analysis. For example, consider maximizing $f(\mathbf{x})=\prod_{i=1}^r x_i$ on a bounded polyhedron's integer points with $x_i\ge1$ for $i\le r$. On any geometric coordinate block with $a_i\le x_i\le(1+\delta)a_i$, the oscillation of $F=-\log f$ is at most $r\log(1+\delta)$. Taking $h_C=0$ shows that arbitrary feasible representatives give
-\[
- f(\widehat{\mathbf{x}})\ge(1+\delta)^{-r}f_{\max}.
-\]
-Choosing the rational value $\delta=\eps/(2r)$ suffices for a $(1-\eps)$ guarantee when $0<\eps\le1$. Products can be evaluated and compared exactly without evaluating logarithms. The number of coordinate boxes is at most
-\[
- \prod_{i=1}^r\left(1+\left\lceil\log_{1+\delta}U_i\right\rceil\right),
-\]
-where $1\le x_i\le U_i$; for fixed $r$ it is polynomial in the coordinate bit bounds and $1/\eps$. An FPTAS additionally requires a polynomial-time feasibility oracle for each restricted problem, as is available in fixed total integer dimension. This is the geometric-binning mechanism of~\cite{PY}, not a new product-optimization result.
-
-The sliceable-function framework of~\cite[Lemma~2.2 and Theorem~2.1]{HWZ} replaces the constant surrogate by a tractable objective. In its nonnegative special case, write $f=\sum_j s_jg_j$ with $s_j,g_j\ge0$, and suppose a cell provides computable rational bounds $a_{j,C}\le s_j\le(1+\delta)a_{j,C}$. Then $q_C=\sum_j a_{j,C}g_j$ satisfies $q_C\le f\le(1+\delta)q_C$. Exact minimization of $q_C$ on each cell gives a multiplicative $(1+\delta)$ approximation; when $f,q_C>0$, this is Proposition~\ref{prop:local-comparison} with $F=\log f$ and $h_C=\log q_C$. Zero values are handled directly by the sandwich inequalities. The local problem is convex when the $g_j$ are convex and quadratic when they are quadratic. Signed objectives require additional control of cancellation, or an additive residual bound as in Proposition~\ref{prop:local-comparison}.
-
-This viewpoint suggests comparing decompositions by their total construction and local-solution cost, rather than by cell shape alone. Objective-adapted coordinate boxes can exploit a small number of nonlinear directions; slack cells instead provide an objective-independent feasibility certificate near every face of the polyhedron. A more efficient replacement must preserve a suitable local comparison bound and admit effective cell enumeration and local optimization. The transfer principle alone supplies neither those algorithms nor an improvement to~\eqref{eq:runtime-coarse}.
-
-\paragraph{Beyond polyhedral feasible regions.}
-Proposition~\ref{prop:local-comparison} does not require a polyhedral, or even convex, feasible set. For a bounded convex set $K$, geometric bins of affine component functions can still be used whenever the required integer feasibility or optimization problems over $K$ intersected with rational polyhedra admit suitable polynomial-time oracles. The multiplicative comparison arguments are unchanged. Thus polyhedrality is a means of obtaining effective covers and local oracles, rather than a hypothesis of the abstract transfer principle.
-
-The reflecting-cell construction requires more. It extends verbatim if one can efficiently construct a polynomial-size cover of $K\cap\Z^d$ such that any two integer points $\mathbf{x},\mathbf y$ in a common cell satisfy
-\[
- \mathbf{x}+k(\mathbf y-\mathbf{x})\in K\cap\Z^d
- \qquad(k\in\Z,\ |k|\le\ell),
-\]
-and find an integer representative in each nonempty cell. An outer polyhedral relaxation $P\supseteq K$ alone does not establish this condition: its reflected samples may lie outside $K$, so their objective values need not be bounded by the range on $K\cap\Z^d$. A polynomial-size, effectively computable relaxation with $P\cap\Z^d=K\cap\Z^d$ would suffice. Merely intersecting the relaxed cells with $K$ ensures feasible representatives but not feasible reflections.
-
-There is an obstruction to polynomial-size covers with this exact reflection property for general convex sets. If $K$ is strictly convex and $\mathbf{x}\in\partial K$, then $\mathbf y,2\mathbf{x}-\mathbf y\in K$ implies $\mathbf y=\mathbf{x}$: otherwise $\mathbf{x}$ is the midpoint of a nontrivial segment in $K$ and hence lies in its interior. Every boundary lattice point must therefore be the sole lattice point in any reflecting cell that contains it. For the four-dimensional ball
-\[
- K_N=\{\mathbf{x}\in\R^4:x_1^2+x_2^2+x_3^2+x_4^2\le N\},
-\]
-with $N$ an odd prime, Jacobi's four-square formula gives $8(N+1)$ boundary lattice points~\cite[Section~27.13(ii)]{DLMF}. Thus such a cover requires exponentially many cells in the $O(\log N)$ input length, already for a single convex quadratic constraint and $\ell\ge1$. This rules out a direct general polynomial-size reflection-cover extension; it does not rule out approximation algorithms based on other local comparison bounds or stronger local optimization oracles.
-
-Boundedness is used to obtain finite coordinate and slack bounds and hence a finite cell arrangement. The univariate estimate itself is local and does not require a bounded ambient polyhedron. However, an unbounded feasible set can have infinite objective range even when its minimum is attained: $f(x)=x^2$ on $\Z_{\ge0}$ is an example. A bounded rational restriction preserving both extrema would suffice for the proof, provided it can be computed with polynomial encoding size; preserving only a minimizer is not enough to identify the original range. No such localization result is established here. Range-relative minimization should not be confused with multiplicative minimization: the quartic hardness reduction in~\cite[Lemma~2.1]{DHKW06}, with one added to the objective, excludes a general multiplicative FPTAS unless $\mathsf P=\mathsf{NP}$, already for strictly positive quartics in two integer variables.
-
 \begin{thebibliography}{99}
 \bibitem{AH} C.~Ari and R.~Hildebrand.
 \emph{Hidden Convexity via Symmetric Displacement Covers: Mixed-Integer Quadratic Programming and Integer Cubic Programming in Fixed Dimension}.
 arXiv:2609.18266, version~2, September~23, 2026.
 \url{https://arxiv.org/abs/2609.18266v2}.
+
+\bibitem{AHIQP} C.~Ari and R.~Hildebrand.
+\emph{Bounded Integer Quadratic Programming through Parallelepiped Covers and Discrete Convic Optimization}.
+arXiv:2609.17889, 2026.
+\url{https://arxiv.org/abs/2609.17889}.
+
+\bibitem{Wei} L.~Wei.
+\emph{Integer quadratic programming in fixed dimension is polynomial-time solvable}.
+Optimization Online, September~14, 2026.
+\url{https://optimization-online.org/2026/09/integer-quadratic-programming-in-fixed-dimension-is-polynomial-time-solvable/}.
 
 \bibitem{Stanley} R.~P.~Stanley.
 An introduction to hyperplane arrangements.
@@ -728,10 +704,6 @@ Minkowski's convex body theorem and integer programming.
 \emph{Mathematische Annalen} 366 (2016), 57--82.
 \url{https://doi.org/10.1007/s00208-015-1294-9}.
 
-\bibitem{DLMF} F.~W.~J.~Olver et al., eds.
-\emph{NIST Digital Library of Mathematical Functions}, Section~27.13(ii), Sums of Squares.
-\url{https://dlmf.nist.gov/27.13.ii}.
-
 \bibitem{PV} F.~Piazzon and M.~Vianello.
 Markov inequalities, Dubiner distance, norming meshes and polynomial optimization on convex bodies.
 \emph{Optimization Letters} 13 (2019), 1325--1343.
@@ -759,7 +731,7 @@ On October 14, 2026, sixteen calculation, geometry, and abstract correctness the
 \item \emph{Refinement:} \texttt{refinement\_error} proves $D^4/\ell^2\le\eps$ from $\eps,\ell>0$ and $\ell\ge D^2/\sqrt\eps$. The declaration \texttt{ceiling\_refinement} also verifies positivity and this error bound for the actual choice $\ell=\lceil D^2/\sqrt\eps\rceil$, for $D,\eps>0$.
 \item \emph{Optimization transfer:} \texttt{local\_comparison} verifies the scalar inequality in Proposition~\ref{prop:local-comparison}, assuming selection, local optimization, and residual bounds. The declarations \texttt{uniform\_model\_error} and \texttt{nonnegative\_maximization} verify, respectively, the $2\delta+\eta$ transfer for a uniformly accurate surrogate and the final algebra in Corollary~\ref{cor:max}.
 \end{itemize}
-The declarations \texttt{cover\_solve\_select} and \texttt{empty\_candidates\_iff} additionally verify the abstract selection and infeasibility arguments behind Algorithm~\ref{alg:cover-solve}: a finite candidate set has a feasible minimizer with the stated error, and it is empty exactly when the feasible set is empty, assuming coverage and sound, complete local oracles. The theorem \texttt{representative\_range\_guarantee} verifies the range-relative selection step for arbitrary feasible representatives, assuming the error bound for one representative near an optimum. These results work over arbitrary point types, not just scalar decision variables. They establish conditional correctness implications, not implementations of the cover or local oracles. Construction and enumeration of the cover, oracle implementations, encoding estimates, and the running-time bound remain unverified in Lean. The earlier exploratory \texttt{ReflectingCells.lean} is not part of this successful check. The repository also contains a separate verification log for 45 earlier cubic-integer-programming calculations; those results do not certify this FPTAS.
+The declarations \texttt{cover\_solve\_select} and \texttt{empty\_candidates\_iff} additionally verify the abstract selection and infeasibility arguments behind the procedure in Appendix~\ref{app:comparison}: a finite candidate set has a feasible minimizer with the stated error, and it is empty exactly when the feasible set is empty, assuming coverage and sound, complete local oracles. The theorem \texttt{representative\_range\_guarantee} verifies the range-relative selection step for arbitrary feasible representatives, assuming the error bound for one representative near an optimum. These results work over arbitrary point types, not just scalar decision variables. They establish conditional correctness implications, not implementations of the cover or local oracles. Construction and enumeration of the cover, oracle implementations, encoding estimates, and the running-time bound remain unverified in Lean. The earlier exploratory \texttt{ReflectingCells.lean} is not part of this successful check. The original \texttt{Unbounded-Cubic-Integer-Programming} repository separately records verification of 45 earlier cubic-integer-programming calculations; those results do not certify this FPTAS.
 
 A separate module, \texttt{verification/lean/SampledMarkov.lean}, verifies eight further results. Its analytic portion consists of \texttt{markov\_difference}, \texttt{nearest\_integer}, \texttt{sampled\_sup\_bound}, \texttt{second\_difference\_bound}, and \texttt{sampled\_markov}. The last is the full univariate statement of Lemma~\ref{lem:markov}, conditional on the classical scaled Markov inequality. Specifically, \texttt{MarkovBound} is an explicit hypothesis asserting, for every real polynomial $r$ of degree at most $D$,
 \[
