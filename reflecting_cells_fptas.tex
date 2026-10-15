@@ -151,7 +151,7 @@ For fixed quadratic rank $k$ and integer dimension $p$, Del Pia~\cite[Propositio
 \]
 The per-test arithmetic has polynomial dependence on the encoding length $\langle\eps\rangle$. The feasibility-call exponent matches $k/2$ when $k=d$, but the enumeration overhead remains and the rank-sensitive bound for $k<d$ is not recovered. Our construction instead applies to arbitrary degree and supplies one objective-independent representative set. Its dimension-dependent factor includes both the constraint normals and right-hand sides through their binary encoding lengths; the displayed bound is not a fixed-parameter tractability claim in $d$.
 
-\section{Reflecting cells and approximation}\label{sec:encoding}\label{sec:cover}
+\section{Reflecting cells and approximation}\label{sec:cover}
 
 The proof separates the geometry of the feasible set from the behavior of the objective. We first partition the integer points into cells whose pairs extend to long feasible progressions. We then restrict the polynomial to such a progression through a global minimizer. The reflected point rules out a large first-order improvement in the backward direction, and a second-difference estimate controls the error of the forward representative. Neither the minimizer nor the objective range needs to be known by the algorithm.
 
@@ -204,7 +204,7 @@ If $a<b$ are successive positive thresholds, then
 \end{equation}
 Indeed, on a dyadic interval $[2^k,2^{k+1}]$ the spacing is $2^k/\ell$ and $a\ge2^k$. This includes its last subinterval. For $\ell=1$ the positive thresholds are exactly dyadic.
 
-\begin{figure}[tbp]
+\begin{figure}[htbp]
 \centering
 \begin{tikzpicture}[x=.29cm,y=.29cm,font=\small]
 \foreach \shift/\panel/\refined in {0/{(a) Dyadic cells}/0,21/{(b) Refined cells, $\ell=2$}/1} {
@@ -298,7 +298,12 @@ There are at most $F_d(H)$ retained cells. Each cell has a description by at mos
 bit operations. Each cell can be converted to a closed rational polyhedron $\widehat C\subseteq C$ having exactly the same integer points, with at most $2m$ inequalities of bit length $O(\tau+M+1)$ per coefficient.
 \end{lemma}
 \begin{proof}
-The standard hyperplane-arrangement face bound gives at most $F_d(H)=\sum_{j=0}^d2^j\binom Hj$ relatively open faces, counting all dimensions; see~\cite[Proposition~2.4 and Theorem~2.6]{Stanley}. Restricting to retained cells cannot increase this count. The elementary estimate $F_d(H)\le(1+2H)^d$ gives~\eqref{eq:F}.
+The total face count follows by induction on the number of hyperplanes. Inserting a new hyperplane replaces each relatively open face that it crosses by two side faces and their intersection, increasing the count by two. The crossed faces give distinct faces of the induced arrangement on the new hyperplane, which has dimension $d-1$ and at most $H-1$ hyperplanes. Faces contained in the new hyperplane are unchanged. Thus the maximum total face count satisfies
+\[
+ T_d(H)\le T_d(H-1)+2T_{d-1}(H-1),
+ \qquad T_d(0)=T_0(H)=1.
+\]
+Pascal's identity shows that $F_d(H)=\sum_{j=0}^d2^j\binom Hj$ satisfies the corresponding equality, proving the bound. Restricting to retained cells cannot increase the count, and $F_d(H)\le(1+2H)^d$ gives~\eqref{eq:F}. See~\cite{Stanley} for general background on arrangements.
 
 Every threshold in~\eqref{eq:thresholds} has a representation $N/\ell$, where $N=2^k(\ell+j)$ or the corresponding numerator for an endpoint. The numerator has $O(M+\log(\ell+1))$ bits and the denominator has $O(\log(\ell+1))$ bits. Multiplying a threshold equation by $\ell$ gives coefficients of bit length $O(B)$. Unlike repeated multiplication of $1+1/\ell$, this construction has no factor $\ell$ in the threshold bit length.
 
@@ -362,7 +367,7 @@ Choose one integer representative from each integer-feasible retained cell, form
 Let $\mathbf{x}_{\min}$ minimize $f$ on $P\cap\Z^d$, and let $\mathbf{y}$ represent its cell. Put $p(t)=f(\mathbf{x}_{\min}+t(\mathbf{y}-\mathbf{x}_{\min}))$. Lemma~\ref{lem:reflection} makes all integer samples with $|k|\le \ell$ feasible, so they lie between $f_{\min}$ and $f_{\max}$. Minimality gives $p(-1)\ge p(0)$. Lemma~\ref{lem:markov} now bounds $f(\mathbf{y})-f(\mathbf{x}_{\min})$. Apply the same argument to $-f$ for the maximum.
 \end{proof}
 
-\begin{figure}[tbp]
+\begin{figure}[htbp]
 \centering
 \begin{minipage}[t]{.48\textwidth}
 \centering\vspace{0pt}
@@ -443,7 +448,7 @@ $ f(1,t)=1+t^2+\tfrac12t$.}
 
 The preceding results lead directly to Algorithm~\ref{alg:sampling}: enumerate the refined cells, find one integer point in each nonempty cell, and compare the objective values at those points. The geometric work is independent of the objective coefficients. This is also why the representatives can be reused for different polynomials of degree at most $D$. For this purpose, the algorithm accepts any prescribed degree bound $D\ge\max\{1,\deg f\}$; Theorem~\ref{thm:main} uses the bound computed from $f$. A constant objective requires only one integer feasibility query; dimension zero is similarly immediate. Representatives can be processed as a stream, or saved as a universal set $Y$ for subsequent objectives.
 
-\begin{algorithm}[tbp]
+\begin{algorithm}[htbp]
 \centering
 \begin{tikzpicture}
 \node[draw=cellblue!65,line width=.6pt,rounded corners=2pt,
@@ -499,7 +504,7 @@ Each of at most $F_d(H)$ queries has $d$ integer variables and a total encoding 
 \begin{equation}\label{eq:ilp-size}
  S_C=O\!\left(m(d+1)(\tau+M+1)+d+m\right).
 \end{equation}
-Fixed-dimensional integer linear feasibility with witness production takes $2^{O(d\log(d+1))}S_C^{O(1)}$ bit operations using standard algorithms~\cite{Lenstra,Kannan}. The feasibility query is made on a subset of the original bounded polytope. Accordingly, every returned coordinate has at most $V+O(1)$ bits by Lemma~\ref{lem:size}; its length is not proportional to its magnitude. Notice also that~\eqref{eq:ilp-size} has no dependence on $\ell$ other than the number of cells, because the threshold inequalities have already been rounded to integer slack bounds.
+Fixed-dimensional integer linear feasibility with witness production takes $2^{O(d\log(d+1))}S_C^{O(1)}$ bit operations using Kannan's algorithm~\cite{Kannan}, improving the dimension dependence of Lenstra's algorithm~\cite{Lenstra}. The feasibility query is made on a subset of the original bounded polytope. Accordingly, every returned coordinate has at most $V+O(1)$ bits by Lemma~\ref{lem:size}; its length is not proportional to its magnitude. Notice also that~\eqref{eq:ilp-size} has no dependence on $\ell$ other than the number of cells, because the threshold inequalities have already been rounded to integer slack bounds.
 
 Finally, the coordinate bound ensures that exact objective evaluation also has polynomial bit cost, even though feasible coordinates can be numerically large.
 The integer coefficients of $f$ have bit length at most $\langle f\rangle$. If $\mathbf{x}\in P\cap\Z^d$, every monomial has absolute value at most $2^{DV}$. Each value of $f(\mathbf{x})$, and the intermediates obtained by evaluating monomials and summing them, has $O(\langle f\rangle+DV+\log(|\mathcal A|+1))$ bits. Repeated squaring evaluates the explicit exponent vectors in a number of arithmetic operations polynomial in $\langle f\rangle+d+\log(D+1)$. Even schoolbook integer arithmetic therefore gives
@@ -533,7 +538,7 @@ Applying Proposition~\ref{prop:extrema} to $-f$ gives $f_{\max}-f(\mathbf{x}_{\e
 \end{proof}
 
 \begin{proof}[Proof of Corollary~\ref{cor:mixed}]
-Use the denominator-compatible grid reduction of~\cite[Sections~3--5]{DHKW08}, with Corollary~\ref{cor:max} as the integer nonnegative-maximization subroutine. Scaling each grid problem gives an integer problem of polynomial encoding size; clearing objective denominators preserves relative error. The reduction is independent of the particular integer FPTAS. For arbitrary-sign objectives, apply the range-estimation and shifting procedure of~\cite[Section~6]{DHKW08}, including its constant-objective case, and negate $f$ for minimization. Mixed-integer linear feasibility handles empty instances. For fixed total dimension, all reductions and subroutine calls have polynomial cost in $\varphi$ and $1/\eps$ under our unary-exponent convention. This establishes the corollary without lattice-point counting; the explicit bound~\eqref{eq:runtime-coarse} is asserted only for the pure-integer problem.
+Use the denominator-compatible grid reduction of~\cite[Sections~3--5]{DHKW08}, with Corollary~\ref{cor:max} as the integer nonnegative-maximization subroutine. A coordinate bound for the bounded polyhedron is computable by rational linear programming, and the polynomial coefficients and this bound give the local Lipschitz bound of~\cite[Section~4]{DHKW08}; both bounds have polynomial encoding length. Scaling each grid problem gives an integer problem of polynomial encoding size; clearing objective denominators preserves relative error. The reduction is independent of the particular integer FPTAS. For arbitrary-sign objectives, apply the range-estimation and shifting procedure of~\cite[Section~6]{DHKW08}, including its constant-objective case, and negate $f$ for minimization. Mixed-integer linear feasibility handles empty instances. For fixed total dimension, all reductions and subroutine calls have polynomial cost in $\varphi$ and $1/\eps$ under our unary-exponent convention. This establishes the corollary without lattice-point counting; the explicit bound~\eqref{eq:runtime-coarse} is asserted only for the pure-integer problem.
 \end{proof}
 
 \section{Discussion and extensions}\label{sec:conclusion}
@@ -618,14 +623,14 @@ arXiv:2609.17889, 2026.
 
 \bibitem{Wei} L.~Wei.
 \emph{Integer quadratic programming in fixed dimension is polynomial-time solvable}.
-Optimization Online, September~14, 2026.
-\url{https://optimization-online.org/2026/09/integer-quadratic-programming-in-fixed-dimension-is-polynomial-time-solvable/}.
+Optimization Online, 2026.
+\url{https://optimization-online.org/wp-content/uploads/2026/09/integer-quadratic-programming-arxiv.pdf}.
 
 \bibitem{Stanley} R.~P.~Stanley.
 An introduction to hyperplane arrangements.
-In \emph{Geometric Combinatorics}, IAS/Park City Mathematics Series, vol.~14,
+In \emph{Geometric Combinatorics}, IAS/Park City Mathematics Series, vol.~13,
 American Mathematical Society, 2007, pp.~389--496.
-\url{https://sites.math.duke.edu/~ezra/PCMI2004/stanley.jcp.pdf}.
+\url{https://doi.org/10.1090/pcms/013/08}.
 
 \bibitem{CHKM} W.~Cook, M.~Hartmann, R.~Kannan, and C.~McDiarmid.
 On integer points in polyhedra.
@@ -643,9 +648,9 @@ FPTAS for optimizing polynomials over the mixed-integer points of polytopes in f
 \url{https://doi.org/10.1007/s10107-007-0175-8}.
 
 \bibitem{PakPanova} I.~Pak and G.~Panova.
-\emph{On the complexity of computing Kronecker coefficients}.
-Preprint, 2014.
-\url{https://www.math.ucla.edu/~pak/papers/kron_complexity32.pdf}.
+On the complexity of computing Kronecker coefficients.
+\emph{Computational Complexity} 26 (2017), 1--36.
+\url{https://doi.org/10.1007/s00037-015-0109-4}.
 
 \bibitem{MSlowrank} S.~Mittal and A.~S.~Schulz.
 An FPTAS for optimizing a class of low-rank functions over a polytope.
@@ -670,7 +675,7 @@ Subdeterminants and concave integer quadratic programming.
 \bibitem{DKLP} E.~de~Klerk, M.~Laurent, and P.~A.~Parrilo.
 A PTAS for the minimization of polynomials of fixed degree over the simplex.
 \emph{Theoretical Computer Science} 361 (2006), 210--225.
-\url{https://www.mit.edu/~parrilo/pubs/files/DeKlerk-Laurent-Parrilo-final.pdf}.
+\url{https://doi.org/10.1016/j.tcs.2006.05.011}.
 
 \bibitem{DKLSV} E.~de~Klerk, M.~Laurent, Z.~Sun, and J.~C.~Vera.
 On the convergence rate of grid search for polynomial optimization over the simplex.
@@ -688,9 +693,9 @@ An FPTAS for minimizing indefinite quadratic forms over integers in polyhedra.
 \url{https://doi.org/10.1137/1.9781611974331.ch118}.
 
 \bibitem{DelPia} A.~Del~Pia.
-\emph{An Approximation Algorithm for Indefinite Mixed Integer Quadratic Programming}.
-arXiv:2211.16442, 2022.
-\url{https://arxiv.org/abs/2211.16442}.
+An approximation algorithm for indefinite mixed integer quadratic programming.
+\emph{Mathematical Programming} 201 (2023), 263--293.
+\url{https://doi.org/10.1007/s10107-022-01907-3}.
 
 \bibitem{Lenstra} H.~W.~Lenstra, Jr.
 Integer programming with a fixed number of variables.
@@ -709,7 +714,7 @@ Minkowski's convex body theorem and integer programming.
 \bibitem{PV} F.~Piazzon and M.~Vianello.
 Markov inequalities, Dubiner distance, norming meshes and polynomial optimization on convex bodies.
 \emph{Optimization Letters} 13 (2019), 1325--1343.
-\url{https://optimization-online.org/wp-content/uploads/2018/08/6758.pdf}.
+\url{https://doi.org/10.1007/s11590-018-1377-0}.
 \end{thebibliography}
 
 \section*{Disclosure of AI assistance and development of the manuscript}

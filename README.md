@@ -1,31 +1,47 @@
 # Polynomial approximation by reflecting cells
 
-The standalone manuscript is `reflecting_cells_fptas.tex`. All figures are embedded TikZ/PGFPlots, including a pentagonal slack-cell example. Compile with a LaTeX installation supporting the packages in its preamble, or the Codex document editor.
+Start with the [short, two-column paper](reflecting_cells_fptas_short.tex). The [extended paper](reflecting_cells_fptas.tex) includes additional discussion and a detailed account of AI assistance and formal verification. Both are standalone LaTeX sources with embedded figures.
 
-## Formal verification
+## Reproduce the verification
 
-`verification/lean/` contains 30 checked results in three modules:
+**30 Lean theorems are checked; the entire FPTAS is not formally verified.** The classical Markov inequality is an explicit hypothesis. Cover construction, enumeration and bit complexity remain mathematical proofs in the paper.
 
-- `FPTASCalculations.lean`: 16 algebraic, geometric, and abstract selection results.
-- `SampledMarkov.lean`: 8 analytic and representative-transfer results, conditional on the classical scaled Markov inequality as an explicit hypothesis.
-- `LineRestriction.lean`: 6 affine substitution, degree, and multivariate approximation results.
+See the **[paper-to-Lean coverage guide](verification/README.md)** for exact declarations, assumptions, exclusions and troubleshooting.
 
-The checked results contain no `sorry` or custom axioms. The logs record only `propext`, `Classical.choice`, and `Quot.sound`. Cover construction, assembly of the full algorithm, and runtime bounds are not formally verified. `ReflectingCells.lean` is an earlier unchecked exploration, excluded from the default build.
-
-From `verification/lean`, install the pinned dependencies with `lake update` and `lake exe cache get`, then run:
+With Python 3, Git and [elan](https://github.com/leanprover/elan) installed, run from this repository:
 
 ```sh
-python3 check_fptas_calculations.py
-python3 check_sampled_markov.py
-python3 check_line_restriction.py
+cd verification/lean
+lake exe cache get
+cd ../..
+python3 verification/check_all.py
 ```
 
-Each checker also accepts `--packages-dir /absolute/path/to/existing/.lake/packages` to reuse compiled dependencies. It checks their Git revisions against the manifest. The line-restriction checker rebuilds its sampled-Markov dependency.
+The committed toolchain and dependency manifest pin Lean and Mathlib. Do not run `lake update` as part of reproduction: it can change the dependency lock. The first setup needs network access and disk space for Lean/Mathlib. The checker rebuilds all three modules and audits every theorem's transitive axioms. Expected total: **30 theorems; no custom axioms or sorryAx**.
 
-## Experiments
+Optionally include the exact small-instance experiments:
 
-`experiments/check_reflecting_cells.py` and `experiments/results.json` provide exhaustive small-instance checks. This is a correctness experiment, not an implementation achieving the stated complexity.
+```sh
+python3 verification/check_all.py --experiments
+```
 
-## Provenance
+These experiments are independent sanity checks, not an implementation with the paper's running-time bound. They include a negative control showing why refinement matters.
 
-Copied on October 14, 2026 from the `polynomial_fptas` directory and FPTAS verification modules in the local `Unbounded-Cubic-Integer-Programming` repository. The source manuscript remains there because it was open in the editor during transfer. The disclosure's reference to 45 earlier cubic calculations concerns that original repository; those unrelated files are not included here.
+## Build the papers
+
+With a standard LaTeX installation including TikZ and PGFPlots:
+
+```sh
+pdflatex -interaction=nonstopmode -halt-on-error reflecting_cells_fptas_short.tex
+pdflatex -interaction=nonstopmode -halt-on-error reflecting_cells_fptas_short.tex
+```
+
+Use `reflecting_cells_fptas.tex` instead for the extended version. Two passes resolve cross-references; no external bibliography database or image files are required.
+
+## Files and provenance
+
+- `verification/lean/`: checked sources, pinned dependencies and individual audit logs.
+- `verification/check_all.py`: single entry point; records source hashes and run status.
+- `experiments/`: exhaustive finite-instance tests and their results.
+
+The project was transferred from `Unbounded-Cubic-Integer-Programming` on October 14, 2026. The 45 earlier cubic calculations mentioned in the extended disclosure belong to that separate project and do not certify this FPTAS. `verification/lean/ReflectingCells.lean` is an unchecked historical exploration, excluded from the build and audit.

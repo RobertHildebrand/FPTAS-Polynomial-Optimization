@@ -1,0 +1,37 @@
+{
+  "started_utc": "2026-10-14T19:58:14.387601+00:00",
+  "success": true,
+  "toolchain": "leanprover/lean4:v4.34.0-rc2",
+  "sha256": {
+    "verification/lean/FPTASCalculations.lean": "e6a3d6326753e404f8f5caed209d1b404e9caa6899887493d52dd773d26fdbcf",
+    "verification/lean/SampledMarkov.lean": "29dbefa220eeca2494c9a3526616fe62b1a249d86e2a9e901e72d0274d6eca1f",
+    "verification/lean/LineRestriction.lean": "9d043cfe7373edd62675ccf803aaa7f34b78e092cb66d9caf419ea8c7342d22f",
+    "verification/lean/lake-manifest.json": "a1da68f56dd0335866aceca8129ac21a11702e523b33d4b58474c24b9d5edb43",
+    "verification/lean/lakefile.toml": "883e392ea991159012334d8aadd8233abba2c019293e710bb172c9b23f6ecdd0",
+    "verification/lean/lean-toolchain": "8190e75a201741065fe508b28955dd64dd72d090babe5f70ce6848879d68ae88",
+    "verification/lean/check_fptas_calculations.py": "fd5e8f194861dfc5c7e2a02ec51f9e46aed8c38b7aef7a9a5179adb270da4a48",
+    "verification/lean/check_sampled_markov.py": "268eef0b460f7d4b99ac3ed8f6ed7ad99243229ae82e6ea374ebb38f00a7e269",
+    "verification/lean/check_line_restriction.py": "b7ec2c73f649cebb2385eadef562f09ae8e20a70bcbd90739b577a6f43a01cc5",
+    "verification/check_all.py": "20bfa15fdacec0ac0c6a8c8996e40cb226688c50f648fd471b59feffc3c81164",
+    "experiments/check_reflecting_cells.py": "9bd485a5caec425ec4efb6269e1e2c1208ae71abe910fb31ba2d2e7ac3813ea7"
+  },
+  "checks": [
+    {
+      "script": "verification/lean/check_fptas_calculations.py",
+      "exit_code": 0
+    },
+    {
+      "script": "verification/lean/check_sampled_markov.py",
+      "exit_code": 0
+    },
+    {
+      "script": "verification/lean/check_line_restriction.py",
+      "exit_code": 0
+    },
+    {
+      "script": "experiments/check_reflecting_cells.py",
+      "exit_code": 0
+    }
+  ],
+  "finished_utc": "2026-10-14T19:58:58.872641+00:00"
+}
