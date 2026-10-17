@@ -4,6 +4,7 @@ import argparse
 from datetime import datetime, timezone
 import hashlib
 import json
+import re
 from pathlib import Path
 import shutil
 import subprocess
@@ -52,7 +53,8 @@ def main():
             return 1
     record.update(success=True, finished_utc=datetime.now(timezone.utc).isoformat())
     save()
-    print('\nPASS: all three Lean modules rebuilt and axiom-audited (30 theorems).')
+    count = sum(len(re.findall(r'^theorem \w+', (LEAN / name).read_text(), re.M)) for name in ['FPTASCalculations.lean', 'SampledMarkov.lean', 'LineRestriction.lean'])
+    print(f'\nPASS: all three Lean modules rebuilt and axiom-audited ({count} theorems).')
     print('Run record: ' + str(output))
     return 0
 

@@ -20,9 +20,12 @@ def ceil_log2(n):
 
 
 def refinement(degree, epsilon):
-    n = degree ** 4 * epsilon.denominator
+    n = degree ** 2 * epsilon.denominator
     ell = isqrt(n // epsilon.numerator)
-    return ell if ell * ell * epsilon.numerator >= n else ell + 1
+    ell = ell if ell * ell * epsilon.numerator >= n else ell + 1
+    ell = max(degree ** 2, ell)
+    assert ell >= degree ** 2 and epsilon * ell ** 2 >= degree ** 2
+    return ell
 
 
 def thresholds(M, ell):
@@ -106,7 +109,7 @@ def run_case(name, bounds, objectives, degree, epsilon, extra=()):
         lo, hi = min(vals.values()), max(vals.values())
         R = hi - lo
         budget = epsilon * R
-        lemma_budget = Fraction(degree ** 4, ell ** 2) * R
+        lemma_budget = Fraction(degree ** 2, ell ** 2) * R
         reps = [points[0] for points in groups.values()]
         approx_min, approx_max = min(vals[x] for x in reps), max(vals[x] for x in reps)
         assert approx_min - lo <= budget

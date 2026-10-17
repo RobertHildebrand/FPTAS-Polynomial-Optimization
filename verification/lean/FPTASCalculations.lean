@@ -34,15 +34,13 @@ theorem second_difference_transfer {pminus pzero pplus B : ℝ}
     pplus - pzero ≤ B := by
   linarith
 
-theorem refinement_error {D ell eps : ℝ} (heps : 0 < eps)
-    (hell : 0 < ell) (hsize : D ^ 2 / Real.sqrt eps ≤ ell) :
-    D ^ 4 / ell ^ 2 ≤ eps := by
+theorem refinement_error {D ell eps : ℝ} (hD : 0 ≤ D) (heps : 0 < eps)
+    (hell : 0 < ell) (hsize : D / Real.sqrt eps ≤ ell) :
+    D ^ 2 / ell ^ 2 ≤ eps := by
   have hs : 0 < Real.sqrt eps := Real.sqrt_pos.2 heps
-  have hsq : Real.sqrt eps ^ 2 = eps := Real.sq_sqrt (le_of_lt heps)
-  have hm : D ^ 2 ≤ ell * Real.sqrt eps := (div_le_iff₀ hs).1 hsize
-  have hn : 0 ≤ ell * Real.sqrt eps := le_of_lt (mul_pos hell hs)
-  have hpow : (D ^ 2) ^ 2 ≤ (ell * Real.sqrt eps) ^ 2 := by
-    nlinarith [sq_nonneg (ell * Real.sqrt eps - D ^ 2)]
+  have hsq : Real.sqrt eps ^ 2 = eps := Real.sq_sqrt heps.le
+  have hm : D ≤ ell * Real.sqrt eps := (div_le_iff₀ hs).1 hsize
+  have hpow := mul_self_le_mul_self hD hm
   apply (div_le_iff₀ (sq_pos_of_pos hell)).2
   nlinarith [hpow]
 
@@ -66,15 +64,15 @@ theorem nonnegative_maximization {value fmin fmax eps : ℝ}
 
 
 /- The actual natural-number ceiling used by the algorithm. -/
-theorem ceiling_refinement {D eps : ℝ} (hD : 0 < D) (heps : 0 < eps) :
-    let ell : ℕ := ⌈D ^ 2 / Real.sqrt eps⌉₊
-    0 < ell ∧ D ^ 4 / (ell : ℝ) ^ 2 ≤ eps := by
+theorem ceiling_refinement {D : ℕ} {eps : ℝ} (hD : 0 < D) (heps : 0 < eps) :
+    let ell : ℕ := max (D ^ 2) ⌈(D : ℝ) / Real.sqrt eps⌉₊
+    0 < ell ∧ D ^ 2 ≤ ell ∧ (D : ℝ) ^ 2 / (ell : ℝ) ^ 2 ≤ eps := by
   dsimp
-  have ht : 0 < D ^ 2 / Real.sqrt eps :=
-    div_pos (sq_pos_of_pos hD) (Real.sqrt_pos.2 heps)
-  have hl : 0 < ⌈D ^ 2 / Real.sqrt eps⌉₊ := Nat.ceil_pos.2 ht
-  refine ⟨hl, refinement_error heps ?_ (Nat.le_ceil _)⟩
-  exact_mod_cast hl
+  have hl : 0 < max (D ^ 2) ⌈(D : ℝ) / Real.sqrt eps⌉₊ :=
+    lt_of_lt_of_le (pow_pos hD _) (le_max_left _ _)
+  refine ⟨hl, le_max_left _ _, refinement_error (Nat.cast_nonneg D) heps ?_ ?_⟩
+  · exact_mod_cast hl
+  · exact (Nat.le_ceil _).trans (by exact_mod_cast (le_max_right (D^2) ⌈(D : ℝ) / Real.sqrt eps⌉₊))
 
 /- A finite candidate set, indexed comparison regions, and sound local outputs.
 The oracle inequality is stated pointwise, avoiding conventions for inf ∅. -/

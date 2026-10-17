@@ -4,7 +4,7 @@ Start with the [short, two-column paper](reflecting_cells_fptas_short.tex). The 
 
 ## Reproduce the verification
 
-**30 Lean theorems are checked; the entire FPTAS is not formally verified.** The classical Markov inequality is an explicit hypothesis. Cover construction, enumeration and bit complexity remain mathematical proofs in the paper.
+**34 Lean theorems are checked; the entire FPTAS is not formally verified.** The development now proves the symmetrization identity, its degree bound, the strengthened `D^2 / ell^2` approximation estimate, and the refinement `max(D^2, ceil(D / sqrt(epsilon)))`. Classical Markov inequalities remain explicit hypotheses. Cover construction, enumeration, the mixed-integer reduction and bit complexity remain mathematical proofs in the paper.
 
 See the **[paper-to-Lean coverage guide](verification/README.md)** for exact declarations, assumptions, exclusions and troubleshooting.
 
@@ -17,7 +17,7 @@ cd ../..
 python3 verification/check_all.py
 ```
 
-The committed toolchain and dependency manifest pin Lean and Mathlib. Do not run `lake update` as part of reproduction: it can change the dependency lock. The first setup needs network access and disk space for Lean/Mathlib. The checker rebuilds all three modules and audits every theorem's transitive axioms. Expected total: **30 theorems; no custom axioms or sorryAx**.
+The committed toolchain and dependency manifest pin Lean and Mathlib. Do not run `lake update` as part of reproduction: it can change the dependency lock. The first setup needs network access and disk space for Lean/Mathlib. The checker rebuilds all three modules and audits every theorem's transitive axioms. Expected total: **34 theorems; no custom axioms or sorryAx**.
 
 Optionally include the exact small-instance experiments:
 

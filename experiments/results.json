@@ -4,18 +4,18 @@
       "case": "interval_D2",
       "degree": 2,
       "epsilon": "1/2",
-      "ell": 6,
+      "ell": 4,
       "lattice_points": 2001,
       "occupied_cells": 143,
-      "largest_cell": 85,
+      "largest_cell": 127,
       "results": [
         {
           "objective": "shifted_square",
           "minimum": 0,
           "maximum": 1261129,
-          "returned_minimum": 576,
-          "adversarial_minimum": 3721,
-          "worst_relative_error": "3721/1261129",
+          "returned_minimum": 324,
+          "adversarial_minimum": 361,
+          "worst_relative_error": "361/1261129",
           "progressions_checked": 2
         },
         {
@@ -96,18 +96,18 @@
       "case": "interval_D2",
       "degree": 2,
       "epsilon": "1/10",
-      "ell": 13,
+      "ell": 7,
       "lattice_points": 2001,
-      "occupied_cells": 225,
-      "largest_cell": 40,
+      "occupied_cells": 143,
+      "largest_cell": 73,
       "results": [
         {
           "objective": "shifted_square",
           "minimum": 0,
           "maximum": 1261129,
-          "returned_minimum": 121,
-          "adversarial_minimum": 400,
-          "worst_relative_error": "400/1261129",
+          "returned_minimum": 0,
+          "adversarial_minimum": 2209,
+          "worst_relative_error": "2209/1261129",
           "progressions_checked": 2
         },
         {
@@ -116,16 +116,16 @@
           "maximum": 2,
           "returned_minimum": -3999998,
           "adversarial_minimum": -3999998,
-          "worst_relative_error": "9/40000",
+          "worst_relative_error": "529/1000000",
           "progressions_checked": 3
         },
         {
           "objective": "random_1",
           "minimum": 2,
           "maximum": 7007002,
-          "returned_minimum": 1472,
-          "adversarial_minimum": 1682,
-          "worst_relative_error": "6/25025",
+          "returned_minimum": 3544,
+          "adversarial_minimum": 3866,
+          "worst_relative_error": "69/125125",
           "progressions_checked": 2
         },
         {
@@ -141,36 +141,36 @@
           "objective": "random_3",
           "minimum": -6,
           "maximum": 2000994,
-          "returned_minimum": 459,
-          "adversarial_minimum": 459,
-          "worst_relative_error": "31/133400",
+          "returned_minimum": 1075,
+          "adversarial_minimum": 1075,
+          "worst_relative_error": "47/87000",
           "progressions_checked": 2
         },
         {
           "objective": "random_4",
           "minimum": 0,
           "maximum": 2004002,
-          "returned_minimum": 392,
-          "adversarial_minimum": 512,
-          "worst_relative_error": "256/1002001",
+          "returned_minimum": 968,
+          "adversarial_minimum": 1058,
+          "worst_relative_error": "529/1002001",
           "progressions_checked": 2
         },
         {
           "objective": "random_5",
           "minimum": -9,
           "maximum": 4005993,
-          "returned_minimum": 803,
-          "adversarial_minimum": 983,
-          "worst_relative_error": "496/2003001",
+          "returned_minimum": 1971,
+          "adversarial_minimum": 2153,
+          "worst_relative_error": "47/87087",
           "progressions_checked": 2
         },
         {
           "objective": "random_6",
           "minimum": 7,
           "maximum": 6004007,
-          "returned_minimum": 1417,
-          "adversarial_minimum": 1417,
-          "worst_relative_error": "141/600400",
+          "returned_minimum": 3273,
+          "adversarial_minimum": 3273,
+          "worst_relative_error": "1633/3002000",
           "progressions_checked": 2
         },
         {
@@ -179,7 +179,7 @@
           "maximum": 2,
           "returned_minimum": -7005998,
           "adversarial_minimum": -7005998,
-          "worst_relative_error": "333/1401200",
+          "worst_relative_error": "3841/7006000",
           "progressions_checked": 2
         }
       ]
@@ -188,18 +188,18 @@
       "case": "interval_D3",
       "degree": 3,
       "epsilon": "1/2",
-      "ell": 13,
+      "ell": 9,
       "lattice_points": 2001,
-      "occupied_cells": 225,
-      "largest_cell": 40,
+      "occupied_cells": 171,
+      "largest_cell": 57,
       "results": [
         {
           "objective": "shifted_square",
           "minimum": 0,
           "maximum": 1261129,
-          "returned_minimum": 121,
-          "adversarial_minimum": 400,
-          "worst_relative_error": "400/1261129",
+          "returned_minimum": 225,
+          "adversarial_minimum": 529,
+          "worst_relative_error": "529/1261129",
           "progressions_checked": 2
         },
         {
@@ -226,7 +226,7 @@
           "maximum": 3,
           "returned_minimum": -4004998,
           "adversarial_minimum": -4004998,
-          "worst_relative_error": "976/4005001",
+          "worst_relative_error": "2185/4005001",
           "progressions_checked": 2
         },
         {
@@ -280,16 +280,16 @@
       "case": "interval_D3",
       "degree": 3,
       "epsilon": "1/10",
-      "ell": 29,
+      "ell": 10,
       "lattice_points": 2001,
-      "occupied_cells": 413,
-      "largest_cell": 18,
+      "occupied_cells": 197,
+      "largest_cell": 51,
       "results": [
         {
           "objective": "shifted_square",
           "minimum": 0,
           "maximum": 1261129,
-          "returned_minimum": 25,
+          "returned_minimum": 16,
           "adversarial_minimum": 36,
           "worst_relative_error": "36/1261129",
           "progressions_checked": 2
@@ -318,7 +318,7 @@
           "maximum": 3,
           "returned_minimum": -4004998,
           "adversarial_minimum": -4004998,
-          "worst_relative_error": "25/572143",
+          "worst_relative_error": "2185/4005001",
           "progressions_checked": 2
         },
         {
@@ -372,27 +372,27 @@
       "case": "interval_D4",
       "degree": 4,
       "epsilon": "1/2",
-      "ell": 23,
+      "ell": 16,
       "lattice_points": 2001,
-      "occupied_cells": 347,
-      "largest_cell": 23,
+      "occupied_cells": 415,
+      "largest_cell": 31,
       "results": [
         {
           "objective": "shifted_square",
           "minimum": 0,
           "maximum": 1261129,
-          "returned_minimum": 81,
-          "adversarial_minimum": 81,
-          "worst_relative_error": "81/1261129",
+          "returned_minimum": 169,
+          "adversarial_minimum": 169,
+          "worst_relative_error": "169/1261129",
           "progressions_checked": 2
         },
         {
           "objective": "random_0",
           "minimum": 0,
           "maximum": 2007005000004,
-          "returned_minimum": 4,
-          "adversarial_minimum": 18,
-          "worst_relative_error": "1/111500277778",
+          "returned_minimum": 2650,
+          "adversarial_minimum": 4932,
+          "worst_relative_error": "137/55750138889",
           "progressions_checked": 2
         },
         {
@@ -408,10 +408,10 @@
           "objective": "random_2",
           "minimum": 1,
           "maximum": 4006995999007,
-          "returned_minimum": 1,
-          "adversarial_minimum": 13,
-          "worst_relative_error": "2/667832666501",
-          "progressions_checked": 3
+          "returned_minimum": 7021,
+          "adversarial_minimum": 11809,
+          "worst_relative_error": "1968/667832666501",
+          "progressions_checked": 2
         },
         {
           "objective": "random_3",
@@ -419,7 +419,7 @@
           "maximum": 5,
           "returned_minimum": -5006006996995,
           "adversarial_minimum": -5006006996995,
-          "worst_relative_error": "1/333733799800",
+          "worst_relative_error": "959/333733799800",
           "progressions_checked": 2
         },
         {
@@ -428,16 +428,16 @@
           "maximum": 9,
           "returned_minimum": -6003994000996,
           "adversarial_minimum": -6003994000996,
-          "worst_relative_error": "2/1200798800201",
+          "worst_relative_error": "1192/461845692385",
           "progressions_checked": 2
         },
         {
           "objective": "random_5",
           "minimum": 2,
           "maximum": 3007004997002,
-          "returned_minimum": 14,
-          "adversarial_minimum": 14,
-          "worst_relative_error": "1/250583749750",
+          "returned_minimum": 9050,
+          "adversarial_minimum": 9050,
+          "worst_relative_error": "377/125291874875",
           "progressions_checked": 2
         },
         {
@@ -455,16 +455,16 @@
           "maximum": 1,
           "returned_minimum": -7001004999999,
           "adversarial_minimum": -7001004999999,
-          "worst_relative_error": "13/7001005000000",
+          "worst_relative_error": "3479/1400201000000",
           "progressions_checked": 2
         },
         {
           "objective": "double_well",
           "minimum": 0,
           "maximum": 1590436265625,
-          "returned_minimum": 5929,
-          "adversarial_minimum": 5929,
-          "worst_relative_error": "5929/1590436265625",
+          "returned_minimum": 27225,
+          "adversarial_minimum": 27225,
+          "worst_relative_error": "121/7068605625",
           "progressions_checked": 2
         }
       ]
@@ -473,27 +473,27 @@
       "case": "interval_D4",
       "degree": 4,
       "epsilon": "1/10",
-      "ell": 51,
+      "ell": 16,
       "lattice_points": 2001,
-      "occupied_cells": 625,
-      "largest_cell": 11,
+      "occupied_cells": 415,
+      "largest_cell": 31,
       "results": [
         {
           "objective": "shifted_square",
           "minimum": 0,
           "maximum": 1261129,
-          "returned_minimum": 4,
-          "adversarial_minimum": 9,
-          "worst_relative_error": "9/1261129",
+          "returned_minimum": 169,
+          "adversarial_minimum": 169,
+          "worst_relative_error": "169/1261129",
           "progressions_checked": 2
         },
         {
           "objective": "random_0",
           "minimum": 0,
           "maximum": 2007005000004,
-          "returned_minimum": 22,
-          "adversarial_minimum": 400,
-          "worst_relative_error": "100/501751250001",
+          "returned_minimum": 2650,
+          "adversarial_minimum": 4932,
+          "worst_relative_error": "137/55750138889",
           "progressions_checked": 2
         },
         {
@@ -509,9 +509,9 @@
           "objective": "random_2",
           "minimum": 1,
           "maximum": 4006995999007,
-          "returned_minimum": 109,
-          "adversarial_minimum": 481,
-          "worst_relative_error": "80/667832666501",
+          "returned_minimum": 7021,
+          "adversarial_minimum": 11809,
+          "worst_relative_error": "1968/667832666501",
           "progressions_checked": 2
         },
         {
@@ -520,7 +520,7 @@
           "maximum": 5,
           "returned_minimum": -5006006996995,
           "adversarial_minimum": -5006006996995,
-          "worst_relative_error": "207/1668668999000",
+          "worst_relative_error": "959/333733799800",
           "progressions_checked": 2
         },
         {
@@ -529,16 +529,16 @@
           "maximum": 9,
           "returned_minimum": -6003994000996,
           "adversarial_minimum": -6003994000996,
-          "worst_relative_error": "548/6003994001005",
+          "worst_relative_error": "1192/461845692385",
           "progressions_checked": 2
         },
         {
           "objective": "random_5",
           "minimum": 2,
           "maximum": 3007004997002,
-          "returned_minimum": 414,
-          "adversarial_minimum": 470,
-          "worst_relative_error": "39/250583749750",
+          "returned_minimum": 9050,
+          "adversarial_minimum": 9050,
+          "worst_relative_error": "377/125291874875",
           "progressions_checked": 2
         },
         {
@@ -556,17 +556,17 @@
           "maximum": 1,
           "returned_minimum": -7001004999999,
           "adversarial_minimum": -7001004999999,
-          "worst_relative_error": "639/7001005000000",
+          "worst_relative_error": "3479/1400201000000",
           "progressions_checked": 2
         },
         {
           "objective": "double_well",
           "minimum": 0,
           "maximum": 1590436265625,
-          "returned_minimum": 0,
-          "adversarial_minimum": 25,
-          "worst_relative_error": "1/63617450625",
-          "progressions_checked": 3
+          "returned_minimum": 27225,
+          "adversarial_minimum": 27225,
+          "worst_relative_error": "121/7068605625",
+          "progressions_checked": 2
         }
       ]
     },
@@ -574,18 +574,18 @@
       "case": "interval_D6",
       "degree": 6,
       "epsilon": "1/2",
-      "ell": 51,
+      "ell": 36,
       "lattice_points": 2001,
-      "occupied_cells": 625,
-      "largest_cell": 11,
+      "occupied_cells": 515,
+      "largest_cell": 15,
       "results": [
         {
           "objective": "shifted_square",
           "minimum": 0,
           "maximum": 1261129,
-          "returned_minimum": 4,
-          "adversarial_minimum": 9,
-          "worst_relative_error": "9/1261129",
+          "returned_minimum": 16,
+          "adversarial_minimum": 81,
+          "worst_relative_error": "81/1261129",
           "progressions_checked": 2
         },
         {
@@ -594,7 +594,7 @@
           "maximum": 4,
           "returned_minimum": -4001006994994993001,
           "adversarial_minimum": -4001006994994993001,
-          "worst_relative_error": "706/800201398998998601",
+          "worst_relative_error": "569/121242636211969485",
           "progressions_checked": 2
         },
         {
@@ -603,7 +603,7 @@
           "maximum": 102,
           "returned_minimum": -4005994006993996002,
           "adversarial_minimum": -4005994006993996002,
-          "worst_relative_error": "4115/4005994006993996104",
+          "worst_relative_error": "893/166916416958083171",
           "progressions_checked": 2
         },
         {
@@ -612,62 +612,62 @@
           "maximum": -7,
           "returned_minimum": -7004002994000004007,
           "adversarial_minimum": -7004002994000004007,
-          "worst_relative_error": "257/291833458083333500",
+          "worst_relative_error": "691/145916729041666750",
           "progressions_checked": 2
         },
         {
           "objective": "random_3",
           "minimum": -4,
           "maximum": 4000006000994996996,
-          "returned_minimum": 3335,
-          "adversarial_minimum": 3371,
-          "worst_relative_error": "9/10666682669319992",
+          "returned_minimum": 17784,
+          "adversarial_minimum": 17888,
+          "worst_relative_error": "213/47619119059464250",
           "progressions_checked": 2
         },
         {
           "objective": "random_4",
           "minimum": -7,
           "maximum": 6004998998001004995,
-          "returned_minimum": 3121,
-          "adversarial_minimum": 5473,
-          "worst_relative_error": "2740/3002499499000502501",
+          "returned_minimum": 19319,
+          "adversarial_minimum": 29343,
+          "worst_relative_error": "14675/3002499499000502501",
           "progressions_checked": 2
         },
         {
           "objective": "random_5",
           "minimum": -1607,
           "maximum": 1003994003005995005,
-          "returned_minimum": -736,
-          "adversarial_minimum": 1340,
-          "worst_relative_error": "2947/1003994003005996612",
+          "returned_minimum": -1607,
+          "adversarial_minimum": 6929,
+          "worst_relative_error": "2134/250998500751499153",
           "progressions_checked": 2
         },
         {
           "objective": "random_6",
           "minimum": 3,
           "maximum": 4007002997001999003,
-          "returned_minimum": 4797,
-          "adversarial_minimum": 4797,
-          "worst_relative_error": "799/667833832833666500",
+          "returned_minimum": 24159,
+          "adversarial_minimum": 24159,
+          "worst_relative_error": "2013/333916916416833250",
           "progressions_checked": 2
         },
         {
           "objective": "random_7",
           "minimum": -2,
           "maximum": 5000005001996006000,
-          "returned_minimum": 3942,
-          "adversarial_minimum": 4086,
-          "worst_relative_error": "292/357143214428286143",
+          "returned_minimum": 21544,
+          "adversarial_minimum": 21848,
+          "worst_relative_error": "10925/2500002500998003001",
           "progressions_checked": 2
         },
         {
           "objective": "double_well",
           "minimum": 0,
           "maximum": 1590436265625,
-          "returned_minimum": 0,
-          "adversarial_minimum": 25,
-          "worst_relative_error": "1/63617450625",
-          "progressions_checked": 3
+          "returned_minimum": 144,
+          "adversarial_minimum": 5929,
+          "worst_relative_error": "5929/1590436265625",
+          "progressions_checked": 2
         }
       ]
     },
@@ -675,18 +675,18 @@
       "case": "interval_D6",
       "degree": 6,
       "epsilon": "1/10",
-      "ell": 114,
+      "ell": 36,
       "lattice_points": 2001,
-      "occupied_cells": 1097,
-      "largest_cell": 5,
+      "occupied_cells": 515,
+      "largest_cell": 15,
       "results": [
         {
           "objective": "shifted_square",
           "minimum": 0,
           "maximum": 1261129,
-          "returned_minimum": 0,
-          "adversarial_minimum": 1,
-          "worst_relative_error": "1/1261129",
+          "returned_minimum": 16,
+          "adversarial_minimum": 81,
+          "worst_relative_error": "81/1261129",
           "progressions_checked": 2
         },
         {
@@ -695,7 +695,7 @@
           "maximum": 4,
           "returned_minimum": -4001006994994993001,
           "adversarial_minimum": -4001006994994993001,
-          "worst_relative_error": "2/363727908635908455",
+          "worst_relative_error": "569/121242636211969485",
           "progressions_checked": 2
         },
         {
@@ -704,7 +704,7 @@
           "maximum": 102,
           "returned_minimum": -4005994006993996002,
           "adversarial_minimum": -4005994006993996002,
-          "worst_relative_error": "0",
+          "worst_relative_error": "893/166916416958083171",
           "progressions_checked": 2
         },
         {
@@ -713,62 +713,62 @@
           "maximum": -7,
           "returned_minimum": -7004002994000004007,
           "adversarial_minimum": -7004002994000004007,
-          "worst_relative_error": "1/583666916166667000",
+          "worst_relative_error": "691/145916729041666750",
           "progressions_checked": 2
         },
         {
           "objective": "random_3",
           "minimum": -4,
           "maximum": 4000006000994996996,
-          "returned_minimum": 3,
-          "adversarial_minimum": 3,
-          "worst_relative_error": "1/571429428713571000",
+          "returned_minimum": 17784,
+          "adversarial_minimum": 17888,
+          "worst_relative_error": "213/47619119059464250",
           "progressions_checked": 2
         },
         {
           "objective": "random_4",
           "minimum": -7,
           "maximum": 6004998998001004995,
-          "returned_minimum": -7,
-          "adversarial_minimum": 9,
-          "worst_relative_error": "8/3002499499000502501",
+          "returned_minimum": 19319,
+          "adversarial_minimum": 29343,
+          "worst_relative_error": "14675/3002499499000502501",
           "progressions_checked": 2
         },
         {
           "objective": "random_5",
           "minimum": -1607,
           "maximum": 1003994003005995005,
-          "returned_minimum": -145,
-          "adversarial_minimum": -145,
-          "worst_relative_error": "731/501997001502998306",
+          "returned_minimum": -1607,
+          "adversarial_minimum": 6929,
+          "worst_relative_error": "2134/250998500751499153",
           "progressions_checked": 2
         },
         {
           "objective": "random_6",
           "minimum": 3,
           "maximum": 4007002997001999003,
-          "returned_minimum": 15,
-          "adversarial_minimum": 15,
-          "worst_relative_error": "1/333916916416833250",
+          "returned_minimum": 24159,
+          "adversarial_minimum": 24159,
+          "worst_relative_error": "2013/333916916416833250",
           "progressions_checked": 2
         },
         {
           "objective": "random_7",
           "minimum": -2,
           "maximum": 5000005001996006000,
-          "returned_minimum": -2,
-          "adversarial_minimum": 14,
-          "worst_relative_error": "8/2500002500998003001",
+          "returned_minimum": 21544,
+          "adversarial_minimum": 21848,
+          "worst_relative_error": "10925/2500002500998003001",
           "progressions_checked": 2
         },
         {
           "objective": "double_well",
           "minimum": 0,
           "maximum": 1590436265625,
-          "returned_minimum": 0,
-          "adversarial_minimum": 16,
-          "worst_relative_error": "16/1590436265625",
-          "progressions_checked": 3
+          "returned_minimum": 144,
+          "adversarial_minimum": 5929,
+          "worst_relative_error": "5929/1590436265625",
+          "progressions_checked": 2
         }
       ]
     },
@@ -776,10 +776,10 @@
       "case": "box",
       "degree": 4,
       "epsilon": "1/2",
-      "ell": 23,
+      "ell": 16,
       "lattice_points": 25921,
-      "occupied_cells": 18769,
-      "largest_cell": 4,
+      "occupied_cells": 21025,
+      "largest_cell": 9,
       "results": [
         {
           "objective": "nonconvex_quartic",
@@ -794,7 +794,7 @@
           "objective": "interior_square",
           "minimum": 0,
           "maximum": 18058,
-          "returned_minimum": 1,
+          "returned_minimum": 0,
           "adversarial_minimum": 1,
           "worst_relative_error": "1/18058",
           "progressions_checked": 2
@@ -823,7 +823,7 @@
           "maximum": 283404316,
           "returned_minimum": -20853700,
           "adversarial_minimum": -20853700,
-          "worst_relative_error": "15365/304258016",
+          "worst_relative_error": "0",
           "progressions_checked": 2
         },
         {
@@ -840,8 +840,8 @@
           "minimum": -250341738,
           "maximum": 948134318,
           "returned_minimum": -250341738,
-          "adversarial_minimum": -250299022,
-          "worst_relative_error": "10679/299619014",
+          "adversarial_minimum": -250341738,
+          "worst_relative_error": "0",
           "progressions_checked": 2
         },
         {
@@ -877,10 +877,10 @@
       "case": "oblique",
       "degree": 4,
       "epsilon": "1/2",
-      "ell": 23,
+      "ell": 16,
       "lattice_points": 14264,
-      "occupied_cells": 13440,
-      "largest_cell": 4,
+      "occupied_cells": 13754,
+      "largest_cell": 5,
       "results": [
         {
           "objective": "nonconvex_quartic",
@@ -896,8 +896,8 @@
           "minimum": 0,
           "maximum": 15185,
           "returned_minimum": 0,
-          "adversarial_minimum": 0,
-          "worst_relative_error": "0",
+          "adversarial_minimum": 1,
+          "worst_relative_error": "1/15185",
           "progressions_checked": 2
         },
         {
@@ -978,18 +978,18 @@
       "case": "box",
       "degree": 4,
       "epsilon": "1/10",
-      "ell": 51,
+      "ell": 16,
       "lattice_points": 25921,
-      "occupied_cells": 25921,
-      "largest_cell": 1,
+      "occupied_cells": 21025,
+      "largest_cell": 9,
       "results": [
         {
           "objective": "nonconvex_quartic",
           "minimum": 1,
           "maximum": 40953682,
           "returned_minimum": 1,
-          "adversarial_minimum": 1,
-          "worst_relative_error": "0",
+          "adversarial_minimum": 2,
+          "worst_relative_error": "1/40953681",
           "progressions_checked": 6
         },
         {
@@ -997,8 +997,8 @@
           "minimum": 0,
           "maximum": 18058,
           "returned_minimum": 0,
-          "adversarial_minimum": 0,
-          "worst_relative_error": "0",
+          "adversarial_minimum": 1,
+          "worst_relative_error": "1/18058",
           "progressions_checked": 2
         },
         {
@@ -1061,7 +1061,7 @@
           "maximum": 1,
           "returned_minimum": -739295762,
           "adversarial_minimum": -739295762,
-          "worst_relative_error": "0",
+          "worst_relative_error": "1/246431921",
           "progressions_checked": 2
         },
         {
@@ -1070,7 +1070,7 @@
           "maximum": 6,
           "returned_minimum": -742976637,
           "adversarial_minimum": -742976637,
-          "worst_relative_error": "0",
+          "worst_relative_error": "1/247658881",
           "progressions_checked": 2
         }
       ]
@@ -1079,10 +1079,10 @@
       "case": "oblique",
       "degree": 4,
       "epsilon": "1/10",
-      "ell": 51,
+      "ell": 16,
       "lattice_points": 14264,
-      "occupied_cells": 14264,
-      "largest_cell": 1,
+      "occupied_cells": 13754,
+      "largest_cell": 5,
       "results": [
         {
           "objective": "nonconvex_quartic",
@@ -1098,8 +1098,8 @@
           "minimum": 0,
           "maximum": 15185,
           "returned_minimum": 0,
-          "adversarial_minimum": 0,
-          "worst_relative_error": "0",
+          "adversarial_minimum": 1,
+          "worst_relative_error": "1/15185",
           "progressions_checked": 2
         },
         {
@@ -1180,9 +1180,9 @@
       "case": "lower_dimensional",
       "degree": 4,
       "epsilon": "1/2",
-      "ell": 23,
+      "ell": 16,
       "lattice_points": 201,
-      "occupied_cells": 153,
+      "occupied_cells": 165,
       "largest_cell": 3,
       "results": [
         {
@@ -1198,7 +1198,7 @@
           "objective": "interior_square",
           "minimum": 8,
           "maximum": 26458,
-          "returned_minimum": 8,
+          "returned_minimum": 10,
           "adversarial_minimum": 10,
           "worst_relative_error": "1/13225",
           "progressions_checked": 2
@@ -1207,9 +1207,9 @@
           "objective": "random_0",
           "minimum": -438,
           "maximum": 108010594,
-          "returned_minimum": -386,
-          "adversarial_minimum": -150,
-          "worst_relative_error": "36/13501379",
+          "returned_minimum": -342,
+          "adversarial_minimum": -342,
+          "worst_relative_error": "12/13501379",
           "progressions_checked": 2
         },
         {
@@ -1253,8 +1253,8 @@
           "minimum": -14,
           "maximum": 608919997,
           "returned_minimum": -14,
-          "adversarial_minimum": -11,
-          "worst_relative_error": "1/202973337",
+          "adversarial_minimum": -3,
+          "worst_relative_error": "11/608920011",
           "progressions_checked": 2
         },
         {
@@ -1325,18 +1325,18 @@
       "case": "large_encoding",
       "degree": 2,
       "epsilon": "1/10",
-      "ell": 13,
+      "ell": 7,
       "lattice_points": 2001,
-      "occupied_cells": 225,
-      "largest_cell": 40,
+      "occupied_cells": 143,
+      "largest_cell": 73,
       "results": [
         {
           "objective": "translated_square",
           "minimum": 0,
           "maximum": 1261129,
-          "returned_minimum": 121,
-          "adversarial_minimum": 400,
-          "worst_relative_error": "400/1261129",
+          "returned_minimum": 0,
+          "adversarial_minimum": 2209,
+          "worst_relative_error": "2209/1261129",
           "progressions_checked": 2
         }
       ]

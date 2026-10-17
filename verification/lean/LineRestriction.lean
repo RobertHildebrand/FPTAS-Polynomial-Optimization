@@ -63,7 +63,7 @@ theorem multivariate_representative {σ : Type*} (f : MvPolynomial σ ℝ)
       (fun i => x i + (k : ℝ) * (y i - x i)) ∈ S) :
     0 ≤ MvPolynomial.eval y f - MvPolynomial.eval x f ∧
     MvPolynomial.eval y f - MvPolynomial.eval x f ≤
-      (D : ℝ)^4 / (T : ℝ)^2 * (fmax - MvPolynomial.eval x f) := by
+      (D : ℝ)^2 / (T : ℝ)^2 * (fmax - MvPolynomial.eval x f) := by
   apply SampledMarkov.representative_at_minimum S (fun z => MvPolynomial.eval z f)
     x y fmax hT hDT hmarkov hy hbounds (restrict f x y)
     ((degree_restrict f x y).trans hdeg) (eval_zero f x y) (eval_one f x y)
@@ -84,7 +84,7 @@ theorem multivariate_selection {σ : Type*} (f : MvPolynomial σ ℝ)
       (∀ y ∈ Y, MvPolynomial.eval best f ≤ MvPolynomial.eval y f) ∧
       0 ≤ MvPolynomial.eval best f - MvPolynomial.eval x f ∧
       MvPolynomial.eval best f - MvPolynomial.eval x f ≤
-        (D : ℝ)^4 / (T : ℝ)^2 * (fmax - MvPolynomial.eval x f) := by
+        (D : ℝ)^2 / (T : ℝ)^2 * (fmax - MvPolynomial.eval x f) := by
   apply SampledMarkov.select_representative S Y (fun z => MvPolynomial.eval z f)
     x fmax hT hDT hmarkov hfeasible hbounds
   obtain ⟨y, hy, hprog⟩ := hwitness

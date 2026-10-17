@@ -3,15 +3,30 @@ import Mathlib.Analysis.Calculus.Deriv.Polynomial
 import Mathlib.Algebra.Order.Round
 import Mathlib.Tactic
 import Mathlib.Analysis.Convex.Deriv
+import Mathlib.Algebra.Polynomial.Expand
+import Mathlib.Analysis.SpecialFunctions.Sqrt
 
 namespace SampledMarkov
 
+open Polynomial
+
 /-- Classical scaled Markov inequality, in pointwise upper-bound form.
 This is an explicit literature hypothesis; it is not asserted as a Lean axiom. -/
-def MarkovBound (D : ℕ) (T : ℝ) : Prop :=
+def CenteredMarkovBound (D : ℕ) (T : ℝ) : Prop :=
   ∀ (p : Polynomial ℝ), p.natDegree ≤ D → ∀ W : ℝ,
     (∀ t ∈ Set.Icc (-T) T, |p.eval t| ≤ W) →
     ∀ t ∈ Set.Icc (-T) T, |p.derivative.eval t| ≤ (D : ℝ)^2 / T * W
+
+/-- Classical Markov inequality on an arbitrary interval, with its standard scaling. -/
+def IntervalMarkovBound (N : ℕ) (a b : ℝ) : Prop :=
+  ∀ (p : Polynomial ℝ), p.natDegree ≤ N → ∀ W : ℝ,
+    (∀ t ∈ Set.Icc a b, |p.eval t| ≤ W) →
+    ∀ t ∈ Set.Icc a b, |p.derivative.eval t| ≤ 2 * (N : ℝ)^2 / (b-a) * W
+
+/-- The two instances of the classical inequality used in the manuscript.
+Neither the symmetrization identity nor its error bound is assumed. -/
+def MarkovBound (D : ℕ) (T : ℝ) : Prop :=
+  CenteredMarkovBound D T ∧ IntervalMarkovBound (D / 2) 0 (T^2)
 
 /-- Mean-value consequence of the classical derivative bound. -/
 theorem markov_difference {D : ℕ} {T W : ℝ}
@@ -22,7 +37,7 @@ theorem markov_difference {D : ℕ} {T W : ℝ}
   have h := Convex.norm_image_sub_le_of_norm_deriv_le
     (f := fun t => p.eval t)
     (fun t _ => p.differentiableAt)
-    (fun t ht => by simpa [Polynomial.deriv, Real.norm_eq_abs] using hmarkov p hdeg W hW t ht)
+    (fun t ht => by simpa [Polynomial.deriv, Real.norm_eq_abs] using hmarkov.1 p hdeg W hW t ht)
     (convex_Icc (-T) T) hx hy
   simpa [Real.norm_eq_abs] using h
 
@@ -114,6 +129,85 @@ theorem second_difference_bound (p : Polynomial ℝ) (B : ℝ)
   norm_num [g, smul_eq_mul] at hm
   linarith
 
+theorem coeff_reflect (p : Polynomial ℝ) (n : ℕ) : (p.comp (-X)).coeff n = (-1 : ℝ)^n * p.coeff n := by
+  induction p using Polynomial.induction_on' with
+  | add p q hp hq => simp [add_comp, hp, hq, mul_add]
+  | monomial k a =>
+    rw [monomial_comp, neg_pow]
+    simp only [← C_neg, ← C_1, ← C_pow, ← mul_assoc, ← C_mul, coeff_C_mul, coeff_X_pow, coeff_monomial]
+    by_cases h : n = k
+    · subst n; simp; ring
+    · simp [h, Ne.symm h]
+
+theorem degree_contract (p : Polynomial ℝ) {D : ℕ} (hd : p.natDegree ≤ D) :
+    (p.contract 2).natDegree ≤ D / 2 := by
+  apply Polynomial.natDegree_le_iff_coeff_eq_zero.mpr
+  intro n hn
+  rw [coeff_contract (by norm_num)]
+  apply coeff_eq_zero_of_natDegree_lt
+  omega
+
+theorem even_contract (q : Polynomial ℝ) (t : ℝ) :
+    (q.contract 2).eval (t^2) = (q.eval t + q.eval (-t))/2 := by
+  have he : Polynomial.expand ℝ 2 (q.contract 2) =
+      Polynomial.C (1/2 : ℝ) * (q + q.comp (-Polynomial.X)) := by
+    ext n
+    rw [Polynomial.coeff_expand (by norm_num), Polynomial.coeff_C_mul,
+      Polynomial.coeff_add, coeff_reflect]
+    by_cases hn : 2 ∣ n
+    · rw [ite_eq_left hn, Polynomial.coeff_contract (by norm_num), Nat.div_mul_cancel hn]
+      have hp : (-1 : ℝ)^n = 1 := by
+        obtain ⟨k, rfl⟩ := hn
+        simp [pow_mul]
+      rw [hp]; ring
+    · rw [ite_eq_right hn]
+      have hp : (-1 : ℝ)^n = -1 := by
+        have hodd : Odd n := Nat.odd_iff.mpr (by omega)
+        exact hodd.neg_one_pow
+      rw [hp]; ring
+  have h := congrArg (fun p : Polynomial ℝ => p.eval t) he
+  simpa [Polynomial.expand_eval, Polynomial.eval_comp, div_eq_mul_inv, mul_comm] using h
+
+/-- Symmetrization improves D^4 to D^2; the half-degree factor is retained. -/
+theorem symmetrized_difference {D T : ℕ} (hT : 1 ≤ T)
+    (hmarkov : MarkovBound D T) (q : Polynomial ℝ) (hdeg : q.natDegree ≤ D)
+    {W : ℝ} (hW : ∀ t ∈ Set.Icc (-(T : ℝ)) T, |q.eval t| ≤ W) :
+    q.eval 1 + q.eval (-1) - 2 * q.eval 0 ≤
+      4 * ((D / 2 : ℕ) : ℝ)^2 / (T : ℝ)^2 * W := by
+  let h := q.contract 2
+  have hTr : (1 : ℝ) ≤ T := by exact_mod_cast hT
+  have hh : ∀ u ∈ Set.Icc (0 : ℝ) ((T : ℝ)^2), |h.eval u| ≤ W := by
+    intro u hu
+    have hs : (Real.sqrt u)^2 = u := Real.sq_sqrt hu.1
+    have ht : Real.sqrt u ≤ T := by nlinarith [Real.sqrt_nonneg u, hu.2]
+    have he := even_contract q (Real.sqrt u)
+    rw [hs] at he
+    change |(q.contract 2).eval u| ≤ W
+    rw [he, abs_div, abs_of_pos (by norm_num : (0 : ℝ) < 2)]
+    apply (div_le_iff₀ (by norm_num : (0 : ℝ) < 2)).2
+    have hp := hW (Real.sqrt u) (by constructor <;> linarith [Real.sqrt_nonneg u])
+    have hn := hW (-Real.sqrt u) (by constructor <;> linarith [Real.sqrt_nonneg u])
+    exact (abs_add_le _ _).trans (by linarith)
+  have hd := hmarkov.2 h (degree_contract q hdeg) W hh
+  have hdiff := Convex.norm_image_sub_le_of_norm_deriv_le
+    (f := fun t => h.eval t) (fun t _ => h.differentiableAt)
+    (fun t ht => by simpa [Polynomial.deriv, Real.norm_eq_abs] using hd t ht)
+    (convex_Icc (0 : ℝ) ((T : ℝ)^2))
+    (show (0 : ℝ) ∈ Set.Icc 0 ((T : ℝ)^2) by constructor <;> positivity)
+    (show (1 : ℝ) ∈ Set.Icc 0 ((T : ℝ)^2) by constructor <;> nlinarith)
+  have hdiff' : |h.eval 1 - h.eval 0| ≤ 2 * ((D / 2 : ℕ) : ℝ)^2 / (T : ℝ)^2 * W := by
+    simpa [Real.norm_eq_abs] using hdiff
+  have h1 := even_contract q 1
+  have h0 := even_contract q 0
+  norm_num at h1 h0
+  have he : q.eval 1 + q.eval (-1) - 2 * q.eval 0 = 2 * (h.eval 1 - h.eval 0) := by
+    dsimp [h]; linarith
+  rw [he]
+  have := (le_abs_self (h.eval 1 - h.eval 0)).trans hdiff'
+  calc
+    _ ≤ 2 * (2 * ((D / 2 : ℕ) : ℝ)^2 / (T : ℝ)^2 * W) := by linarith
+    _ = _ := by ring
+
 /-- The manuscript's sampled Markov lemma, conditional only on the classical
 scaled Markov inequality. All remaining analytic and algebraic steps are proved. -/
 theorem sampled_markov {D T : ℕ} (hT : 1 ≤ T)
@@ -122,7 +216,7 @@ theorem sampled_markov {D T : ℕ} (hT : 1 ≤ T)
     (hsample : ∀ k : ℤ, (k : ℝ) ∈ Set.Icc (-(T : ℝ)) T →
       a ≤ p.eval (k : ℝ) ∧ p.eval (k : ℝ) ≤ b)
     (hmin : p.eval 0 ≤ p.eval (-1)) :
-    p.eval 1 - p.eval 0 ≤ (D : ℝ)^4 / (T : ℝ)^2 * (b-a) := by
+    p.eval 1 - p.eval 0 ≤ (D : ℝ)^2 / (T : ℝ)^2 * (b-a) := by
   let q := p - Polynomial.C ((a+b)/2)
   have hqdeg : q.natDegree ≤ D :=
     (Polynomial.natDegree_sub_le _ _).trans (max_le hdeg (by simp))
@@ -133,23 +227,20 @@ theorem sampled_markov {D T : ℕ} (hT : 1 ≤ T)
     rw [abs_le]
     constructor <;> linarith [(hsample k hk).1, (hsample k hk).2]
   have hW := sampled_sup_bound (by omega : 0 < T) hDT hmarkov q hqdeg hqsample
-  have hdW := hmarkov q hqdeg (b-a) hW
-  have hddeg : q.derivative.natDegree ≤ D :=
-    (Polynomial.natDegree_derivative_le _).trans ((Nat.sub_le _ _).trans hqdeg)
-  have hddW := hmarkov q.derivative hddeg _ hdW
-  have hTr : (1 : ℝ) ≤ T := by exact_mod_cast hT
-  have hb : ∀ t ∈ Set.Icc (-1 : ℝ) 1,
-      p.derivative.derivative.eval t ≤ (D : ℝ)^4 / (T : ℝ)^2 * (b-a) := by
-    intro t ht
-    have h := hddW t (by constructor <;> linarith [ht.1, ht.2])
-    have heq : (D : ℝ)^2 / T * ((D : ℝ)^2 / T * (b-a)) =
-        (D : ℝ)^4 / (T : ℝ)^2 * (b-a) := by ring
-    rw [heq] at h
-    have hder : q.derivative.derivative = p.derivative.derivative := by simp [q]
-    rw [hder] at h
-    exact (le_abs_self _).trans h
-  have hsecond := second_difference_bound p _ hb
+  have hsecond := symmetrized_difference hT hmarkov q hqdeg hW
+  have hR : 0 ≤ b-a := by
+    have hz := hsample 0 (by constructor <;> norm_num)
+    linarith
+  have hn : 2 * ((D / 2 : ℕ) : ℝ) ≤ (D : ℝ) := by
+    exact_mod_cast (show 2 * (D / 2) ≤ D by omega)
+  have hn0 : (0 : ℝ) ≤ ((D / 2 : ℕ) : ℝ) := Nat.cast_nonneg _
+  have hsquare : 4 * ((D / 2 : ℕ) : ℝ)^2 ≤ (D : ℝ)^2 := by nlinarith
+  have hcoef := mul_le_mul_of_nonneg_right
+    (div_le_div_of_nonneg_right hsquare (sq_nonneg (T : ℝ))) hR
+  have hqeval : ∀ t, q.eval t = p.eval t - (a+b)/2 := by intro t; simp [q]
+  simp only [hqeval] at hsecond
   linarith
+
 
 
 /-- Feasible integer samples and global optimality imply the representative
@@ -163,7 +254,7 @@ theorem representative_at_minimum {α : Type*} (X : Set α) (f : α → ℝ)
     (hprogression : ∀ k : ℤ, (k : ℝ) ∈ Set.Icc (-(T : ℝ)) T →
       ∃ z ∈ X, p.eval (k : ℝ) = f z) :
     0 ≤ f y - f xmin ∧
-      f y - f xmin ≤ (D : ℝ)^4 / (T : ℝ)^2 * (fmax - f xmin) := by
+      f y - f xmin ≤ (D : ℝ)^2 / (T : ℝ)^2 * (fmax - f xmin) := by
   have hs : ∀ k : ℤ, (k : ℝ) ∈ Set.Icc (-(T : ℝ)) T →
       f xmin ≤ p.eval (k : ℝ) ∧ p.eval (k : ℝ) ≤ fmax := by
     intro k hk
@@ -188,7 +279,7 @@ theorem representative_at_maximum {α : Type*} (X : Set α) (f : α → ℝ)
     (hprogression : ∀ k : ℤ, (k : ℝ) ∈ Set.Icc (-(T : ℝ)) T →
       ∃ z ∈ X, p.eval (k : ℝ) = f z) :
     0 ≤ f xmax - f y ∧
-      f xmax - f y ≤ (D : ℝ)^4 / (T : ℝ)^2 * (f xmax - fmin) := by
+      f xmax - f y ≤ (D : ℝ)^2 / (T : ℝ)^2 * (f xmax - fmin) := by
   have h := representative_at_minimum X (fun z => -f z) xmax y (-fmin)
     hT hDT hmarkov hy
     (fun z hz => ⟨neg_le_neg (hbounds z hz).2, neg_le_neg (hbounds z hz).1⟩)
@@ -213,7 +304,7 @@ theorem select_representative {α : Type*} (X : Set α) (Y : Finset α)
         ∃ z ∈ X, p.eval (k : ℝ) = f z) :
     ∃ best ∈ Y, best ∈ X ∧ (∀ y ∈ Y, f best ≤ f y) ∧
       0 ≤ f best - f xmin ∧
-      f best - f xmin ≤ (D : ℝ)^4 / (T : ℝ)^2 * (fmax - f xmin) := by
+      f best - f xmin ≤ (D : ℝ)^2 / (T : ℝ)^2 * (fmax - f xmin) := by
   obtain ⟨y, hy, p, hdeg, hzero, hone, hprog⟩ := hwitness
   have herr := representative_at_minimum X f xmin y fmax hT hDT hmarkov
     (hfeasible y hy) hbounds p hdeg hzero hone hprog

@@ -115,7 +115,7 @@ There is a deterministic algorithm that reports infeasibility or returns $\mathb
 bit operations, with an absolute constant in the $O(d)$ exponent.
 \end{theorem}
 
-Since the input explicitly lists the $m$ inequalities in $d$ variables, $m,d\le\varphi$; their separate factors in the detailed running-time bound are therefore absorbed into the base $\varphi$ and the $O(d)$ exponent in~\eqref{eq:runtime-coarse}. The dependence on dimension remains explicit in that exponent. More precisely, for fixed $P,D,d$, the algorithm makes $O(\eps^{-d/2})$ integer-feasibility queries; the detailed running-time bound in the proof retains the factor $D^2/\sqrt\eps$.
+Since the input explicitly lists the $m$ inequalities in $d$ variables, $m,d\le\varphi$; their separate factors in the detailed running-time bound are therefore absorbed into the base $\varphi$ and the $O(d)$ exponent in~\eqref{eq:runtime-coarse}. The dependence on dimension remains explicit in that exponent. More precisely, for fixed $P,D,d$, the algorithm makes $O(\eps^{-d/2})$ integer-feasibility queries; the detailed running-time bound in the proof retains the factor $\max\{D^2,D/\sqrt\eps\}$.
 
 Rational inequalities can be normalized to integral data in polynomial time, as detailed below. Rational objective coefficients can likewise be reduced to integer coefficients by clearing denominators in polynomial time; positive scaling preserves the approximation guarantee, as in~\cite[Section~5]{DHKW08}. The remaining construction parameters and the exact feasibility-query count are introduced in the proof. For fixed $d$, the bound is polynomial in $\varphi$ and $1/\eps$, hence gives an FPTAS in Definition~\ref{def:fptas}. The same explicit bound remains valid for binary-encoded exponents, but then its numerical dependence on $D$ does not assert an FPTAS in the sparse binary input size.
 
@@ -167,7 +167,7 @@ Here $\|A\|_{\max}$ is the largest absolute matrix entry, so $\tau$ measures coe
 \begin{align}
  V&=d\bigl(\tau+\lceil\log_2(d+1)\rceil\bigr)+2,\label{eq:V}\\
  M&=\tau+V+\lceil\log_2(d+1)\rceil+2,\label{eq:M}\\
- \ell&=\left\lceil D^2/\sqrt\eps\right\rceil,\qquad H=m(M\ell+2),\label{eq:HT}\\
+ \ell&=\max\{D^2,\lceil D/\sqrt\eps\rceil\},\qquad H=m(M\ell+2),\label{eq:HT}\\
  F_d(H)&=\sum_{j=0}^{d}2^j\binom Hj\le(1+2H)^d.\label{eq:F}
 \end{align}
 
@@ -267,6 +267,8 @@ In particular, for $\mathbf{x},\mathbf{y}\in C$,
 \end{equation}
 \end{lemma}
 \begin{proof}
+Since cells with a slack in $(0,1)$ were discarded, every varying slack on a retained cell lies between successive thresholds $a<b$ with $a\ge1$. Thus the relative-width bound~\eqref{eq:width} applies.
+
 For a varying slack, $|s_i(\mathbf{y})-s_i(\mathbf{x})|<b-a\le a/\ell$ and $s_i(\mathbf{x})>a=w_i$; for a constant slack the difference is zero. These inequalities give both inclusions row by row. The set $D_C$ is convex, symmetric, and contains zero, so it contains $t(\mathbf{y}-\mathbf{x})$ for $|t|\le\ell$. Also $D_C\subseteq P-\mathbf{x}$ for any $\mathbf{x}\in C$, hence it is bounded, as required for a symmetric displacement cover in~\cite[Definition~2.1]{AH}.
 \end{proof}
 
@@ -311,7 +313,7 @@ For completeness, an elementary incremental enumerator suffices. Start with $P$ 
 
 To test real feasibility with strict inequalities, write each strict inequality as $u_j^\top \mathbf{x}<v_j$, introduce a common variable $\delta$, replace it by $u_j^\top \mathbf{x}\le v_j-\delta$, impose $0\le\delta\le1$, and maximize $\delta$. Keep the weak constraints and equalities unchanged. Feasibility of the strict system is equivalent to a positive optimal value; when there are no strict inequalities, use ordinary feasibility. This is an exact rational LP in at most $d+1$ variables. There are $O((H+1)F_d(H))$ tests. Comparisons and storage of the compressed descriptions satisfy the same bound. At termination discard any cell meeting the forbidden slack interval $(0,1)$.
 
-Finally, the slack $s_i(\mathbf{x})$ is integral for integer $\mathbf{x}$. Replace $s_i(\mathbf{x})>a$ by $s_i(\mathbf{x})\ge\lfloor a\rfloor+1$, and replace $s_i(\mathbf{x})<b$ by $s_i(\mathbf{x})\le\lceil b\rceil-1$. If a slack is fixed at a nonintegral threshold, discard the cell as integer-infeasible; otherwise keep its integral equality. These replacements define a closed subset of the original cell with the same integer points. Their right-hand sides have $O(\tau+M+1)$ bits, and their normals are rows of $A$ or their negatives. Equality may be stored as two inequalities. All arithmetic, including floor and ceiling, is exact.
+Finally, the slack $s_i(\mathbf{x})$ is integral for integer $\mathbf{x}$. Replace $s_i(\mathbf{x})>a$ by $s_i(\mathbf{x})\ge\lfloor a\rfloor+1$, and replace $s_i(\mathbf{x})<b$ by $s_i(\mathbf{x})\le\lceil b\rceil-1$. If a slack is fixed at a nonintegral threshold, discard the cell as integer-infeasible; otherwise keep its integral equality. These replacements define a closed subset of the original cell with the same integer points. A slack constant at a nonintegral value that is not a threshold also leaves the cell integer-infeasible; the integer-feasibility query detects this case. Their right-hand sides have $O(\tau+M+1)$ bits, and their normals are rows of $A$ or their negatives. Equality may be stored as two inequalities. All arithmetic, including floor and ceiling, is exact.
 \end{proof}
 
 \begin{remark}[Parallel families]
@@ -325,31 +327,40 @@ If row $i$ contributes $q_i$ distinct threshold hyperplanes, the count can be sh
 The insertion argument counts intersections involving at most one hyperplane from each parallel family; further dependencies can only reduce the count. This improves the bound without changing its worst-case $\ell^d$ dependence. We retain $F_d(H)$ for simplicity. The boundary-vertex count in~\cite[pp.~30--31]{CHKM} bounds integer-hull vertices, not all reflecting cells, and therefore does not directly replace this count.
 \end{remark}
 
-We now turn to the objective. A polynomial can vary substantially between consecutive integer samples, so bounded sample values do not immediately bound its derivatives. Markov's inequality resolves this in two steps: first it controls the polynomial between the samples, and then it bounds its second derivative. At an integer minimizer, the backward sample supplies the additional inequality needed to turn that derivative bound into an approximation guarantee. This avoids imposing a continuous stationarity condition or approximating the objective uniformly on every cell.
+We now turn to the objective. A polynomial can vary substantially between consecutive integer samples, so bounded sample values do not immediately bound its derivatives. Markov's inequality resolves this in two steps: first it controls the polynomial between the samples, and then symmetrization reduces the needed second difference to a first difference of a lower-degree polynomial. At an integer minimizer, the backward sample supplies the additional inequality needed to turn that derivative bound into an approximation guarantee. This avoids imposing a continuous stationarity condition or approximating the objective uniformly on every cell.
 
 The following elementary consequence of the classical Markov inequality combines the standard sample-to-supremum argument used in polynomial norming meshes (see~\cite[Section~2]{PV}) with a convexity bound for a centered second difference. We include the short proof for the discrete-minimum formulation needed here.
 
 \begin{lemma}[Approximation at a discrete minimum]\label{lem:markov}
-Let $p\in\R[t]$ have degree at most $D\ge1$, and let $\ell\ge D^2$ be an integer. Suppose
+Let $D\ge1$ and $\ell\ge D^2$ be integers, and let $p\in\R[t]$ have degree at most $D$. Suppose
 \[
  a\le p(k)\le b\quad(k=-\ell,\ldots,\ell),\qquad p(-1)\ge p(0).
 \]
 Then
 \[
- p(1)-p(0)\le \frac{D^4}{\ell^2}(b-a).
+ p(1)-p(0)\le \frac{D^2}{\ell^2}(b-a).
 \]
 \end{lemma}
 \begin{proof}
-Set $q=p-(a+b)/2$ and $W=\|q\|_{\infty,[-\ell,\ell]}$. The scaled classical Markov inequality gives $\|q'\|_\infty\le D^2W/\ell$; see~\cite[Theorem~1.1]{Pierzchala}. Every point of $[-\ell,\ell]$ lies within $1/2$ of an integer in this interval, so
+Set $q=p-(a+b)/2$ and $W=\|q\|_{\infty,[-\ell,\ell]}$. The scaled classical Markov inequality gives $\|q'\|_\infty\le D^2W/\ell$; see~\cite[Theorem~1.1]{Pierzchala}. Every point of $[-\ell,\ell]$ lies within $1/2$ of a sampled integer, so
 \[
- W\le \frac{b-a}{2}+\frac{D^2}{2\ell}W,
- \qquad\text{and hence}\qquad W\le b-a.
+ W\le \frac{b-a}{2}+\frac{D^2}{2\ell}W\le\frac{b-a+W}{2},
+ \qquad W\le b-a.
 \]
-Applying Markov twice to $q$ yields $\|p''\|_\infty\le B$, where $B=D^4(b-a)/\ell^2$. Thus $g(t)=Bt^2/2-p(t)$ is convex on $[-1,1]$. Its midpoint inequality gives $p(1)+p(-1)-2p(0)\le B$, and therefore
+Let $n=\lfloor D/2\rfloor$. The even part of $q$ has the form
 \[
- p(1)-p(0)\le p(1)+p(-1)-2p(0)\le B.
+ e(t)=\frac{q(t)+q(-t)}2=h(t^2),\qquad \deg h\le n.
 \]
-Figure~\ref{fig:polynomial-cell} illustrates the comparison. The argument also covers $a=b$ and polynomials of degree at most one.
+Thus $\|h\|_{\infty,[0,\ell^2]}\le W$. Markov's inequality on $[0,\ell^2]$ gives $\|h'\|_\infty\le 2n^2W/\ell^2$. Since $\ell\ge1$, the mean value bound on $[0,1]$ and $p(-1)\ge p(0)$ yield
+\[
+\begin{aligned}
+ p(1)-p(0)&\le p(1)+p(-1)-2p(0)\\
+ &=2(h(1)-h(0))\\
+ &\le\frac{4\lfloor D/2\rfloor^2}{\ell^2}(b-a)
+ \le\frac{D^2}{\ell^2}(b-a).
+\end{aligned}
+\]
+For $D=1$, $h$ is constant and the bound is zero. The argument also covers $a=b$.
 \end{proof}
 
 The estimate is needed only on the cell containing a global minimizer, and holds for any representative of that cell. Applying it also to $-f$ gives the following simultaneous approximation of both extrema. This passage from sampling to optimization is standard; compare~\cite[Proposition~1]{PV}. The reflecting geometry supplies the feasible integer samples needed here.
@@ -358,8 +369,8 @@ The estimate is needed only on the cell containing a global minimizer, and holds
 Choose one integer representative from each integer-feasible retained cell, forming $Y$. If $P\cap\Z^d\ne\varnothing$ and $\ell\ge D^2$, then every real polynomial $f$ of degree at most $D$ satisfies
 \[
 \begin{aligned}
- 0&\le\min_Y f-\min_{P\cap\Z^d} f\le\frac{D^4}{\ell^2}(f_{\max}-f_{\min}),\\
- 0&\le\max_{P\cap\Z^d} f-\max_Y f\le\frac{D^4}{\ell^2}(f_{\max}-f_{\min}).
+ 0&\le\min_Y f-\min_{P\cap\Z^d} f\le\frac{D^2}{\ell^2}(f_{\max}-f_{\min}),\\
+ 0&\le\max_{P\cap\Z^d} f-\max_Y f\le\frac{D^2}{\ell^2}(f_{\max}-f_{\min}).
 \end{aligned}
 \]
 \end{proposition}
@@ -465,7 +476,7 @@ The preceding results lead directly to Algorithm~\ref{alg:sampling}: enumerate t
 \begin{tabular}{@{}r@{\hspace{.8em}}p{.89\linewidth}@{}}
 {\color{cellblue}1} & Clear row denominators: $P=\{\mathbf{x}:A\mathbf{x}\le\mathbf b\}$, $A,\mathbf b$ integral.\\
 {\color{cellblue}2} & \textbf{if} $P=\varnothing$ \textbf{then return} \textsf{INFEASIBLE}.\\
-{\color{cellblue}3} & Compute $M$ from~\eqref{eq:M}; set $\ell\gets\lceil D^2/\sqrt\eps\rceil$, $Y\gets\varnothing$.\\
+{\color{cellblue}3} & Compute $M$ from~\eqref{eq:M}; set $\ell\gets\max\{D^2,\lceil D/\sqrt\eps\rceil\}$, $Y\gets\varnothing$.\\
 {\color{cellblue}4} & Construct the thresholds\\[-3pt]
  & $\displaystyle\mathcal B_{M,\ell}\gets\{0,2^M\}\cup
  \left\{2^k(1+j/\ell):\ 0\le k<M,\ 0\le j<\ell\right\}$.\\
@@ -489,15 +500,15 @@ $0\le f(\mathbf{x}_{\eps})-f_{\min}\le\eps(f_{\max}-f_{\min})$.
 \end{algorithm}
 
 \begin{proof}[Correctness in Theorem~\ref{thm:main}]
-Every integer-feasible cell contributes a feasible representative, and the retained cells cover $P\cap\Z^d$. Thus $Y=\varnothing$ if and only if $P\cap\Z^d=\varnothing$. Otherwise, Proposition~\ref{prop:extrema} and $\ell=\lceil D^2/\sqrt\eps\rceil$ give
+Every integer-feasible cell contributes a feasible representative, and the retained cells cover $P\cap\Z^d$. Thus $Y=\varnothing$ if and only if $P\cap\Z^d=\varnothing$. Otherwise, Proposition~\ref{prop:extrema} and $\ell=\max\{D^2,\lceil D/\sqrt\eps\rceil\}$ give
 \[
- 0\le\min_Y f-f_{\min}\le \frac{D^4}{\ell^2}(f_{\max}-f_{\min})\le\eps (f_{\max}-f_{\min}).
+ 0\le\min_Y f-f_{\min}\le \frac{D^2}{\ell^2}(f_{\max}-f_{\min})\le\eps (f_{\max}-f_{\min}).
 \]
 The algorithm returns a minimizer on $Y$. The cover and representatives depend only on $P,D,\eps$, so the same set works for every polynomial of degree at most $D$.
 \end{proof}
 
 It remains to account for bit operations. There are three costs: constructing the arrangement, producing integer representatives, and evaluating the objective. The distinction between the number of cells and the sizes of their descriptions is important: refinement increases the former polynomially in $1/\sqrt\eps$, whereas it increases the threshold bit lengths only logarithmically.
-By Lemma~\ref{lem:arrangement}, face enumeration costs~\eqref{eq:arrangement-time}. The bit length of $\ell$ is $O(\log(D+1)+\langle\eps\rangle)$; it is computed exactly as the least positive integer satisfying $\eps \ell^2\ge D^4$, by binary search with rational comparisons. Generating all thresholds uses $O(M\ell)$ arithmetic operations on integers with $O(M+\log(\ell+1))$ bits and is included in the arrangement bound when $m\ge1$. A nonempty bounded polyhedron in positive dimension cannot be specified by zero inequalities.
+By Lemma~\ref{lem:arrangement}, face enumeration costs~\eqref{eq:arrangement-time}. The bit length of $\ell$ is $O(\log(D+1)+\langle\eps\rangle)$; compute the least positive integer $k$ satisfying $\eps k^2\ge D^2$ by binary search with rational comparisons, and set $\ell=\max\{D^2,k\}$. Generating all thresholds uses $O(M\ell)$ arithmetic operations on integers with $O(M+\log(\ell+1))$ bits and is included in the arrangement bound when $m\ge1$. A nonempty bounded polyhedron in positive dimension cannot be specified by zero inequalities.
 
 Once a cell has been enumerated, its integer feasibility query has a description whose coefficient sizes do not grow with the refinement parameter.
 Each of at most $F_d(H)$ queries has $d$ integer variables and a total encoding length
@@ -518,16 +529,16 @@ Combining these three costs gives the explicit bound
  \left((H+1)F_d(H)+2^{O(d\log(d+1))}F_d(H)\right)
  \poly\!\left(\varphi+d+m+M+\log(\ell+1)+DV\right).
 \end{equation}
-The polynomial here has an absolute exponent. Since $M,V=O(d(\tau+\log(d+1)))$ and $\ell\le2D^2/\sqrt\eps$, the more detailed parameter bound is
+The polynomial here has an absolute exponent. Since $M,V=O(d(\tau+\log(d+1)))$ and $\Lambda\le\ell\le2\Lambda$ for $\Lambda=\max\{D^2,D/\sqrt\eps\}$, the more detailed parameter bound is
 \[
  2^{O(d\log(d+1))}
- \left(1+md(\tau+\log(d+1))\frac{D^2}{\sqrt\eps}\right)^{d+1}
+ \left(1+md(\tau+\log(d+1))\Lambda\right)^{d+1}
  \poly\!\left(\varphi+Dd(\tau+\log(d+1))\right).
 \]
 For the integral input in Theorem~\ref{thm:main}, $\tau=O(\varphi)$ and $d\le\varphi$. Consequently $\tau+\log(d+1)=O(\varphi)$, and the factor $d^{d+1}$ is absorbed into $2^{O(d\log(d+1))}$. The polynomial overhead is bounded by $\poly(\varphi,D)$. Since $m,\varphi,D\ge1$ and $\eps\le1$, the additive one can also be absorbed, giving
 \[
  2^{O(d\log(d+1))}
- \left(\frac{m\varphi D^2}{\sqrt\eps}\right)^{d+1}
+ \left(m\varphi\Lambda\right)^{d+1}
  \poly(\varphi,D).
 \]
 Finally, $m,d\le\varphi$ allows the dimension factor and the polynomial overhead to be absorbed into $(\varphi D/\eps)^{O(d)}$, proving~\eqref{eq:runtime-coarse}. The dependence on the objective encoding $\langle f\rangle$ enters through exact evaluation in~\eqref{eq:eval}; the cell construction is independent of the objective coefficients.
@@ -538,10 +549,45 @@ Applying Proposition~\ref{prop:extrema} to $-f$ gives $f_{\max}-f(\mathbf{x}_{\e
 \end{proof}
 
 \begin{proof}[Proof of Corollary~\ref{cor:mixed}]
-Use the denominator-compatible grid reduction of~\cite[Sections~3--5]{DHKW08}, with Corollary~\ref{cor:max} as the integer nonnegative-maximization subroutine. A coordinate bound for the bounded polyhedron is computable by rational linear programming, and the polynomial coefficients and this bound give the local Lipschitz bound of~\cite[Section~4]{DHKW08}; both bounds have polynomial encoding length. Scaling each grid problem gives an integer problem of polynomial encoding size; clearing objective denominators preserves relative error. The reduction is independent of the particular integer FPTAS. For arbitrary-sign objectives, apply the range-estimation and shifting procedure of~\cite[Section~6]{DHKW08}, including its constant-objective case, and negate $f$ for minimization. Mixed-integer linear feasibility handles empty instances. For fixed total dimension, all reductions and subroutine calls have polynomial cost in $\varphi$ and $1/\eps$ under our unary-exponent convention. This establishes the corollary without lattice-point counting; the explicit bound~\eqref{eq:runtime-coarse} is asserted only for the pure-integer problem.
+If $d_c=0$, apply Theorem~\ref{thm:main}. Otherwise write $S=P\cap(\R^{d_c}\times\Z^{d_i})$. The compatible-grid construction of~\cite[Theorem~8 and Lemma~9]{DHKW08} supplies an integer $\Delta>0$ of polynomial encoding length for fixed dimension. Choose an integer coordinate bound $B\ge1$ for $P$ and a rational Lipschitz bound $K\ge1$ for $f$ on its bounding box, both of polynomial encoding length; see~\cite[Lemma~11]{DHKW08}. Set
+\[
+\begin{gathered}
+ q_0=(D+1)d_c\Delta,\qquad \rho=q_0^{-D},\\
+ \delta=\frac{\eps\rho}{2K},\qquad
+ Q=\Delta\left\lceil\frac{2d_cB}{\delta}\right\rceil.
+\end{gathered}
+\]
+The grid $S_Q=S\cap(Q^{-1}\Z^{d_c}\times\Z^{d_i})$ approximates every point of $S$ within $\delta$ in its integer slice. In particular, $S_Q$ is nonempty exactly when $S$ is. If $R=f_{\max}-f_{\min}>0$, then $R\ge\rho$ by~\cite[Theorem~14]{DHKW08}, and
+\[
+ \min_{S_Q}f-\min_Sf\le K\delta\le\eps R/2.
+\]
+Apply Theorem~\ref{thm:main} on this grid with accuracy $\eps/2$. Its objective range is at most $R$, so its returned point satisfies
+\[
+ f(\mathbf{x}_{\eps})-\min_Sf\le\eps R/2+\eps R/2=\eps R.
+\]
+If $R=0$, every feasible grid point is optimal; no constancy test is needed.
+
+For the reduction, write the continuous coordinates as $\mathbf x=\mathbf u/Q$ and use the integer-coefficient polynomial $g(\mathbf u,\mathbf z)=Q^D f(\mathbf u/Q,\mathbf z)$. Its degree and monomial support are unchanged, and coefficient lengths increase by at most $O(D\log Q)$. Since
+\[
+\begin{split}
+ \log Q=O\bigl(&\log\Delta+\log(d_cB)+\log K\\
+              &+D\log q_0+\log(1/\eps)+1\bigr),
+\end{split}
+\]
+the scaled input has polynomial encoding length for fixed total dimension. Positive objective scaling preserves the guarantee. Negating $f$ gives maximization, and nonnegativity gives its multiplicative guarantee. This proves the corollary with one integer approximation call, without shifting or counting lattice points. The dimension dependence of $\Delta$ does not establish the uniform bound~\eqref{eq:runtime-coarse} for the mixed-integer problem; that bound remains restricted to pure integers.
 \end{proof}
 
 \section{Discussion and extensions}\label{sec:conclusion}
+Symmetrization gives two refinement regimes: $\ell=D^2$ when $\eps\ge D^{-2}$, and $\ell=\lceil D/\sqrt\eps\rceil$ when $\eps\le D^{-2}$. In the latter regime, replacing the earlier twice-differentiated Markov estimate improves the refinement-dependent factors in the cell-count and enumeration bounds by $D^d$ and $D^{d+1}$, respectively, up to ceiling effects. These are improvements in upper bounds, not guaranteed instance-by-instance speedups; the accuracy exponents are unchanged.
+
+The accuracy exponent for objective-independent representative sets has a simple cardinality obstruction. On $P_N=[0,N]^d$, suppose $Y\subseteq P_N\cap\Z^d$ approximates all quadratic minima with range-relative accuracy $\eps$. For each integer center $\mathbf a$, apply this guarantee to $f_{\mathbf a}(\mathbf x)=\|\mathbf x-\mathbf a\|_2^2$. Its minimum is zero and its range is at most $dN^2$, so some $\mathbf y\in Y$ lies within $N\sqrt{d\eps}$ of $\mathbf a$. Each representative covers at most $(2N\sqrt{d\eps}+1)^d$ integer centers, giving
+\[
+ |Y|\ge\frac{(N+1)^d}{(2N\sqrt{d\eps}+1)^d}.
+\]
+For integer $N\ge\eps^{-1/2}$ this is $\Omega_d(\eps^{-d/2})$. This lower bound concerns universal representative sets across a family of boxes, not arbitrary optimization algorithms or one fixed finite lattice set. It does not explain the additional $\eps^{-1/2}$ factor in our enumeration bound.
+
+For any refinement $\ell\ge1$, the representatives include every vertex of the integer hull. Indeed, if such a vertex $\mathbf v$ shared a cell with a distinct integer point $\mathbf y$, reflection would make $2\mathbf v-\mathbf y$ feasible, contradicting extremality of $\mathbf v=(\mathbf y+(2\mathbf v-\mathbf y))/2$. Thus every linear objective is optimized exactly.
+
 The main result concerns polynomial optimization: a refined reflecting cover and one integer-feasibility query per cell suffice for a range-relative FPTAS. Corollary~\ref{cor:mixed} supplies the mixed-integer extension through the established grid reduction. Table~\ref{tab:framework} places this construction alongside related decomposition and sampling methods; the common error-transfer principle is recorded in Appendix~\ref{app:comparison}.
 
 For polynomial objectives with additional structure, one can replace feasibility by optimization of a local surrogate $h_C$. If $|f-h_C|\le\delta_C$ on the feasible part of a cell and a feasible candidate minimizes $h_C$ there within additive error $\eta_C$, then selecting the best candidate gives error at most $2\delta_{C^*}+\eta_{C^*}$, where $C^*$ contains a global minimizer. Affine, convex, or quadratic surrogates are useful when their local optimization problems are tractable and their errors can be bounded relative to the global objective range. This includes the frozen-weight idea for sliceable objectives~\cite{HWZ} and affine models for quadratics~\cite{DelPia}. An FPTAS still requires polynomial bounds on the cover construction, local computations, and encoding sizes; the transfer inequality alone does not supply them.
@@ -727,30 +773,29 @@ Hildebrand posed the research question: whether the polynomial approximation res
 Hildebrand also guided the subsequent mathematical and expository choices. His request for simpler proofs prompted reconsideration of the cell-oscillation argument. He proposed considering affine or quadratic models on cells for mixed-integer optimization, questioned whether a grid was necessary, and ultimately chose to refer to the existing grid-approximation reduction rather than expand the paper. He raised the possibility of reusing computations under successive accuracy refinements, then chose to keep the manuscript focused on its core result. He requested alignment with De Loera et al.'s notation, an explicit definition of encoding size, a shorter abstract, and removal of unnecessary range notation. These contributions concern problem formulation, the choice of geometric approach, scrutiny of proposed extensions, and the scope and presentation of the paper.
 
 \paragraph{AI-generated development.}
-In response to this direction, the assistant developed the proposed refined-slack construction and its connection to long feasible integer progressions, drafted the application of the classical Markov inequality to integer samples, and worked out the cell-count and encoding estimates. Earlier drafts used a first-difference bound and then affine Taylor models to improve accuracy dependence. During the simplification discussion, the assistant proposed using the symmetric second difference at a global integer minimizer, exploiting $p(-1)\ge p(0)$. This yielded the present square-root accuracy scaling with arbitrary cell representatives and removed the need for affine-model optimization in the main argument. It also corrected the assistant's earlier assertion that the coarser cover would lose the universal representative guarantee. The assistant searched for related work on polynomial norming meshes and drafted the comparisons and references. Attribution of these steps to the exchange is not a claim that the mathematical ingredients are new.
+In response to this direction, the assistant developed the proposed refined-slack construction and its connection to long feasible integer progressions, drafted the application of the classical Markov inequality to integer samples, and worked out the cell-count and encoding estimates. Earlier drafts used a first-difference bound and then affine Taylor models to improve accuracy dependence. During the simplification discussion, the assistant proposed using the symmetric second difference at a global integer minimizer, exploiting $p(-1)\ge p(0)$. This yielded the present square-root accuracy scaling with arbitrary cell representatives and removed the need for affine-model optimization in the main argument. It also corrected the assistant's earlier assertion that the coarser cover would lose the universal representative guarantee. The assistant searched for related work on polynomial norming meshes and drafted the comparisons and references. A subsequent review supplied by Hildebrand proposed the even-part symmetrization and the one-grid mixed-integer proof; the assistant incorporated these arguments and formalized the strengthened sampled estimate and refinement in Lean. Attribution of these steps to the exchange is not a claim that the mathematical ingredients are new.
 
 \paragraph{Status of Lean verification.}
-On October 14, 2026, sixteen calculation, geometry, and abstract correctness theorems in \texttt{verification/lean/FPTASCalculations.lean} compiled successfully with Lean~4.34.0-rc2 and the pinned Mathlib revision. The checker \texttt{check\_fptas\_calculations.py} audits the transitive axioms of every theorem; the successful run is recorded in \texttt{fptas\_calculations\_verification\_log.txt}. Only the standard axioms \texttt{propext}, \texttt{Classical.choice}, and \texttt{Quot.sound} occur, with no custom axioms or \texttt{sorry} placeholders. The verified scope is:
+The updated verification includes the symmetrization argument and revised refinement parameter. The three modules contain 34 checked theorems; the classical Markov inequality remains an explicit hypothesis. The individual axiom audits and aggregate source-hash record in the repository identify the checked development.
+
+On October 17, 2026, sixteen calculation, geometry, and abstract correctness theorems in \texttt{verification/lean/FPTASCalculations.lean} compiled successfully with Lean~4.34.0-rc2 and the pinned Mathlib revision. The checker \texttt{check\_fptas\_calculations.py} audits the transitive axioms of every theorem; the successful run is recorded in \texttt{fptas\_calculations\_verification\_log.txt}. Only the standard axioms \texttt{propext}, \texttt{Classical.choice}, and \texttt{Quot.sound} occur, with no custom axioms or \texttt{sorry} placeholders. The verified scope is:
 \begin{itemize}[leftmargin=*]
 \item \emph{Slack geometry:} \texttt{interval\_width} and \texttt{slack\_extrapolation} prove the scalar width and nonnegativity inequalities used in Lemma~\ref{lem:reflection}, given the interval and affine-slack data. The declaration \texttt{linear\_slack\_progression} derives the slack identity from linearity of each constraint row; \texttt{reflecting\_cell\_progression} then proves~\eqref{eq:long} from the relative-width conditions, including constant-slack faces. Thus feasibility of the extrapolated point is a conclusion, not an assumption. The finite construction of such cells and the full displacement-set inclusions are not formalized.
 \item \emph{Integrality:} \texttt{mixed\_integer\_progression} proves that integer-spaced extrapolation preserves integrality of any specified subset of coordinates. The declaration \texttt{integer\_slack\_gap} proves that a nonnegative integer slack is either zero or at least one; it assumes the slack is integral and does not formalize matrix denominator clearing. These checks distinguish closure of the feasible domain under integer-spaced extrapolation from the discrete slack gap used to construct the finite cover.
 \item \emph{Error calculations:} \texttt{sampled\_sup\_algebra} proves $W\le R$ from $W\ge0$, $c\le1/2$, and $W\le R/2+cW$. The declaration \texttt{second\_difference\_transfer} proves $p(1)-p(0)\le B$ from $p(-1)\ge p(0)$ and an assumed second-difference bound. These verify algebraic steps in Lemma~\ref{lem:markov}, not its analytic estimates.
-\item \emph{Refinement:} \texttt{refinement\_error} proves $D^4/\ell^2\le\eps$ from $\eps,\ell>0$ and $\ell\ge D^2/\sqrt\eps$. The declaration \texttt{ceiling\_refinement} also verifies positivity and this error bound for the actual choice $\ell=\lceil D^2/\sqrt\eps\rceil$, for $D,\eps>0$.
+\item \emph{Refinement:} \texttt{refinement\_error} proves $D^2/\ell^2\le\eps$ from $D\ge0$, $\eps,\ell>0$, and $\ell\ge D/\sqrt\eps$. For positive integer $D$, \texttt{ceiling\_refinement} verifies positivity, $\ell\ge D^2$, and this error bound for the actual choice $\ell=\max\{D^2,\lceil D/\sqrt\eps\rceil\}$.
+
 \item \emph{Optimization transfer:} \texttt{local\_comparison} verifies the scalar inequality in Proposition~\ref{prop:local-comparison}, assuming selection, local optimization, and residual bounds. The declarations \texttt{uniform\_model\_error} and \texttt{nonnegative\_maximization} verify, respectively, the $2\delta+\eta$ transfer for a uniformly accurate surrogate and the final algebra in Corollary~\ref{cor:max}.
 \end{itemize}
 The declarations \texttt{cover\_solve\_select} and \texttt{empty\_candidates\_iff} additionally verify the abstract selection and infeasibility arguments behind the procedure in Appendix~\ref{app:comparison}: a finite candidate set has a feasible minimizer with the stated error, and it is empty exactly when the feasible set is empty, assuming coverage and sound, complete local oracles. The theorem \texttt{representative\_range\_guarantee} verifies the range-relative selection step for arbitrary feasible representatives, assuming the error bound for one representative near an optimum. These results work over arbitrary point types, not just scalar decision variables. They establish conditional correctness implications, not implementations of the cover or local oracles. Construction and enumeration of the cover, oracle implementations, encoding estimates, and the running-time bound remain unverified in Lean. The earlier exploratory \texttt{ReflectingCells.lean} is not part of this successful check. The original \texttt{Unbounded-Cubic-Integer-Programming} repository separately records verification of 45 earlier cubic-integer-programming calculations; those results do not certify this FPTAS.
 
-A separate module, \texttt{verification/lean/SampledMarkov.lean}, verifies eight further results. Its analytic portion consists of \texttt{markov\_difference}, \texttt{nearest\_integer}, \texttt{sampled\_sup\_bound}, \texttt{second\_difference\_bound}, and \texttt{sampled\_markov}. The last is the full univariate statement of Lemma~\ref{lem:markov}, conditional on the classical scaled Markov inequality. Specifically, \texttt{MarkovBound} is an explicit hypothesis asserting, for every real polynomial $r$ of degree at most $D$,
-\[
- \bigl(|r(t)|\le W\text{ for all }|t|\le\ell\bigr)
- \quad\Longrightarrow\quad
- |r'(t)|\le (D^2/\ell)W\text{ for all }|t|\le\ell.
-\]
-It is not introduced as a Lean axiom. Mean-value control, nearest-integer rounding within the interval, attainment of the continuous maximum, absorption of the sampling error, and both applications of Markov are verified. The second-difference estimate follows from Mathlib's theorem that a nonnegative second derivative implies convexity, with no additional Taylor or integral hypothesis. The checker \texttt{check\_sampled\_markov.py} records the successful compilation and axiom audit in \texttt{sampled\_markov\_verification\_log.txt}; these eight results also use only the three standard axioms listed above. The additional declarations \texttt{representative\_at\_minimum}, \texttt{representative\_at\_maximum}, and \texttt{select\_representative} compose the sampled Markov lemma with feasible progression samples, global objective bounds, and finite selection. They derive the representative error at either extremum and the error of the best selected candidate; the representative error is not assumed. Their explicit interface assumes a univariate polynomial of degree at most $D$ whose values at zero and one equal the optimum and representative values, and whose integer samples are objective values of feasible points. The restriction interface is discharged by the additional module described below; assembling the geometric cover remains outside these proofs.
+The module \texttt{verification/lean/SampledMarkov.lean} verifies twelve results. The declarations \texttt{markov\_difference}, \texttt{nearest\_integer}, and \texttt{sampled\_sup\_bound} establish mean-value control, rounding, and the sample-to-supremum estimate. The declarations \texttt{coeff\_reflect}, \texttt{degree\_contract}, and \texttt{even\_contract} construct the polynomial $h$ from the even coefficients of $q$, prove $\deg h\le\lfloor D/2\rfloor$, and prove $h(t^2)=(q(t)+q(-t))/2$. The theorem \texttt{symmetrized\_difference} then proves the sharper factor $4\lfloor D/2\rfloor^2/\ell^2$, and \texttt{sampled\_markov} derives the stated $D^2/\ell^2$ bound in Lemma~\ref{lem:markov}. No symmetrization or approximation conclusion is assumed.
 
-The module \texttt{verification/lean/LineRestriction.lean} constructs $p(t)=f(\mathbf{x}+t(\mathbf{y}-\mathbf{x}))$ by substituting affine univariate polynomials into an actual \texttt{MvPolynomial}. Its six checked theorems are \texttt{eval\_restrict}, \texttt{eval\_zero}, \texttt{eval\_one}, \texttt{degree\_restrict}, \texttt{multivariate\_representative}, and \texttt{multivariate\_selection}. They prove the evaluation identity, endpoint identities, and $\deg p\le\deg f$ (including zero and constant restrictions), then compose these facts with the sampled Markov and selection theorems. Thus the final two theorems derive the approximation guarantee for multivariate polynomials from feasible progression samples, global objective bounds, and the classical Markov hypothesis; existence of a suitable univariate restriction is no longer assumed. The checker \texttt{check\_line\_restriction.py} rebuilds the sampled Markov dependency and records the six-theorem axiom audit in \texttt{line\_restriction\_verification\_log.txt}. All three modules use only the standard axioms already listed and contain 30 checked results in total. The finite cover construction, its assembly with these interfaces, and the full algorithmic complexity analysis remain outside the formalization.
+The proposition \texttt{MarkovBound} packages two explicit instances of the classical inequality: degree $D$ on $[-\ell,\ell]$, with derivative factor $D^2/\ell$, and degree $n=\lfloor D/2\rfloor$ on $[0,\ell^2]$, with derivative factor $2n^2/\ell^2$. Neither is introduced as a Lean axiom. The retained helper \texttt{second\_difference\_bound} proves the former convexity-based estimate, but is no longer used by the strengthened sampled Markov proof. The declarations \texttt{representative\_at\_minimum}, \texttt{representative\_at\_maximum}, and \texttt{select\_representative} propagate the new $D^2/\ell^2$ error to extrema and finite selection, assuming feasible progression samples and global objective bounds. The checker \texttt{check\_sampled\_markov.py} records compilation and the twelve-theorem axiom audit in \texttt{sampled\_markov\_verification\_log.txt}.
+
+The module \texttt{verification/lean/LineRestriction.lean} constructs $p(t)=f(\mathbf{x}+t(\mathbf{y}-\mathbf{x}))$ by substituting affine univariate polynomials into an actual \texttt{MvPolynomial}. Its six checked theorems are \texttt{eval\_restrict}, \texttt{eval\_zero}, \texttt{eval\_one}, \texttt{degree\_restrict}, \texttt{multivariate\_representative}, and \texttt{multivariate\_selection}. They prove the evaluation identity, endpoint identities, and $\deg p\le\deg f$ (including zero and constant restrictions), then compose these facts with the sampled Markov and selection theorems. Thus the final two theorems derive the approximation guarantee for multivariate polynomials from feasible progression samples, global objective bounds, and the classical Markov hypothesis; existence of a suitable univariate restriction is no longer assumed. The checker \texttt{check\_line\_restriction.py} rebuilds the sampled Markov dependency and records the six-theorem axiom audit in \texttt{line\_restriction\_verification\_log.txt}. All three modules use only the standard axioms already listed and contain 34 checked results in total. The finite cover construction, its assembly with these interfaces, the mixed-integer grid reduction, and the full algorithmic complexity analysis remain outside the formalization.
 
 \paragraph{Verification and responsibility.}
-The assistant checked compilation of the edited \LaTeX{} source and consulted literature during development. At Hildebrand's request, Lean verification was resumed and the 30 results described above were checked; the complete manuscript is not formally verified. Successful typesetting does not verify a mathematical proof, and the literature searches do not establish novelty or exhaust the relevant literature. This disclosure does not assert that a complete independent human audit has already taken place. Responsibility for checking the arguments, complexity claims, citations, and contribution statements, and for approving any submitted version, remains with the human authors.
+The assistant checked compilation of the edited \LaTeX{} source and consulted literature during development. At Hildebrand's request, Lean verification was resumed and the 34 results described above were checked; the complete manuscript is not formally verified. Successful typesetting does not verify a mathematical proof, and the literature searches do not establish novelty or exhaust the relevant literature. This disclosure does not assert that a complete independent human audit has already taken place. Responsibility for checking the arguments, complexity claims, citations, and contribution statements, and for approving any submitted version, remains with the human authors.
 
 \end{document}
