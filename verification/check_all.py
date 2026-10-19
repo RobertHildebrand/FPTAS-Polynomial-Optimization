@@ -17,12 +17,27 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--packages-dir', type=Path, default=LEAN / '.lake/packages')
     parser.add_argument('--experiments', action='store_true')
+    parser.add_argument('--check-record', action='store_true', help='Check recorded hashes without rebuilding Lean')
     args = parser.parse_args()
-    scripts = ['check_fptas_calculations.py', 'check_sampled_markov.py', 'check_line_restriction.py']
-    sources = [LEAN / name for name in ['FPTASCalculations.lean', 'SampledMarkov.lean', 'LineRestriction.lean', 'lake-manifest.json', 'lakefile.toml', 'lean-toolchain'] + scripts]
-    sources += [Path(__file__).resolve()]
+    if args.check_record:
+        path = ROOT / 'verification/last_run.json'
+        record = json.loads(path.read_text())
+        changed = [name for name, digest in record['sha256'].items()
+                   if not (ROOT / name).is_file() or hashlib.sha256((ROOT / name).read_bytes()).hexdigest() != digest]
+        if not record.get('success') or changed:
+            print('STALE OR FAILED: ' + ', '.join(changed))
+            return 1
+        print('PASS: successful audit matches the recorded drafts and sources; Lean was not rerun.')
+        return 0
+    scripts = ['check_fptas_calculations.py', 'check_sampled_markov.py', 'check_line_restriction.py', 'check_scaled_polynomial.py']
+    sources = [LEAN / name for name in ['FPTASCalculations.lean', 'SampledMarkov.lean', 'LineRestriction.lean', 'ScaledPolynomial.lean', 'lake-manifest.json', 'lakefile.toml', 'lean-toolchain'] + scripts]
+    sources += [Path(__file__).resolve(), ROOT / 'verification/make_review_draft.py',
+                ROOT / 'verification/README.md', ROOT / 'verification/reference_audit.txt',
+                ROOT / 'README.md', ROOT / 'reflecting_cells_fptas_review.tex']
+    # Bind this audit to the exact accompanying drafts, not just Lean sources.
+    sources += [ROOT / name for name in ['reflecting_cells_fptas_short.tex', 'reflecting_cells_fptas.tex']]
     if args.experiments:
-        sources.append(ROOT / 'experiments/check_reflecting_cells.py')
+        sources += [ROOT / 'experiments' / n for n in ['check_reflecting_cells.py', 'check_shifted_chambers.py']]
     record = {'started_utc': datetime.now(timezone.utc).isoformat(), 'success': False,
               'toolchain': (LEAN / 'lean-toolchain').read_text().strip(),
               'sha256': {str(p.relative_to(ROOT)): hashlib.sha256(p.read_bytes()).hexdigest() for p in sources},
@@ -42,7 +57,7 @@ def main():
         return 1
     commands = [[sys.executable, str(LEAN / s), '--packages-dir', str(packages)] for s in scripts]
     if args.experiments:
-        commands.append([sys.executable, str(ROOT / 'experiments/check_reflecting_cells.py')])
+        commands += [[sys.executable, str(ROOT / 'experiments' / n)] for n in ['check_reflecting_cells.py', 'check_shifted_chambers.py']]
     for command in commands:
         print('\nChecking ' + Path(command[1]).name, flush=True)
         result = subprocess.run(command, cwd=ROOT)
@@ -53,8 +68,8 @@ def main():
             return 1
     record.update(success=True, finished_utc=datetime.now(timezone.utc).isoformat())
     save()
-    count = sum(len(re.findall(r'^theorem \w+', (LEAN / name).read_text(), re.M)) for name in ['FPTASCalculations.lean', 'SampledMarkov.lean', 'LineRestriction.lean'])
-    print(f'\nPASS: all three Lean modules rebuilt and axiom-audited ({count} theorems).')
+    count = sum(len(re.findall(r'^theorem \w+', (LEAN / name).read_text(), re.M)) for name in ['FPTASCalculations.lean', 'SampledMarkov.lean', 'LineRestriction.lean', 'ScaledPolynomial.lean'])
+    print(f'\nPASS: all four Lean modules rebuilt and axiom-audited ({count} theorems).')
     print('Run record: ' + str(output))
     return 0
 

@@ -1,7 +1,6 @@
-\documentclass[10pt,twocolumn]{article}
+\documentclass[final,5p,times,twocolumn]{elsarticle}
 \usepackage[T1]{fontenc}
-\usepackage{lmodern,microtype}
-\usepackage[letterpaper,margin=.72in,columnsep=.27in]{geometry}
+\usepackage{microtype}
 \usepackage{amsmath,amssymb,amsthm,mathtools,enumitem,booktabs}
 \usepackage{graphicx,tikz}
 \usepackage{float}
@@ -27,14 +26,21 @@
 \newcommand{\osc}{\operatorname{osc}}
 \newcommand{\bits}{\operatorname{bits}}
 \newcommand{\norm}[1]{\lVert#1\rVert}
-\title{A Short Proof of a Range-Relative FPTAS\\for Polynomial Integer Optimization over Bounded Polyhedra}
-\author{Robert Hildebrand\thanks{Developed with assistance from OpenAI's Codex assistant; see the disclosure at the end of the paper and the extended manuscript.}}
-\date{}
-\begin{document}\raggedbottom
-\maketitle
+\journal{Operations Research Letters}
+\begin{document}
+\begin{frontmatter}
+\title{A short proof of a range-relative FPTAS for polynomial integer optimization over bounded polyhedra}
+\author{Robert Hildebrand}
+\ead{rhil@vt.edu}
+\affiliation{organization={Grado Department of Industrial and Systems Engineering, Virginia Tech},
+  city={Blacksburg}, state={Virginia}, country={USA}}
 \begin{abstract}
-We give a short proof of a fully polynomial-time range-relative approximation scheme for polynomial optimization over the integer points of a bounded rational polyhedron in fixed dimension. Boundedness supplies a finite slack decomposition and a finite integer objective range. The proof combines the reflecting-set decomposition of Cook, Hartmann, Kannan, and McDiarmid with Markov's inequality and uses one integer linear feasibility query per refined cell. The running time is polynomial in the input encoding length, the numerical degree, and the reciprocal accuracy.
+We give a short proof of a fully polynomial-time range-relative approximation scheme for polynomial optimization over the integer points of a bounded rational polyhedron in fixed dimension. Boundedness supplies a finite slack decomposition and a finite integer objective range. The proof combines the reflecting-set decomposition of Cook, Hartmann, Kannan, and McDiarmid with Markov's polynomial derivative inequality and uses one integer linear feasibility query per refined cell. The running time is polynomial in the input encoding size, the numerical degree, and the reciprocal accuracy.
 \end{abstract}
+\begin{keyword}
+Integer programming \sep Polynomial optimization \sep Approximation schemes \sep Fixed dimension \sep Reflecting cells
+\end{keyword}
+\end{frontmatter}
 
 \section{Introduction and main result}
 
@@ -50,11 +56,10 @@ When $P\cap\Z^d\ne\varnothing$, choose minimizers and maximizers $\mathbf{x}_{\m
 
 De Loera, Hemmecke, K\"oppe, and Weismantel established an FPTAS for nonnegative polynomial maximization and a range-relative scheme for arbitrary polynomials in fixed dimension~\cite{DHKW06,DHKW08}. We give a short geometric proof for the bounded integer problem, using integer linear feasibility and an explicit bit-complexity bound. The guarantee is invariant under translation of the objective; it is not a multiplicative approximation to a nonnegative minimum.
 
-The key ingredient is decomposition by relative constraint slacks. The reflecting sets of Cook, Hartmann, Kannan, and McDiarmid~\cite{CHKM} underpin their integer-hull analysis; related symmetric covers appear in the quadratic and cubic algorithms of Ari and Hildebrand~\cite{AHIQP,AH}, and dyadic slack grouping also appears in Wei's quadratic algorithm~\cite{Wei}. Here refinement produces long feasible integer progressions. Markov's inequality on these progressions controls the error at an integer optimum, allowing any feasible representative of its cell. The same representatives work for all polynomials of a prescribed degree.
+The key ingredient is decomposition by relative constraint slacks. The reflecting sets of Cook, Hartmann, Kannan, and McDiarmid~\cite{CHKM} underpin their integer-hull analysis; related symmetric covers appear in the quadratic and cubic algorithms of Ari and Hildebrand~\cite{AHIQP,AH}, and dyadic slack grouping also appears in Wei's quadratic algorithm~\cite[Section~4.1]{Wei}. Here refinement produces long feasible integer progressions. Markov's polynomial derivative inequality~\cite[Chapter~5]{BorweinErdelyi} on these progressions controls the error at an integer optimum, allowing any feasible representative of its cell. The same representatives work for all polynomials of a prescribed degree.
 
 \begin{figure*}[t]
 \centering
-{\small\bfseries Algorithm at a glance}\par\medskip
 \begin{tikzpicture}[
   stage/.style={draw=cellblue!65,line width=.6pt,rounded corners=2pt,
     fill=cellblue!3,text width=.255\textwidth,minimum height=2.05cm,
@@ -63,7 +68,7 @@ The key ingredient is decomposition by relative constraint slacks. The reflectin
   node distance=7mm]
 \node[stage] (decompose) {
   {\color{cellblue}\bfseries 1. Decompose}\\[5pt]
-  Refine dyadic slack intervals\\
+  Shift and refine slack intervals\\
   to form reflecting cells $C$.
 };
 \node[stage,right=of decompose] (sample) {
@@ -79,16 +84,17 @@ The key ingredient is decomposition by relative constraint slacks. The reflectin
 \draw[flow] (decompose)--(sample);
 \draw[flow] (sample)--(select);
 \end{tikzpicture}
+\caption{Algorithm at a glance: decompose a relaxation with the same integer points, select one representative from each cell containing integer points, and return the representative with the best objective value.}\label{fig:overview}
 \end{figure*}
 
-The algorithm follows the decompose--sample--select procedure summarized in the overview. No local objective model is optimized. The proof separates the reflecting geometry (Section~\ref{sec:cover}) from enumeration and bit complexity (Section~\ref{sec:algorithm}).
+The algorithm follows the decompose--sample--select procedure summarized in Figure~\ref{fig:overview}. No local objective model is optimized. The proof separates the reflecting geometry (Section~\ref{sec:cover}) from enumeration and bit complexity (Section~\ref{sec:algorithm}).
 
-To state the complexity bound precisely, we fix the following encoding convention. Vectors are columns and are written in bold. For an integer $u$, set $\langle u\rangle=1+\lceil\log_2(1+|u|)\rceil$. A rational number $u/v$ is stored in lowest terms with $v>0$, with size $\langle u/v\rangle=\langle u\rangle+\langle v\rangle$. For matrices, vectors, and lists, $\langle\cdot\rangle$ is the sum of the entry sizes together with the binary sizes of the dimensions and list lengths. The polynomial is supplied explicitly as
+To state the complexity bound precisely, we fix the following encoding convention. Vectors are columns and are written in bold. For an integer $u$, its \emph{binary encoding size} is $\langle u\rangle=1+\lceil\log_2(1+|u|)\rceil$, counting a sign bit and the binary magnitude bits. We use \emph{encoding size}, \emph{bit length}, or simply \emph{size} for storage measured in bits when the context is clear; \emph{magnitude} refers to the numerical absolute value. A rational number $u/v$ is stored in lowest terms with $v>0$, with size $\langle u/v\rangle=\langle u\rangle+\langle v\rangle$. For matrices, vectors, and lists, $\langle\cdot\rangle$ is the sum of the entry sizes together with the binary encoding sizes of the dimensions and list lengths. The polynomial is supplied explicitly as
 \[
- f(\mathbf{x})=\sum_{\alpha\in\mathcal A}c_\alpha\mathbf{x}^\alpha,
- \qquad c_\alpha\in\Z,\quad \alpha\in\Z_+^d,\quad |\alpha|_1\le D.
+ f(\mathbf{x})=\sum_{\boldsymbol{\alpha}\in\mathcal A}c_{\boldsymbol{\alpha}}\mathbf{x}^{\boldsymbol{\alpha}},
+ \qquad c_{\boldsymbol{\alpha}}\in\Z,\quad \boldsymbol{\alpha}\in\Z_+^d,\quad |\boldsymbol{\alpha}|_1\le D.
 \]
-Following~\cite{DHKW08}, coefficients are encoded in binary and exponent vectors in unary: each exponent $\alpha_j$ occupies $\alpha_j+1$ symbols. Thus $\langle f\rangle$ includes the coefficient sizes and $\sum_{\alpha\in\mathcal A}\sum_{j=1}^d(\alpha_j+1)$, together with dimensions and list lengths. Write $\varphi=\langle A,\mathbf b,f,\eps\rangle$ for the total input encoding size. We compute $D=\max\{1,\deg f\}$ from the nonzero monomials, taking $D=1$ for the zero polynomial; no separate degree input is needed. We retain $D$ explicitly in the running-time bound to show its contribution.
+Following~\cite{DHKW08}, coefficients are encoded in binary and exponent vectors in unary: each exponent $\alpha_j$ is stored as $\alpha_j$ one-bits followed by a zero, using $\alpha_j+1$ bits. The input is therefore a bit string, although exponents use unary rather than positional binary notation. Accordingly, $\langle f\rangle$ includes the coefficient sizes and $\sum_{\boldsymbol{\alpha}\in\mathcal A}\sum_{j=1}^d(\alpha_j+1)$, together with dimensions and list lengths. Write $\varphi=\langle A,\mathbf b,f,\eps\rangle$ for the total input encoding size. We set $D=\max\{1,\deg f\}$ from the nonzero monomials, taking $D=1$ for the zero polynomial; no separate degree input is needed. We retain $D$ explicitly in the running-time bound to show its contribution.
 
 \begin{definition}[Range-relative FPTAS]\label{def:fptas}
 Under the encoding convention above and for fixed dimension $d$, a range-relative fully polynomial-time approximation scheme is an algorithm that, for every rational $0<\eps\le1$, reports infeasibility when $P\cap\Z^d=\varnothing$, and otherwise returns $\mathbf{x}_{\eps}\in P\cap\Z^d$ satisfying
@@ -101,7 +107,7 @@ Its running time is polynomial in the total input encoding size $\varphi$ and $1
 All complexity statements below count bit operations. The function $\poly$ denotes a polynomial with an absolute exponent, independent of $d,D,\eps$; different occurrences may denote different polynomials. Logs are base two unless indicated otherwise.
 
 \begin{theorem}[Polynomial approximation by reflecting cells]\label{thm:main}
-Let $d\ge1$ and let $P=\{\mathbf{x}\in\R^d:A\mathbf{x}\le\mathbf b\}$ be bounded, with $A\in\Z^{m\times d}$ and $\mathbf b\in\Z^m$, let $f\in\Z[x_1,\ldots,x_d]$, and put $D=\max\{1,\deg f\}$, with $D=1$ when $f=0$. For rational $0<\eps\le1$, let $\varphi=\langle A,\mathbf b,f,\eps\rangle$ be the total input encoding size.
+Let $d\ge1$ and let $P=\{\mathbf{x}\in\R^d:A\mathbf{x}\le\mathbf b\}$ be bounded, with $A\in\Z^{m\times d}$ and $\mathbf b\in\Z^m$, let $f\in\Z[x_1,\ldots,x_d]$, and put $D=\max\{1,\deg f\}$, with $D=1$ when $f\equiv0$. For rational $0<\eps\le1$, let $\varphi=\langle A,\mathbf b,f,\eps\rangle$ be the total input encoding size.
 There is a deterministic algorithm that reports infeasibility or returns $\mathbf{x}_{\eps}\in P\cap\Z^d$ satisfying~\eqref{eq:guarantee}, in at most
 \begin{equation}\label{eq:runtime-coarse}
  \left(\frac{\varphi D}{\eps}\right)^{O(d)}
@@ -113,7 +119,9 @@ Since the input explicitly lists the $m$ inequalities in $d$ variables, $m,d\le\
 
 Rational inequalities can be normalized to integral data in polynomial time, as detailed below. Rational objective coefficients can likewise be reduced to integer coefficients by clearing denominators in polynomial time; positive scaling preserves the approximation guarantee, as in~\cite[Section~5]{DHKW08}. The remaining construction parameters and the exact feasibility-query count are introduced in the proof. For fixed $d$, the bound is polynomial in $\varphi$ and $1/\eps$, hence gives an FPTAS in Definition~\ref{def:fptas}. The same explicit bound remains valid for binary-encoded exponents, but then its numerical dependence on $D$ does not assert an FPTAS in the sparse binary input size.
 
-\begin{corollary}[Nonnegative maximization]\label{cor:max}
+The next two corollaries recover known guarantees of De Loera et al.: nonnegative integer maximization~\cite[Theorem~1.1]{DHKW06} and mixed-integer approximation~\cite[Theorems~1(a) and~2(b)]{DHKW08}. The first follows directly from our range-relative bound. For the second, we use their compatible-grid reduction~\cite[Theorem~8 and Lemma~9]{DHKW08}, replacing the integer approximation subroutine by Theorem~\ref{thm:main}.
+
+\begin{corollary}[Nonnegative maximization {\cite[Theorem~1.1]{DHKW06}}]\label{cor:max}
 Under the same assumptions and encoding conventions, if $f\ge0$ on $P\cap\Z^d$, choosing the largest objective value among the representatives yields
 \[
  f(\mathbf{x}_{\eps})\ge(1-\eps)f_{\max}.
@@ -121,7 +129,7 @@ Under the same assumptions and encoding conventions, if $f\ge0$ on $P\cap\Z^d$, 
 Thus the construction gives a multiplicative FPTAS for nonnegative maximization under the encoding convention of Definition~\ref{def:fptas}.
 \end{corollary}
 
-\begin{corollary}[Mixed-integer approximation]\label{cor:mixed}
+\begin{corollary}[Mixed-integer approximation {\cite[Theorems~1(a) and~2(b)]{DHKW08}}]\label{cor:mixed}
 Fix the total dimension $d=d_c+d_i$. Let $P=\{\mathbf{x}\in\R^d:A\mathbf{x}\le\mathbf b\}$ be a bounded rational polyhedron and $f\in\Z[x_1,\ldots,x_d]$. Under the same encoding convention, for rational $0<\eps\le1$ there is an algorithm, polynomial in $\varphi=\langle A,\mathbf b,f,\eps\rangle$ and $1/\eps$, that reports infeasibility or returns
 \[
 \begin{gathered}\mathbf{x}_{\eps}\in P\cap(\Q^{d_c}\times\Z^{d_i}),\\
@@ -130,11 +138,9 @@ Fix the total dimension $d=d_c+d_i$. Let $P=\{\mathbf{x}\in\R^d:A\mathbf{x}\le\m
 where the extrema are over $P\cap(\R^{d_c}\times\Z^{d_i})$. For nonnegative $f$ on this set, a multiplicative FPTAS for maximization is obtained as well.
 \end{corollary}
 
-Corollary~\ref{cor:mixed} combines our integer algorithm with the grid reduction of De Loera et al.~\cite{DHKW08}; it does not require a reflecting-cell cover of the entire mixed-integer feasible set.
-
 \paragraph{Comparison with prior algorithms.}
 
-The generating-function approach of De Loera et al.~\cite{DHKW06,DHKW08} computes weighted sums involving $f^q$, where $q=O(1+\eps^{-1}\log N)$ and $N=|P\cap\Z^d|$. The standard Barvinok counting bound is $\langle A,\mathbf b\rangle^{O(d\log(d+1))}$~\cite[Theorem~2.3]{PakPanova}; our entire algorithm has bound $\varphi^{O(d)}$ for fixed $D,\eps$. This compares available upper bounds, not a runtime separation: counting alone does not describe their FPTAS, and our potentially large cell count does not establish practical superiority.
+The short rational generating functions used by De Loera et al. build on Barvinok's lattice-point counting algorithm~\cite{Barvinok}. Their approach~\cite{DHKW06,DHKW08} computes weighted sums involving $f^q$, where $q=O(1+\eps^{-1}\log N)$ and $N=|P\cap\Z^d|$. The standard Barvinok counting bound is $\langle A,\mathbf b\rangle^{O(d\log(d+1))}$~\cite[Theorem~2.3]{PakPanova}; our entire algorithm has bound $\varphi^{O(d)}$ for fixed $D,\eps$. This compares available upper bounds, not a runtime separation: counting alone does not describe their FPTAS, and our potentially large cell count does not establish practical superiority.
 
 Del Pia's quadratic scheme~\cite[Proposition~3 and Section~6.2]{DelPia} uses affine optimization over boxes after geometric preprocessing, with flatness recursion in the remaining cases. For fixed quadratic rank $k$ and integer dimension $p$, it uses $O_{k,p}(1+\eps^{-k/2})$ MILP subproblems and allows variable continuous dimension. Our feasibility-call exponent matches $k/2$ at $k=d$, but our enumeration costs an additional factor of order $\eps^{-1/2}$. Our advantages are arbitrary degree and objective-independent representatives; we do not recover his low-rank dependence.
 
@@ -142,123 +148,127 @@ Del Pia's quadratic scheme~\cite[Proposition~3 and Section~6.2]{DelPia} uses aff
 
 We first construct cells supporting feasible integer progressions, then apply Markov's inequality along a progression through an integer optimum. Neither the optimum nor the objective range is needed by the algorithm.
 
-Clear rational row denominators by multiplying each row by the product of its positive denominators. This takes polynomial time; normalized entries have $O(\varphi)$ bits. Equalities may be represented by pairs of inequalities, and lower-dimensional polytopes are allowed. Real feasibility and boundedness are testable by rational linear programming; boundedness remains a hypothesis of our theorem.
+Clear rational row denominators by multiplying each row by the product of its positive denominators. This takes polynomial time; normalized entries have $O(\varphi)$ bits. Equalities may be represented by pairs of inequalities, and lower-dimensional polytopes are allowed. Real feasibility and boundedness are testable by rational linear programming; boundedness remains a hypothesis of our theorem. After testing real feasibility, remove zero constraint rows. We treat $d\ge1$ below; dimension zero is immediate.
 
 For the remainder of the construction, $A,\mathbf b$ denote the normalized integral data; $\varphi$ continues to denote the original input size. To track the construction explicitly, define
 \begin{equation}\label{eq:tau}
  \tau=\left\lceil\log_2\bigl(2+\max\{\|A\|_{\max},\|\mathbf b\|_\infty\}\bigr)\right\rceil.
 \end{equation}
-Here $\|A\|_{\max}$ is the largest absolute matrix entry, so $\tau$ measures coefficient size rather than magnitude. The remaining parameters have the following roles: $V$ bounds coordinate lengths, $M$ is the number of dyadic slack scales, $\ell$ is the refinement, and $H$ bounds the number of hyperplanes. Set
+In Schrijver's encoding convention~\cite[Section~2.1]{Schrijver}, each normalized row inequality has size at most $(d+1)(\tau+3)$, including its right-hand side. This bounds the per-inequality size parameter used by CHKM, distinct from our total input size $\varphi$. Here $\|A\|_{\max}$ is the largest absolute matrix entry, so $\tau$ bounds the coefficient bit lengths up to a constant. The remaining parameters have the following roles: $\Phi$ gives the common magnitude bound $2^\Phi$ for coordinates and shifted slacks and determines how many intervals $[2^k,2^{k+1}]$ are needed below, $\ell$ is the refinement, and $H$ bounds the number of hyperplanes. Set
 \begin{align}
- V&=d\bigl(\tau+\lceil\log_2(d+1)\rceil\bigr)+2,\label{eq:V}\\
- M&=\tau+V+\lceil\log_2(d+1)\rceil+2,\label{eq:M}\\
- \ell&=\max\{D^2,\lceil D/\sqrt\eps\rceil\},\qquad H=m(M\ell+2),\label{eq:HT}\\
- F_d(H)&=\sum_{j=0}^{d}2^j\binom Hj\le(1+2H)^d.\label{eq:F}
+ \Phi&=5d^2(d+1)(\tau+3)+2,\label{eq:Phi}\\
+ \ell&=\max\{D^2,\lceil D/\sqrt\eps\rceil\},\qquad H=m((\Phi+2)\ell+1),\label{eq:HT}\\
+ R_d(H)&=\sum_{j=0}^{d}\binom Hj\le(1+H)^d.\label{eq:F}
 \end{align}
 
-\begin{lemma}[Coordinates and slacks]\label{lem:size}
-If $P\ne\varnothing$, every $\mathbf{x}\in P$ satisfies $|x_j|<2^V$ for every $j$. Every slack $s_i(\mathbf{x})=b_i-\mathbf{a}_i^\top \mathbf{x}$ satisfies $0\le s_i(\mathbf{x})<2^M$, with $V,M$ defined in~\eqref{eq:V}--\eqref{eq:M}.
-\end{lemma}
-\begin{proof}
-A vertex of a bounded polyhedron in $\R^d$ has $d$ linearly independent active constraint normals, including when the polyhedron is lower-dimensional. Cramer's rule expresses each vertex coordinate as a ratio of two integral determinants of order $d$. The nonzero denominator has absolute value at least one. Since every entry of $A,\mathbf{b}$ has absolute value less than $2^\tau$, the absolute value of a numerator is at most $d!2^{d\tau}\le d^d2^{d\tau}<2^V$. Every point of $P$ is a convex combination of vertices. Finally,
+Following the outward perturbation in~\cite[proof of Theorem~2.1, p.~29]{CHKM}, define
 \[
- s_i(\mathbf{x})\le |b_i|+\sum_{j=1}^d|a_{ij}|\,|x_j|
- <2^\tau(1+d2^V)<2^M.
+\begin{gathered}
+ \widetilde P=\{\mathbf{x}:A\mathbf{x}\le\mathbf b+\tfrac12\mathbf1\},\\
+ s_i(\mathbf{x})=b_i+\tfrac12-\mathbf a_i^\top\mathbf{x}.
+\end{gathered}
 \]
-\end{proof}
+Since $A,\mathbf b$ are integral, $\widetilde P\cap\Z^d=P\cap\Z^d$. Every integer point of $P$ has $s_i\ge1/2$. We will extrapolate real segments in $\widetilde P$ and use integrality to return their integer samples to $P$. This shift is applied only to the pure-integer problem, including the scaled integer problem in the mixed-integer reduction.
 
-The preceding bounds identify a finite interval of relevant slack values. At an integer point, each slack is either zero or at least one. This gap allows us to cover all positive integer slacks using finitely many dyadic scales, even when the polytope is thin or lower-dimensional. Within each scale, the refinement controls relative slack variation; this is what permits extrapolation beyond the cell.
-
-The dyadic construction in~\cite[Theorem~2.2]{AH}, tracing back to~\cite{CHKM}, groups comparable positive slacks. We retain their notation $s_i$, $C$, and $D_C$ for slacks, cells, and symmetric displacement sets. Figure~\ref{fig:pentagon-cells} illustrates the construction on a pentagon. Our refinement parameter $\ell\ge1$ strengthens $C-C\subseteq D_C$ to $\ell(C-C)\subseteq D_C$.
-
-\begin{definition}[Refined thresholds]\label{def:thresholds}
-For integers $M,\ell\ge1$, let
-\begin{equation}\label{eq:thresholds}
-\begin{split}\mathcal B_{M,\ell}=\{0,2^M\}\cup\\
- \left\{2^k\left(1+\frac{j}{\ell}\right):0\le k<M,\ 0\le j<\ell\right\}
-.\end{split}
+The coordinate and slack estimates in the proof of CHKM's Theorem~2.1~\cite[p.~29]{CHKM}, with their per-inequality size bounded by $(d+1)(\tau+3)$, give
+\begin{equation}\label{eq:integer-bounds}
+ |x_j|<2^\Phi,\qquad \tfrac12\le s_i(\mathbf{x})<2^\Phi
+ \quad(\mathbf{x}\in P\cap\Z^d).
 \end{equation}
-There are $M\ell+2$ thresholds. Insert the hyperplanes $s_i(\mathbf{x})=a$ for every row $i$ and every $a\in\mathcal B_{M,\ell}$, ignoring expressions that do not define proper hyperplanes. A cell is a nonempty relatively open face of this arrangement that lies in $P$. Discard cells having any slack in $(0,1)$.
+Their estimates are stated at vertices of the integer hull and extend throughout that hull by linearity. Their integral shifted rows $2A\mathbf{x}\le2\mathbf b+\mathbf1$ have slacks $2s_i$; the extra constant in~\eqref{eq:Phi} safely covers this convention. Their argument treats $d\ge2$; for $d=1$, the same bounds follow directly from the interval endpoints and $|a_{ij}|,|b_i|<2^\tau$. Only bounds on integer feasible points are needed here. The extended version retains the detailed determinant proof with a sharper exponent.
+
+We use the reflecting-set construction of CHKM~\cite[proof of Theorem~2.1, pp.~29--30]{CHKM}: move integer points into the interior and group slacks in dyadic intervals. Our modification subdivides each such interval into $\ell$ equal parts. This extends their reflection calculation to long integer progressions; see also~\cite[Theorem~2.2]{AH}. Figure~\ref{fig:pentagon-cells} illustrates the refinement.
+
+\begin{definition}[Closed refined cells]\label{def:thresholds}
+For integers $\Phi,\ell\ge1$, let
+\begin{equation}\label{eq:thresholds}
+\begin{split}
+\mathcal B_{\Phi,\ell}=\{2^\Phi\}\cup\\
+ \left\{2^k\left(1+\frac j\ell\right):-2\le k<\Phi,\ 0\le j<\ell\right\}.
+\end{split}
+\end{equation}
+There are $(\Phi+2)\ell+1$ thresholds, starting at $1/4$. Set
+\[
+ Q=\{\mathbf{x}:1/4\le s_i(\mathbf{x})\le2^\Phi\ (1\le i\le m)\}.
+\]
+Subdivide $Q$ by the hyperplanes $s_i(\mathbf{x})=a$, $a\in\mathcal B_{\Phi,\ell}$. The family $\mathcal C$ consists of the closures of the resulting full-dimensional chambers. If $Q$ has empty interior, set $\mathcal C=\varnothing$.
 \end{definition}
 
-Including all faces is essential: integer points may lie on many threshold hyperplanes. Denote the retained cell family by $\mathcal C$. These cells cover $P\cap\Z^d$, because all slacks at integer points are nonnegative integers. Threshold zero ensures that an arrangement face cannot cross the boundary of $P$.
+Every integer point of $P$ lies in the interior of $Q$, by~\eqref{eq:integer-bounds}, and therefore belongs to a closed cell. The cells may overlap on subdivision hyperplanes, but no separate lower-dimensional faces are needed. Conversely, $Q\subseteq\widetilde P$, so every integer point in a cell belongs to $P$. These statements also justify declaring integer infeasibility when $Q$ has empty interior. The set $Q$ is bounded: its recession directions satisfy $A\mathbf v=0$, which forces $\mathbf v=0$ since $P$ is nonempty and bounded.
 
-If $a<b$ are successive positive thresholds, then
+If $a<b$ are successive thresholds, then
 \begin{equation}\label{eq:width}
  b-a\le a/\ell.
 \end{equation}
-Indeed, on a dyadic interval $[2^k,2^{k+1}]$ the spacing is $2^k/\ell$ and $a\ge2^k$. This includes its last subinterval. For $\ell=1$ the positive thresholds are exactly dyadic.
+Indeed, on $[2^k,2^{k+1}]$ the spacing is $2^k/\ell$ and $a\ge2^k$. The same argument applies to the two additional scales below one.
 
 \begin{figure*}[t]
 \centering
 \begin{tikzpicture}[x=.29cm,y=.29cm,font=\small]
-\foreach \shift/\panel/\refined in {0/{(a) Dyadic cells}/0,21/{(b) Refined cells, $\ell=2$}/1} {
-  \begin{scope}[xshift=\shift*.29cm]
-    \begin{scope}
-      \clip (0,0)--(16,0)--(16,8)--(8,16)--(0,16)--cycle;
-      \fill[gray!5] (0,0) rectangle (16,16);
-      \fill[cellblue!20] (8,4)--(12,4)--(8,8)--cycle;
-      \foreach \u in {1,2,4,8,12,14,15} {
-        \draw[gray!65,thin] (\u,0)--(\u,16);
-        \draw[gray!65,thin] (0,\u)--(16,\u);
-      }
-      % Fifth slack: 24-x_1-x_2. Each threshold gives a diagonal.
-      \foreach \a in {1,2,4,8,16} {
-        \draw[gray!65,thin] (-8,{32-\a})--(32,{-8-\a});
-      }
-      \ifnum\refined=1
-        \foreach \u in {1.5,3,6,10,13,14.5} {
-          \draw[cellorange,densely dashed,thin] (\u,0)--(\u,16);
-          \draw[cellorange,densely dashed,thin] (0,\u)--(16,\u);
-        }
-        \foreach \a in {1.5,3,6,12,24} {
-          \draw[cellorange,densely dashed,thin] (-8,{32-\a})--(32,{-8-\a});
-        }
-        \fill[cellblue!40] (8,4) rectangle (10,6);
-        \draw[cellblue,thick,dashed] (8,4) rectangle (10,6);
-        \fill (9,5) circle (2pt);
-        \node[above right,font=\scriptsize] at (9,5) {$\mathbf z_C$};
-      \else
-        \node[cellblue] at (9,5.2) {$C$};
-      \fi
-    \end{scope}
-    \draw[thick] (0,0)--(16,0)--(16,8)--(8,16)--(0,16)--cycle;
-    \foreach \u in {0,4,8,12,16} {
-      \node[below,font=\scriptsize] at (\u,0) {$\u$};
-      \node[left,font=\scriptsize] at (0,\u) {$\u$};
+\foreach \shift/\panel/\refined in {0/{(a) Dyadic chambers}/0,21/{(b) Refined chambers, $\ell=2$}/1} {
+ \begin{scope}[xshift=\shift*.29cm]
+  \begin{scope}
+   \clip (-.25,-.25)--(16.25,-.25)--(16.25,8)--(8,16.25)--(-.25,16.25)--cycle;
+   \fill[gray!5] (-.25,-.25) rectangle (16.25,16.25);
+   \fill[cellblue!20] (8.5,3.5)--(12.5,3.5)--(12.5,4)--(9,7.5)--(8.5,7.5)--cycle;
+   \foreach \a in {.25,.5,1,2,4,8,16,32} {
+    \draw[gray!60,thin] ({\a-.5},-.25)--({\a-.5},16.25);
+    \draw[gray!60,thin] ({16.5-\a},-.25)--({16.5-\a},16.25);
+    \draw[gray!60,thin] (-.25,{\a-.5})--(16.25,{\a-.5});
+    \draw[gray!60,thin] (-.25,{16.5-\a})--(16.25,{16.5-\a});
+    \draw[gray!60,thin] (-10,{34.5-\a})--(35,{-10.5-\a});
+   }
+   \ifnum\refined=1
+    \foreach \a in {.375,.75,1.5,3,6,12,24} {
+     \draw[cellorange,densely dashed,thin] ({\a-.5},-.25)--({\a-.5},16.25);
+     \draw[cellorange,densely dashed,thin] ({16.5-\a},-.25)--({16.5-\a},16.25);
+     \draw[cellorange,densely dashed,thin] (-.25,{\a-.5})--(16.25,{\a-.5});
+     \draw[cellorange,densely dashed,thin] (-.25,{16.5-\a})--(16.25,{16.5-\a});
+     \draw[cellorange,densely dashed,thin] (-10,{34.5-\a})--(35,{-10.5-\a});
     }
-    \node at (8,18) {\panel};
-    \node[right] at (16,0) {$x_1$};
-    \node[above] at (0,16) {$x_2$};
+    \fill[cellblue!45] (8.5,4.5) rectangle (10.5,5.5);
+    \draw[cellblue,thick] (8.5,4.5) rectangle (10.5,5.5);
+   \else
+    \draw[cellblue,thick] (8.5,3.5)--(12.5,3.5)--(12.5,4)--(9,7.5)--(8.5,7.5)--cycle;
+   \fi
+   \foreach \x in {0,...,16} {\foreach \y in {0,...,16} {
+    \pgfmathtruncatemacro{\inside}{\x+\y<=24}
+    \ifnum\inside=1 \fill[black!45] (\x,\y) circle (.045);\fi
+   }}
   \end{scope}
+  \draw[black!55,dashed] (0,0)--(16,0)--(16,8)--(8,16)--(0,16)--cycle;
+  \draw[thick] (-.25,-.25)--(16.25,-.25)--(16.25,8)--(8,16.25)--(-.25,16.25)--cycle;
+  \fill[cellblue] (9,5) circle (.12);
+  \node[below] at (8,-1) {\panel};
+ \end{scope}
 }
 \end{tikzpicture}
-\caption{The slack-cell construction on the pentagon $P=\{\mathbf{x}\in[0,16]^2:x_1+x_2\le24\}$. The fifth slack, $24-x_1-x_2$, adds diagonal threshold lines, so cells need not be boxes. The shaded dyadic cell is the open triangle $x_1>8$, $x_2>4$, $x_1+x_2<16$. Refinement with $\ell=2$ introduces the dashed orange lines; the darker cell $(8,10)\times(4,6)$ contains the integer representative $(9,5)$. Both panels show the full arrangement before discarding open strips with slack in $(0,1)$; lower-dimensional faces are also cells.}
+\caption{Closed shifted-slack chambers for $P=\{\mathbf{x}\in[0,16]^2:x_1+x_2\le24\}$ (dashed outline). The solid outline is $Q$, whose lower shifted-slack bound is $1/4$; the upper bound is inactive in this example. The fifth shifted slack is $24.5-x_1-x_2$, giving the diagonal lines. The shaded dyadic chamber is refined in (b); its darker closed rectangle $[8.5,10.5]\times[4.5,5.5]$ contains the representative $(9,5)$. All lattice points of $P$, including its boundary points, lie inside $Q$. Adjacent closed cells share their boundaries.}
 \label{fig:pentagon-cells}
 \end{figure*}
 
-\begin{lemma}[Refined displacement cover]\label{lem:reflection}
-For each $C\in\mathcal C$, define
+\begin{lemma}[Refined CHKM reflection property]\label{lem:reflection}
+Each $C\in\mathcal C$ is described by $a_i\le s_i(\mathbf{x})\le c_i$ for successive thresholds $a_i<c_i$. Set
 \[
- D_C=\{\mathbf{d}\in\R^d:|\mathbf{a}_i^\top\mathbf{d}|\le w_i\ (1\le i\le m)\},
+ D_C=\{\mathbf v\in\R^d:|\mathbf a_i^\top\mathbf v|\le a_i\ (1\le i\le m)\}.
 \]
-where $w_i=0$ for a slack constant on $C$, and $w_i=a$ for a slack in a positive interval $(a,b)$. Then
-\[
- \ell(C-C)\subseteq D_C,\qquad C\pm D_C\subseteq P.
-\]
-In particular, for $\mathbf{x},\mathbf{y}\in C$,
+Then $\ell(C-C)\subseteq D_C$ and $C\pm D_C\subseteq\widetilde P$. In particular,
 \begin{equation}\label{eq:long}
- \mathbf{x}+t(\mathbf{y}-\mathbf{x})\in P\qquad(|t|\le\ell).
+ \mathbf{x}+k(\mathbf{y}-\mathbf{x})\in P\cap\Z^d
+ \quad(\mathbf{x},\mathbf y\in C\cap\Z^d,\ k\in\Z,\ |k|\le\ell).
 \end{equation}
 \end{lemma}
 \begin{proof}
-Since cells with a slack in $(0,1)$ were discarded, every varying slack on a retained cell lies between successive thresholds $a<b$ with $a\ge1$. Thus the relative-width bound~\eqref{eq:width} applies.
-
-For a varying slack, $|s_i(\mathbf{y})-s_i(\mathbf{x})|<b-a\le a/\ell$ and $s_i(\mathbf{x})>a=w_i$; for a constant slack the difference is zero. These inequalities give both inclusions row by row. The set $D_C$ is convex, symmetric, and contains zero, so it contains $t(\mathbf{y}-\mathbf{x})$ for $|t|\le\ell$. Also $D_C\subseteq P-\mathbf{x}$ for any $\mathbf{x}\in C$, hence it is bounded, as required for a symmetric displacement cover in~\cite[Definition~2.1]{AH}.
+The CHKM reflection calculation~\cite[p.~30]{CHKM} applies with the refined width:
+\[
+ |s_i(\mathbf y)-s_i(\mathbf{x})|\le c_i-a_i\le a_i/\ell
+ \le s_i(\mathbf{x})/\ell.
+\]
+This gives both inclusions and the real progression in $\widetilde P$. Its integer samples belong to $P$ because the shift preserves integer feasibility. Boundedness of $D_C$ follows from $A\mathbf v=0\Rightarrow\mathbf v=0$.
 \end{proof}
 
 \begin{remark}[Relative slacks characterize extrapolation]\label{rem:slack-characterization}
-Let $\mathbf{x},\mathbf y\in P$, set $\mathbf v=\mathbf y-\mathbf{x}$, and let $\ell>0$. The segments $\mathbf{x}+[-\ell,\ell]\mathbf v$ and $\mathbf y+[-\ell,\ell]\mathbf v$, centered at $\mathbf{x}$ and $\mathbf y$ respectively, both lie in $P$ if and only if, for every row $i$,
+Let $\mathbf{x},\mathbf y\in\widetilde P$, set $\mathbf v=\mathbf y-\mathbf{x}$, and let $\ell>0$. The segments $\mathbf{x}+[-\ell,\ell]\mathbf v$ and $\mathbf y+[-\ell,\ell]\mathbf v$, centered at $\mathbf{x}$ and $\mathbf y$ respectively, both lie in $\widetilde P$ if and only if, for every row $i$,
 \[
  \ell\,|s_i(\mathbf y)-s_i(\mathbf{x})|
  \le\min\{s_i(\mathbf{x}),s_i(\mathbf y)\}.
@@ -268,37 +278,33 @@ Indeed, the minimum slack along the first segment is $s_i(\mathbf{x})-\ell|s_i(\
  \frac{\max\{s_i(\mathbf{x}),s_i(\mathbf y)\}}
  {\min\{s_i(\mathbf{x}),s_i(\mathbf y)\}}\le1+\frac1\ell;
 \]
-if either slack is zero, both must be zero. Thus multiplicative slack control is exactly the geometry needed for extrapolation about both points. Refined dyadic intervals enforce this condition with short rational descriptions, and integrality limits the number of relevant scales. The condition is independent of the objective: Proposition~\ref{prop:extrema} turns the resulting cover into a simultaneous approximation guarantee for every polynomial of degree at most $D$.
+if either slack is zero, both must be zero. Our cells have positive shifted slacks, so this last case never arises. Thus multiplicative slack control is exactly the geometry needed for extrapolation about both points. Refined dyadic intervals enforce this condition with short rational descriptions, and integrality limits the number of relevant scales. The condition is independent of the objective: Proposition~\ref{prop:extrema} turns the resulting cover into a simultaneous approximation guarantee for every polynomial of degree at most $D$.
 \end{remark}
 
-The displacement property is the only geometric input to the approximation argument. To obtain an algorithm, we also need a short list of cells and a linear description suitable for integer feasibility. Including every face of the arrangement handles points on threshold hyperplanes; rounding strict slack bounds then preserves exactly the integer points in each face.
+The integer progression property is the geometric input to approximation. Closed chambers also give weak linear descriptions directly; integer rounding below only removes threshold denominators.
 
 \begin{lemma}[Number, encoding, and enumeration of cells]\label{lem:arrangement}
-Let $H=m(M\ell+2)$ and set
+Let $H=m((\Phi+2)\ell+1)$ and set
 \[
- B=\tau+M+\lceil\log_2(\ell+1)\rceil+10.
+ B=\tau+\Phi+\lceil\log_2(\ell+1)\rceil+10.
 \]
-There are at most $F_d(H)$ retained cells. Each cell has a description by at most two slack bounds per row, allowing equality or strict inequalities, with coefficient bit length $O(B)$. The cells can be enumerated deterministically in
+There are at most $R_d(H)$ closed cells. Each has at most $2m$ weak slack inequalities with coefficient bit length $O(B)$. They can be enumerated deterministically in
 \begin{equation}\label{eq:arrangement-time}
- (H+1)F_d(H)\,\poly(\langle A,\mathbf b\rangle+d+m+B)
+ (H+1)R_d(H)\,\poly(\langle A,\mathbf b\rangle+d+m+B)
 \end{equation}
-bit operations. Each cell can be converted to a closed rational polyhedron $\widehat C\subseteq C$ having exactly the same integer points, with at most $2m$ inequalities of bit length $O(\tau+M+1)$ per coefficient.
+bit operations. Each cell has a closed rational subset $\widehat C$ with exactly the same integer points, described by at most $2m$ inequalities of coefficient bit length $O(\tau+\Phi+1)$.
 \end{lemma}
 \begin{proof}
-The total face count follows by induction on the number of hyperplanes. Inserting a new hyperplane replaces each relatively open face that it crosses by two side faces and their intersection, increasing the count by two. The crossed faces give distinct faces of the induced arrangement on the new hyperplane, which has dimension $d-1$ and at most $H-1$ hyperplanes. Faces contained in the new hyperplane are unchanged. Thus the maximum total face count satisfies
+The standard arrangement bound gives $R_d(H)$ chambers~\cite{Stanley}; intersecting with convex $Q$ cannot increase their number. The thresholds have denominator dividing $4\ell$ and numerator bit length $O(\Phi+\log(\ell+1))$.
+
+Incrementally split each closed cell into its two closed halfspace intersections, retaining only those with nonempty interior. These cover the parent, including the splitting hyperplane. At most $R_d(H)$ cells occur at each stage. Their constraints compress to two bounds per original row. Interior is tested by maximizing $\delta\in[0,1]$ with a common margin $\delta$ in every inequality; positivity is equivalent to nonempty interior since zero normals were removed. Thus $O((H+1)R_d(H))$ rational LP tests suffice.
+
+Finally, replace $a\le s_i(\mathbf{x})\le c$ by
 \[
-\begin{gathered}T_d(H)\le T_d(H-1)+2T_{d-1}(H-1),\\
- T_d(0)=T_0(H)=1.\end{gathered}
+ \lceil a-\tfrac12\rceil\le b_i-\mathbf a_i^\top\mathbf{x}
+ \le\lfloor c-\tfrac12\rfloor.
 \]
-Pascal's identity shows that $F_d(H)=\sum_{j=0}^d2^j\binom Hj$ satisfies the corresponding equality, proving the bound. Restricting to retained cells cannot increase the count, and $F_d(H)\le(1+2H)^d$ gives~\eqref{eq:F}. See~\cite{Stanley} for general background on arrangements.
-
-Every threshold in~\eqref{eq:thresholds} has a representation $N/\ell$, where $N=2^k(\ell+j)$ or the corresponding numerator for an endpoint. The numerator has $O(M+\log(\ell+1))$ bits and the denominator has $O(\log(\ell+1))$ bits. Multiplying a threshold equation by $\ell$ gives coefficients of bit length $O(B)$. Unlike repeated multiplication of $1+1/\ell$, this construction has no factor $\ell$ in the threshold bit length.
-
-For completeness, an elementary incremental enumerator suffices. Start with $P$ and insert the threshold hyperplanes one at a time. For each retained sign region, test its intersections with the positive, zero, and negative side of the new hyperplane. Keep the nonempty regions. At each stage every region is the intersection of $P$ with an arrangement face; it has a unique sign vector, and there are at most $F_d(H)$ such regions. Constraints arising from the same original row can always be compressed to its strongest lower and upper slack bounds, recording whether a bound is strict. Equality is represented by equal bounds. Thus each feasibility test has $O(m)$ constraints, rather than $O(H)$ constraints.
-
-To test real feasibility with strict inequalities, write each strict inequality as $u_j^\top \mathbf{x}<v_j$, introduce a common variable $\delta$, replace it by $u_j^\top \mathbf{x}\le v_j-\delta$, impose $0\le\delta\le1$, and maximize $\delta$. Keep the weak constraints and equalities unchanged. Feasibility of the strict system is equivalent to a positive optimal value; when there are no strict inequalities, use ordinary feasibility. This is an exact rational LP in at most $d+1$ variables. There are $O((H+1)F_d(H))$ tests. Comparisons and storage of the compressed descriptions satisfy the same bound. At termination discard any cell meeting the forbidden slack interval $(0,1)$.
-
-Finally, the slack $s_i(\mathbf{x})$ is integral for integer $\mathbf{x}$. Replace $s_i(\mathbf{x})>a$ by $s_i(\mathbf{x})\ge\lfloor a\rfloor+1$, and replace $s_i(\mathbf{x})<b$ by $s_i(\mathbf{x})\le\lceil b\rceil-1$. If a slack is fixed at a nonintegral threshold, discard the cell as integer-infeasible; otherwise keep its integral equality. These replacements define a closed subset of the original cell with the same integer points. A slack constant at a nonintegral value that is not a threshold also leaves the cell integer-infeasible; the integer-feasibility query detects this case. Their right-hand sides have $O(\tau+M+1)$ bits, and their normals are rows of $A$ or their negatives. Equality may be stored as two inequalities. All arithmetic, including floor and ceiling, is exact.
+This preserves integer points, defines a subset of the closed cell, and removes the dependence on $\ell$ from the coefficient bit lengths. The extended version gives the enumeration details.
 \end{proof}
 
 \begin{remark}[Parallel families]
@@ -306,13 +312,13 @@ If row $i$ contributes $q_i$ distinct threshold hyperplanes, the count can be sh
 \[
  |\mathcal C|\le
  \sum_{\substack{I\subseteq\{1,\ldots,m\}\\|I|\le d}}
- 2^{|I|}\prod_{i\in I}q_i
- \le\sum_{j=0}^d2^j\binom mj(M\ell+2)^j.
+ \prod_{i\in I}q_i
+ \le\sum_{j=0}^d\binom mj((\Phi+2)\ell+1)^j.
 \]
-The insertion argument counts intersections involving at most one hyperplane from each parallel family; further dependencies can only reduce the count. This improves the bound without changing its worst-case $\ell^d$ dependence. We retain $F_d(H)$ for simplicity. The boundary-vertex count in~\cite[pp.~30--31]{CHKM} bounds integer-hull vertices, not all reflecting cells, and therefore does not directly replace this count.
+The insertion argument counts intersections involving at most one hyperplane from each parallel family; further dependencies can only reduce the count. This improves the bound without changing its worst-case $\ell^d$ dependence. We retain $R_d(H)$ for simplicity. The boundary-vertex count in~\cite[pp.~30--31]{CHKM} bounds integer-hull vertices, not all reflecting cells, and therefore does not directly replace this count.
 \end{remark}
 
-We next combine the sample-to-supremum argument used in polynomial norming meshes~\cite[Section~2]{PV} with a second-difference bound at a discrete minimum. Long progressions control variation between integer samples without assuming continuous stationarity.
+We next combine the sample-to-supremum argument used in polynomial norming meshes~\cite{PV} with a second-difference bound at a discrete minimum. Long progressions control variation between integer samples without assuming continuous stationarity.
 
 \begin{lemma}[Approximation at a discrete minimum]\label{lem:markov}
 Let $D\ge1$ and $\ell\ge D^2$ be integers, and let $p\in\R[t]$ have degree at most $D$. Suppose
@@ -346,10 +352,10 @@ Thus $\|h\|_{\infty,[0,\ell^2]}\le W$. Markov's inequality on $[0,\ell^2]$ gives
 For $D=1$, $h$ is constant and the bound is zero. The argument also covers $a=b$.
 \end{proof}
 
-The estimate is needed only on the cell containing a global minimizer, and holds for any representative of that cell. Applying it also to $-f$ gives the following simultaneous approximation of both extrema. This passage from sampling to optimization is standard; compare~\cite[Proposition~1]{PV}. The reflecting geometry supplies the feasible integer samples needed here.
+The estimate is needed only on the cell containing a global minimizer, and holds for any representative of that cell. Applying it also to $-f$ gives the following simultaneous approximation of both extrema. This passage from sampling to optimization is standard; compare~\cite{PV}. The reflecting geometry supplies the feasible integer samples needed here.
 
 \begin{proposition}[Representatives approximate extrema]\label{prop:extrema}
-Choose one integer representative from each integer-feasible retained cell, forming $Y$. If $P\cap\Z^d\ne\varnothing$ and $\ell\ge D^2$, then every real polynomial $f$ of degree at most $D$ satisfies
+Choose one integer representative from each integer-feasible closed cell, forming $Y$. If $P\cap\Z^d\ne\varnothing$ and $\ell\ge D^2$, then every real polynomial $f$ of degree at most $D$ satisfies
 \[
 \begin{aligned}
  0&\le\min_Y f-\min_{P\cap\Z^d} f\le\frac{D^2}{\ell^2}(f_{\max}-f_{\min}),\\
@@ -358,7 +364,7 @@ Choose one integer representative from each integer-feasible retained cell, form
 \]
 \end{proposition}
 \begin{proof}
-Let $\mathbf{x}_{\min}$ minimize $f$ on $P\cap\Z^d$, and let $\mathbf{y}$ represent its cell. Put $p(t)=f(\mathbf{x}_{\min}+t(\mathbf{y}-\mathbf{x}_{\min}))$. Lemma~\ref{lem:reflection} makes all integer samples with $|k|\le \ell$ feasible, so they lie between $f_{\min}$ and $f_{\max}$. Minimality gives $p(-1)\ge p(0)$. Lemma~\ref{lem:markov} now bounds $f(\mathbf{y})-f(\mathbf{x}_{\min})$. Apply the same argument to $-f$ for the maximum.
+Let $\mathbf{x}_{\min}$ minimize $f$ on $P\cap\Z^d$, and let $\mathbf{y}$ represent a cell containing it. Put $p(t)=f(\mathbf{x}_{\min}+t(\mathbf{y}-\mathbf{x}_{\min}))$. Lemma~\ref{lem:reflection} makes all integer samples with $|k|\le \ell$ feasible, so they lie between $f_{\min}$ and $f_{\max}$. Minimality gives $p(-1)\ge p(0)$. Lemma~\ref{lem:markov} now bounds $f(\mathbf{y})-f(\mathbf{x}_{\min})$. Apply the same argument to $-f$ for the maximum.
 \end{proof}
 
 
@@ -376,8 +382,8 @@ Algorithm~\ref{alg:sampling} enumerates the refined cells and compares their rep
 \textbf{Input:} bounded rational $P$, polynomial $f$, degree bound $D\ge\max\{1,\deg f\}$, accuracy $0<\eps\le1$.
 \begin{enumerate}[leftmargin=1.5em,itemsep=2pt,topsep=4pt]
 \item Clear row denominators. If $P=\varnothing$, return \textsf{INFEASIBLE}.
-\item Compute $M$, set $\ell=\max\{D^2,\lceil D/\sqrt\eps\rceil\}$, and construct the thresholds~\eqref{eq:thresholds}.
-\item Enumerate retained cells $C$. Form $\widehat C$ by rounding slack bounds; if integer-feasible, obtain $\mathbf z_C\in\widehat C\cap\Z^d$.
+\item Form the shifted slacks, compute $\Phi$, set $\ell=\max\{D^2,\lceil D/\sqrt\eps\rceil\}$, and construct the thresholds~\eqref{eq:thresholds}.
+\item Enumerate closed chambers in $Q$, obtaining cells $C$. Form $\widehat C$ by rounding slack bounds; if integer-feasible, obtain $\mathbf z_C\in\widehat C\cap\Z^d$.
 \item If no representative exists, return \textsf{INFEASIBLE}; otherwise return one minimizing $f(\mathbf z_C)$, evaluated exactly.
 \end{enumerate}
 \end{minipage}};
@@ -387,7 +393,7 @@ Algorithm~\ref{alg:sampling} enumerates the refined cells and compares their rep
 \end{algorithm}
 
 \begin{proof}[Correctness in Theorem~\ref{thm:main}]
-Every integer-feasible cell contributes a feasible representative, and the retained cells cover $P\cap\Z^d$. Thus $Y=\varnothing$ if and only if $P\cap\Z^d=\varnothing$. Otherwise, Proposition~\ref{prop:extrema} and $\ell=\max\{D^2,\lceil D/\sqrt\eps\rceil\}$ give
+Every integer-feasible cell contributes a feasible representative, and the closed cells cover $P\cap\Z^d$. Thus $Y=\varnothing$ if and only if $P\cap\Z^d=\varnothing$. Otherwise, Proposition~\ref{prop:extrema} and $\ell=\max\{D^2,\lceil D/\sqrt\eps\rceil\}$ give
 \[
  0\le\min_Y f-f_{\min}\le \frac{D^2}{\ell^2}(f_{\max}-f_{\min})\le\eps (f_{\max}-f_{\min}).
 \]
@@ -395,41 +401,41 @@ The algorithm returns a minimizer on $Y$. The cover and representatives depend o
 \end{proof}
 
 It remains to account for bit operations. There are three costs: constructing the arrangement, producing integer representatives, and evaluating the objective. The distinction between the number of cells and the sizes of their descriptions is important: refinement increases the former polynomially in $1/\sqrt\eps$, whereas it increases the threshold bit lengths only logarithmically.
-By Lemma~\ref{lem:arrangement}, face enumeration costs~\eqref{eq:arrangement-time}. The bit length of $\ell$ is $O(\log(D+1)+\langle\eps\rangle)$; compute the least positive integer $k$ satisfying $\eps k^2\ge D^2$ by binary search with rational comparisons, and set $\ell=\max\{D^2,k\}$. Generating all thresholds uses $O(M\ell)$ arithmetic operations on integers with $O(M+\log(\ell+1))$ bits and is included in the arrangement bound when $m\ge1$. A nonempty bounded polyhedron in positive dimension cannot be specified by zero inequalities.
+By Lemma~\ref{lem:arrangement}, chamber enumeration costs~\eqref{eq:arrangement-time}. The bit length of $\ell$ is $O(\log(D+1)+\langle\eps\rangle)$; compute the least positive integer $k$ satisfying $\eps k^2\ge D^2$ by binary search with rational comparisons, and set $\ell=\max\{D^2,k\}$. Generating all thresholds uses $O(\Phi\ell)$ arithmetic operations on integers with $O(\Phi+\log(\ell+1))$ bits and is included in the arrangement bound when $m\ge1$. A nonempty bounded polyhedron in positive dimension cannot be specified by zero inequalities.
 
 Once a cell has been enumerated, its integer feasibility query has a description whose coefficient sizes do not grow with the refinement parameter.
-Each of at most $F_d(H)$ queries has $d$ integer variables and a total encoding length
+Each of at most $R_d(H)$ queries has $d$ integer variables and a total encoding size
 \begin{equation}\label{eq:ilp-size}
- S_C=O\!\left(m(d+1)(\tau+M+1)+d+m\right).
+ S_C=O\!\left(m(d+1)(\tau+\Phi+1)+d+m\right).
 \end{equation}
-Fixed-dimensional integer linear feasibility with witness production takes $2^{O(d\log(d+1))}S_C^{O(1)}$ bit operations using Kannan's algorithm~\cite{Kannan}, improving the dimension dependence of Lenstra's algorithm~\cite{Lenstra}. The feasibility query is made on a subset of the original bounded polytope. Accordingly, every returned coordinate has at most $V+O(1)$ bits by Lemma~\ref{lem:size}; its length is not proportional to its magnitude. Notice also that~\eqref{eq:ilp-size} has no dependence on $\ell$ other than the number of cells, because the threshold inequalities have already been rounded to integer slack bounds.
+Fixed-dimensional integer linear feasibility with witness production takes $2^{O(d\log(d+1))}S_C^{O(1)}$ bit operations using Kannan's algorithm~\cite{Kannan}, improving the dimension dependence of Lenstra's algorithm~\cite{Lenstra}. Every integer point returned from a shifted cell belongs to the original bounded polytope. Accordingly, every returned coordinate has at most $\Phi+O(1)$ bits by~\eqref{eq:integer-bounds}; its bit length grows logarithmically with its magnitude. Notice also that~\eqref{eq:ilp-size} has no dependence on $\ell$ other than the number of cells, because the threshold inequalities have already been rounded to integer slack bounds.
 
 Finally, the coordinate bound ensures that exact objective evaluation also has polynomial bit cost, even though feasible coordinates can be numerically large.
-The integer coefficients of $f$ have bit length at most $\langle f\rangle$. If $\mathbf{x}\in P\cap\Z^d$, every monomial has absolute value at most $2^{DV}$. Each value of $f(\mathbf{x})$, and the intermediates obtained by evaluating monomials and summing them, has $O(\langle f\rangle+DV+\log(|\mathcal A|+1))$ bits. Repeated squaring evaluates the explicit exponent vectors in a number of arithmetic operations polynomial in $\langle f\rangle+d+\log(D+1)$. Even schoolbook integer arithmetic therefore gives
+The integer coefficients of $f$ have bit length at most $\langle f\rangle$. If $\mathbf{x}\in P\cap\Z^d$, every monomial has absolute value at most $2^{D\Phi}$. Each value of $f(\mathbf{x})$, and the intermediates obtained by evaluating monomials and summing them, has $O(\langle f\rangle+D\Phi+\log(|\mathcal A|+1))$ bits. Repeated squaring evaluates the explicit exponent vectors in a number of arithmetic operations polynomial in $\langle f\rangle+d+\log(D+1)$. Even schoolbook integer arithmetic therefore gives
 \begin{equation}\label{eq:eval}
- \poly(\langle f\rangle+d+DV)
+ \poly(\langle f\rangle+d+D\Phi)
 \end{equation}
 bit operations per representative. The case of the zero polynomial is immediate. Returning an exact integer objective value also fits this bound. No unit-cost assumption on rational arithmetic is used.
 
 Combining these three costs gives the explicit bound
 \begin{equation}\label{eq:runtime-detailed}
-\begin{split} F_d(H)\bigl(H+1+2^{O(d\log(d+1))}\bigr)\\
- {}\cdot\poly\!\left(\varphi+d+m+M+\log(\ell+1)+DV\right).\end{split}
+\begin{split} R_d(H)\bigl(H+1+2^{O(d\log(d+1))}\bigr)\\
+ {}\cdot\poly\!\left(\varphi+d+m+\Phi+\log(\ell+1)+D\Phi\right).\end{split}
 \end{equation}
-Since $M,V=O(d(\tau+\log(d+1)))$, $\Lambda\le\ell\le2\Lambda$ for $\Lambda=\max\{D^2,D/\sqrt\eps\}$, and $\tau=O(\varphi)$, this is at most
+Since $\Phi=O(d^3(\tau+1))$, $\Lambda\le\ell\le2\Lambda$ for $\Lambda=\max\{D^2,D/\sqrt\eps\}$, and $\tau=O(\varphi)$, this is at most
 \[
  2^{O(d\log(d+1))}
  \left(m\varphi\Lambda\right)^{d+1}
  \poly(\varphi,D).
 \]
-Here factors $d^{O(d)}$ are absorbed into $2^{O(d\log(d+1))}$. Using $m,d\le\varphi$ gives $(\varphi D/\eps)^{O(d)}$, proving Theorem~\ref{thm:main}. The exponent $d+1$ includes incremental enumeration overhead; the number of integer feasibility queries is at most $F_d(H)=O(\eps^{-d/2})$ for fixed $P,D,d$. Objective coefficients enter only through exact evaluation~\eqref{eq:eval}. Normalization preserves polynomial encoding length, so the coarse bound also applies to rational inequalities.
+The CKHM bound for $\Phi$ contributes only factors $d^{O(d)}$, which are absorbed into $2^{O(d\log(d+1))}$. Using $m,d\le\varphi$ gives $(\varphi D/\eps)^{O(d)}$, proving Theorem~\ref{thm:main}. The exponent $d+1$ includes incremental enumeration overhead; the number of integer feasibility queries is at most $R_d(H)=O(\eps^{-d/2})$ for fixed $P,D,d$. Objective coefficients enter only through exact evaluation~\eqref{eq:eval}. Normalization preserves polynomial encoding size, so the coarse bound also applies to rational inequalities.
 
 \begin{proof}[Proof of Corollary~\ref{cor:max}]
 Applying Proposition~\ref{prop:extrema} to $-f$ gives $f_{\max}-f(\mathbf{x}_{\eps})\le\eps (f_{\max}-f_{\min})$. Nonnegativity on $P\cap\Z^d$ implies $f_{\max}-f_{\min}\le f_{\max}$.
 \end{proof}
 
 \begin{proof}[Proof of Corollary~\ref{cor:mixed}]
-If $d_c=0$, apply Theorem~\ref{thm:main}. Otherwise write $S=P\cap(\R^{d_c}\times\Z^{d_i})$. The compatible-grid construction of~\cite[Theorem~8 and Lemma~9]{DHKW08} supplies an integer $\Delta>0$ of polynomial encoding length for fixed dimension. Choose an integer coordinate bound $B\ge1$ for $P$ and a rational Lipschitz bound $K\ge1$ for $f$ on its bounding box, both of polynomial encoding length; see~\cite[Lemma~11]{DHKW08}. Set
+If $d_c=0$, apply Theorem~\ref{thm:main}. Otherwise write $S=P\cap(\R^{d_c}\times\Z^{d_i})$. The compatible-grid construction of~\cite[Theorem~8 and Lemma~9]{DHKW08} supplies an integer $\Delta>0$ of polynomial encoding size for fixed dimension. Choose an integer coordinate bound $B\ge1$ for $P$ and a rational Lipschitz bound $K\ge1$ for $f$ on its bounding box, both of polynomial encoding size; see~\cite[Lemma~11]{DHKW08}. Set
 \[
 \begin{gathered}
  q_0=(D+1)d_c\Delta,\qquad \rho=q_0^{-D},\\
@@ -447,20 +453,22 @@ Apply Theorem~\ref{thm:main} on this grid with accuracy $\eps/2$. Its objective 
 \]
 If $R=0$, every feasible grid point is optimal; no constancy test is needed.
 
-For the reduction, write the continuous coordinates as $\mathbf x=\mathbf u/Q$ and use the integer-coefficient polynomial $g(\mathbf u,\mathbf z)=Q^D f(\mathbf u/Q,\mathbf z)$. Its degree and monomial support are unchanged, and coefficient lengths increase by at most $O(D\log Q)$. Since
+For the reduction, write the continuous coordinates as $\mathbf x=\mathbf u/Q$ and use the integer-coefficient polynomial $g(\mathbf u,\mathbf z)=Q^D f(\mathbf u/Q,\mathbf z)$. Its degree and monomial support are unchanged, and coefficient bit lengths increase by at most $O(D\log(Q+1))$. Since
 \[
 \begin{split}
  \log Q=O\bigl(&\log\Delta+\log(d_cB)+\log K\\
               &+D\log q_0+\log(1/\eps)+1\bigr),
 \end{split}
 \]
-the scaled input has polynomial encoding length for fixed total dimension. Positive objective scaling preserves the guarantee. Negating $f$ gives maximization, and nonnegativity gives its multiplicative guarantee. This proves the corollary with one integer approximation call, without shifting or counting lattice points. The dimension dependence of $\Delta$ does not establish the uniform bound~\eqref{eq:runtime-coarse} for the mixed-integer problem; that bound remains restricted to pure integers.
+the scaled input has polynomial encoding size for fixed total dimension. Positive objective scaling preserves the guarantee. Negating $f$ gives maximization, and nonnegativity gives its multiplicative guarantee. This proves the corollary with one integer approximation call, without an objective shift or lattice-point counting. The dimension dependence of $\Delta$ does not establish the uniform bound~\eqref{eq:runtime-coarse} for the mixed-integer problem; that bound remains restricted to pure integers.
 \end{proof}
 
 \section{Discussion and extensions}\label{sec:conclusion}
 For any refinement $\ell\ge1$, the representatives include every vertex of the integer hull. Indeed, if such a vertex $\mathbf v$ shared a cell with a distinct integer point $\mathbf y$, reflection would make $2\mathbf v-\mathbf y$ feasible, contradicting extremality of $\mathbf v=(\mathbf y+(2\mathbf v-\mathbf y))/2$. Thus every linear objective is optimized exactly.
 
 The reflecting cover is independent of objective coefficients, so its representatives can be reused for any polynomial of degree at most $D$. Multiplicative slack bins connect the construction to approximate Pareto methods~\cite{PY} and affine slicing~\cite{HWZ}; Markov-based norming meshes provide a continuous sampling analogue~\cite{PV}. Our error certificate uses feasible integer samples and the integer objective range.
+
+Cook, Hartmann, Kannan, and McDiarmid also give a fully polynomial-time approximation scheme for lattice-point counting in fixed dimension~\cite[Theorem~3.1]{CHKM}. Its dense-lattice case uses volume estimates, while its thin case recurses on lower-dimensional slices. Combining this architecture with Markov estimates suggests an alternative route to polynomial optimization, replacing volume estimates by feasible sampling. Establishing the range-relative guarantee and bit complexity would require further analysis; the refined reflecting cover gives the direct proof used here.
 
 A simple principle allows other local procedures: if $|f-h_C|\le\delta_C$ on the feasible part of each cell and a feasible candidate minimizes $h_C$ there within $\eta_C$, selecting the best candidate has error at most $2\delta_{C^*}+\eta_{C^*}$, where $C^*$ contains a global optimum. Indeed, compare the candidate to that optimum through $h_{C^*}$ and apply the two residual bounds. An FPTAS also needs polynomial bounds on construction, local computation, and encoding.
 
@@ -469,10 +477,9 @@ For a supplied factorization $f(\mathbf{x})=g(B\mathbf{x})+\mathbf c^\top\mathbf
 \section*{AI assistance and formal verification}
 Robert Hildebrand posed the approximation question, proposed using the CHKM decomposition from the Ari--Hildebrand work, and directed the mathematical scope, encoding analysis, comparisons, and revisions. OpenAI's Codex assistant contributed mathematical exploration, proposed arguments, literature searches, drafting, and computational checks. The extended manuscript records these contributions in detail; responsibility for the manuscript remains with the human author.
 
-The accompanying Lean development contains 34 checked results, including the even-part polynomial identity and degree bound, the strengthened $D^2/\ell^2$ sampled Markov estimate, affine line restriction, and representative selection. It also verifies $\ell=\max\{D^2,\lceil D/\sqrt\eps\rceil\}\ge D^2$ and $D^2/\ell^2\le\eps$. The classical Markov inequalities on $[-\ell,\ell]$ and $[0,\ell^2]$ are explicit hypotheses, not custom axioms. The cover construction, its full assembly with the analytic results, the mixed-integer grid reduction, and the bit-complexity analysis are not formally verified. Sources, checker scripts, and verification logs are maintained with the extended manuscript.
+The accompanying Lean development contains 97 checked results, including the even-part polynomial identity and degree bound, the strengthened $D^2/\ell^2$ sampled Markov estimate, affine line restriction, and representative selection. It also verifies $\ell=\max\{D^2,\lceil D/\sqrt\eps\rceil\}\ge D^2$ and $D^2/\ell^2\le\eps$. The classical Markov inequalities on $[-\ell,\ell]$ and $[0,\ell^2]$ are explicit hypotheses, not custom axioms. The shifted cover theorem verifies the half-unit relaxation for actual integer rows and derives samples feasible in the original polytope from closed shifted-slack widths and integrality. The conditional mixed-integer reduction verifies grid-parameter arithmetic, positive objective scaling, nonemptiness, and the final error budget from grid-approximation, Lipschitz, range-gap, and solver hypotheses. The scaled polynomial is constructed over the integers with its substitution identity, support and degree verified. The scaled feasible-set bijection and binary-length bounds for polynomial coefficients and scaled constraints are also verified. Rational row normalization preserves feasibility with verified bit-length bounds. The extended version's determinant and slack estimates are checked conditional on Cramer data and convex representations; the invocation of CKHM's integer-hull estimates here is not formalized. Cover and grid construction and full bit complexity remain unverified. Sources, checker scripts, and verification logs are maintained with the extended manuscript.
 
 \begin{thebibliography}{99}
-\small
 \bibitem{AH} C.~Ari and R.~Hildebrand.
 \emph{Hidden Convexity via Symmetric Displacement Covers: Mixed-Integer Quadratic Programming and Integer Cubic Programming in Fixed Dimension}.
 arXiv:2609.18266, version~2, September~23, 2026.
@@ -521,7 +528,7 @@ On the approximability of trade-offs and optimal access of Web sources.
 
 \bibitem{HWZ} R.~Hildebrand, R.~Weismantel, and K.~Zemmer.
 An FPTAS for minimizing indefinite quadratic forms over integers in polyhedra.
-\emph{Proceedings of the 2016 Annual ACM--SIAM Symposium on Discrete Algorithms}, 2016.
+\emph{Proceedings of the 2016 Annual ACM--SIAM Symposium on Discrete Algorithms}, 2016, pp.~1715--1723.
 \url{https://doi.org/10.1137/1.9781611974331.ch118}.
 
 \bibitem{DelPia} A.~Del~Pia.
@@ -538,6 +545,18 @@ Integer programming with a fixed number of variables.
 Minkowski's convex body theorem and integer programming.
 \emph{Mathematics of Operations Research} 12 (1987), 415--440.
 \url{https://doi.org/10.1287/moor.12.3.415}.
+
+\bibitem{Schrijver} A.~Schrijver.
+\emph{Theory of Linear and Integer Programming}. Wiley, Chichester, 1986.
+
+\bibitem{BorweinErdelyi} P.~Borwein and T.~Erd\'elyi.
+\emph{Polynomials and Polynomial Inequalities}. Graduate Texts in Mathematics 161, Springer, New York, 1995.
+\url{https://doi.org/10.1007/978-1-4612-0793-1}.
+
+\bibitem{Barvinok} A.~I.~Barvinok.
+A polynomial time algorithm for counting integral points in polyhedra when the dimension is fixed.
+\emph{Mathematics of Operations Research} 19 (1994), 769--779.
+\url{https://doi.org/10.1287/moor.19.4.769}.
 
 \bibitem{Pierzchala} R.~Pierzcha\l a. Markov's inequality and polynomial mappings.
 \emph{Mathematische Annalen} 366 (2016), 57--82.

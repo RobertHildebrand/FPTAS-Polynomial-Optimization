@@ -1,9 +1,29 @@
 Lean (version 4.34.0-rc2, arm64-apple-darwin24.6.0, commit 6a10ac8c22beadecabdbb0919c2b50214762f91d, Release)
 Mathlib: 85e3a25e006c35636f0e53b0e9296caca2685bc0
-
-LineRestriction.lean:48:9: warning: try 'simp' instead of 'simpa'
+FPTASCalculations.lean:113:4: warning: Try `simp at hy` instead of `simpa using hy`
 
 Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+FPTASCalculations.lean:118:4: warning: Try `simp at this` instead of `simpa using this`
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+FPTASCalculations.lean:222:20: warning: Variable name `hx` is not explicitly referenced.
+
+Hint: The binding can be removed (if unused) or named `_` (if used implicitly). Alternatively, prefix the name with `_` to silence this warning:
+  [apply] _hx
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+
+
+LineRestriction.lean:49:9: warning: try 'simp' instead of 'simpa'
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+LineRestriction.lean:200:44: warning: This simp argument is unused:
+  mul_left_comm
+
+Hint: Omit it from the simp argument list.
+  [apply] simp [Finset.mul_sum, mul_comm, mul_assoc]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
 
 'LineRestriction.eval_restrict' depends on axioms: [propext, Classical.choice, Quot.sound]
 'LineRestriction.eval_zero' depends on axioms: [propext, Classical.choice, Quot.sound]
@@ -11,5 +31,14 @@ Note: This linter can be disabled with `set_option linter.unnecessarySimpa false
 'LineRestriction.degree_restrict' depends on axioms: [propext, Classical.choice, Quot.sound]
 'LineRestriction.multivariate_representative' depends on axioms: [propext, Classical.choice, Quot.sound]
 'LineRestriction.multivariate_selection' depends on axioms: [propext, Classical.choice, Quot.sound]
+'LineRestriction.certified_cover_guarantee' depends on axioms: [propext, Classical.choice, Quot.sound]
+'LineRestriction.slack_integral_progression' depends on axioms: [propext, Classical.choice, Quot.sound]
+'LineRestriction.slack_cover_guarantee' depends on axioms: [propext, Classical.choice, Quot.sound]
+'LineRestriction.integer_row_value' depends on axioms: [propext, Classical.choice, Quot.sound]
+'LineRestriction.integer_half_shift' depends on axioms: [propext, Classical.choice, Quot.sound]
+'LineRestriction.shifted_feasible_iff' depends on axioms: [propext, Classical.choice, Quot.sound]
+'LineRestriction.shifted_slack_positive' depends on axioms: [propext, Classical.choice, Quot.sound]
+'LineRestriction.shifted_slack_integral_progression' depends on axioms: [propext, Classical.choice, Quot.sound]
+'LineRestriction.shifted_slack_cover_guarantee' depends on axioms: [propext, Classical.choice, Quot.sound]
 
-PASS: 6 theorems; no custom axioms or sorryAx.
+PASS: 15 theorems; no custom axioms or sorryAx.

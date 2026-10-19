@@ -1,0 +1,47 @@
+[
+  {
+    "name": "unit square: boundary integer points",
+    "cells": 256,
+    "integer_points": 4,
+    "memberships": 16,
+    "representatives": 16,
+    "nontrivial_pairs": 0,
+    "passed": true
+  },
+  {
+    "name": "pentagon: nonconvex quadratic",
+    "cells": 791,
+    "integer_points": 13,
+    "memberships": 76,
+    "representatives": 76,
+    "nontrivial_pairs": 0,
+    "passed": true
+  },
+  {
+    "name": "wide square: nontrivial progressions",
+    "cells": 2809,
+    "integer_points": 1089,
+    "memberships": 1681,
+    "representatives": 1369,
+    "nontrivial_pairs": 720,
+    "passed": true
+  },
+  {
+    "name": "lower-dimensional original segment",
+    "cells": 192,
+    "integer_points": 4,
+    "memberships": 16,
+    "representatives": 16,
+    "nontrivial_pairs": 0,
+    "passed": true
+  },
+  {
+    "name": "real feasible, integer infeasible",
+    "cells": 256,
+    "integer_points": 0,
+    "memberships": 0,
+    "representatives": 0,
+    "nontrivial_pairs": 0,
+    "passed": true
+  }
+]

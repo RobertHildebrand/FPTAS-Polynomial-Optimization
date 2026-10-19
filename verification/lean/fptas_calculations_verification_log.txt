@@ -6,6 +6,12 @@ Note: This linter can be disabled with `set_option linter.unnecessarySimpa false
 FPTASCalculations.lean:118:4: warning: Try `simp at this` instead of `simpa using this`
 
 Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+FPTASCalculations.lean:222:20: warning: Variable name `hx` is not explicitly referenced.
+
+Hint: The binding can be removed (if unused) or named `_` (if used implicitly). Alternatively, prefix the name with `_` to silence this warning:
+  [apply] _hx
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
 
 'FPTASCalculations.interval_width' depends on axioms: [propext, Classical.choice, Quot.sound]
 'FPTASCalculations.slack_extrapolation' depends on axioms: [propext, Classical.choice, Quot.sound]
@@ -23,5 +29,10 @@ Note: This linter can be disabled with `set_option linter.unnecessarySimpa false
 'FPTASCalculations.reflecting_cell_progression' depends on axioms: [propext, Classical.choice, Quot.sound]
 'FPTASCalculations.mixed_integer_progression' depends on axioms: [propext, Classical.choice, Quot.sound]
 'FPTASCalculations.integer_slack_gap' depends on axioms: [propext, Classical.choice, Quot.sound]
+'FPTASCalculations.compatible_grid_parameters' depends on axioms: [propext, Classical.choice, Quot.sound]
+'FPTASCalculations.positive_scaling_transfer' depends on axioms: [propext, Classical.choice, Quot.sound]
+'FPTASCalculations.mixed_integer_grid_transfer' depends on axioms: [propext, Classical.choice, Quot.sound]
+'FPTASCalculations.scaled_mixed_integer_grid_transfer' depends on axioms: [propext, Classical.choice, Quot.sound]
+'FPTASCalculations.grid_nonempty_iff' does not depend on any axioms
 
-PASS: 16 theorems; no custom axioms or sorryAx.
+PASS: 21 theorems; no custom axioms or sorryAx.

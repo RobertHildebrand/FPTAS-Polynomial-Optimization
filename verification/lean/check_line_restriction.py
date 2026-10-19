@@ -28,13 +28,13 @@ names = re.findall(r'^theorem (\w+)', source, re.M)
 audit = root / '.lake/LineRestrictionAudit.lean'
 audit.write_text('import LineRestriction\n' + '\n'.join('#print axioms LineRestriction.' + n for n in names) + '\n')
 log = [subprocess.check_output(base + ['--version'], text=True).strip(), 'Mathlib: ' + manifest['packages'][0]['rev']]
-for command in [base + ['-o', str(build/'SampledMarkov.olean'), 'SampledMarkov.lean'], base + ['-o', str(build/'LineRestriction.olean'), 'LineRestriction.lean'], base + [str(audit)]]:
+for command in [base + ['-o', str(build/'FPTASCalculations.olean'), 'FPTASCalculations.lean'], base + ['-o', str(build/'SampledMarkov.olean'), 'SampledMarkov.lean'], base + ['-o', str(build/'LineRestriction.olean'), 'LineRestriction.lean'], base + [str(audit)]]:
     result = subprocess.run(command, cwd=root, env=env, text=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
     print(result.stdout, flush=True)
     log.append(result.stdout)
     if result.returncode or 'sorryAx' in result.stdout or re.search(r"uses .sorry.", result.stdout):
         raise SystemExit('Verification failed')
-reports = re.findall(r'depends on axioms: \[([^\]]*)\]', log[-1])
+reports = re.findall(r'depends on axioms: \[([^\]]*)\]|does not depend on any axioms', log[-1])
 if len(reports) != len(names):
     raise SystemExit('Missing axiom report')
 for report in reports:

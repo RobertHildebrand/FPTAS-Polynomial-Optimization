@@ -184,6 +184,103 @@ theorem integer_slack_gap (s : ℤ) (hs : 0 ≤ s) :
     have : (1 : ℤ) ≤ s := by omega
     exact_mod_cast this
 
+/-- The actual delta and compatible grid multiplier satisfy the grid theorem's
+resolution condition; Delta itself is supplied by the integral scaling theorem. -/
+theorem compatible_grid_parameters {eps rho K B : ℝ} {dc Delta : ℕ}
+    (heps : 0 < eps) (hrho : 0 < rho) (hK : 0 < K) (hB : 0 < B)
+    (hdc : 0 < dc) (hDelta : 0 < Delta) :
+    let delta := eps * rho / (2 * K)
+    let m : ℕ := ⌈2 * (dc : ℝ) * B / delta⌉₊
+    let Q := Delta * m
+    0 < delta ∧ 0 < Q ∧ Delta ∣ Q ∧
+      2 * (dc : ℝ) * B / delta ≤ (m : ℝ) ∧
+      K * delta = eps * rho / 2 := by
+  dsimp
+  have hd : 0 < eps * rho / (2 * K) := div_pos (mul_pos heps hrho) (by positivity)
+  have ha : 0 < 2 * (dc : ℝ) * B / (eps * rho / (2 * K)) := by positivity
+  have hc := Nat.le_ceil (2 * (dc : ℝ) * B / (eps * rho / (2 * K)))
+  have hm : 0 < ⌈2 * (dc : ℝ) * B / (eps * rho / (2 * K))⌉₊ := by
+    exact_mod_cast (lt_of_lt_of_le ha hc)
+  refine ⟨hd, Nat.mul_pos hDelta hm, dvd_mul_right _ _, hc, ?_⟩
+  field_simp
+
+/-- Positive objective rescaling preserves the range-relative guarantee. -/
+theorem positive_scaling_transfer {a b c u eps scale : ℝ}
+    (hs : 0 < scale)
+    (h : scale * u - scale * a ≤ eps * (scale * b - scale * c)) :
+    u - a ≤ eps * (b - c) := by
+  apply (mul_le_mul_iff_right₀ hs).mp
+  nlinarith [h]
+
+/-- Single-grid reduction. The literature supplies a nearby feasible grid point
+and Lipschitz estimate; the grid solver supplies its own range-relative error.
+Both the positive-range and constant-objective cases are proved. -/
+theorem mixed_integer_grid_transfer {α : Type*} [PseudoMetricSpace α]
+    (S G : Set α) (f : α → ℝ) (xmin gmin gmax answer : α)
+    (fmax eps rho K : ℝ)
+    (heps : 0 < eps) (hrho : 0 < rho) (hK : 0 < K)
+    (hsub : G ⊆ S) (hx : xmin ∈ S)
+    (hmin : ∀ z ∈ S, f xmin ≤ f z) (hmax : ∀ z ∈ S, f z ≤ fmax)
+    (hgmin : gmin ∈ G) (hgmax : gmax ∈ G) (ha : answer ∈ G)
+    (hgridmin : ∀ z ∈ G, f gmin ≤ f z)
+    (hrange : fmax = f xmin ∨ rho ≤ fmax - f xmin)
+    (hnear : ∃ z ∈ G, dist z xmin ≤ eps * rho / (2 * K))
+    (hlipschitz : ∀ z ∈ G, |f z - f xmin| ≤ K * dist z xmin)
+    (hsolver : f answer - f gmin ≤ (eps / 2) * (f gmax - f gmin)) :
+    answer ∈ S ∧ 0 ≤ f answer - f xmin ∧
+      f answer - f xmin ≤ eps * (fmax - f xmin) := by
+  have has := hsub ha
+  refine ⟨has, sub_nonneg.mpr (hmin answer has), ?_⟩
+  rcases hrange with hz | hp
+  · have haU := hmax answer has
+    rw [hz] at haU
+    rw [hz]
+    nlinarith [hmin answer has]
+  · obtain ⟨z, hz, hd⟩ := hnear
+    have hn : f z - f xmin ≤ K * (eps * rho / (2 * K)) :=
+      (le_abs_self _).trans ((hlipschitz z hz).trans
+        (mul_le_mul_of_nonneg_left hd (le_of_lt hK)))
+    have hgm := hgridmin z hz
+    have hminG := hmin gmin (hsub hgmin)
+    have hmaxG := hmax gmax (hsub hgmax)
+    have hid : K * (eps * rho / (2 * K)) = eps * rho / 2 := by field_simp
+    rw [hid] at hn
+    have hbudget := mul_le_mul_of_nonneg_left hp (le_of_lt heps)
+    have hgridrange : f gmax - f gmin ≤ fmax - f xmin := by linarith
+    have hhalf := mul_le_mul_of_nonneg_left hgridrange (show 0 ≤ eps / 2 by positivity)
+    linarith
+
+/-- The reduction still holds when the grid solver reports its guarantee for
+Q^D times the original objective, as in denominator clearing in the draft. -/
+theorem scaled_mixed_integer_grid_transfer {α : Type*} [PseudoMetricSpace α]
+    (S G : Set α) (f : α → ℝ) (xmin gmin gmax answer : α)
+    (fmax eps rho K Q : ℝ) (D : ℕ) (hQ : 0 < Q)
+    (heps : 0 < eps) (hrho : 0 < rho) (hK : 0 < K)
+    (hsub : G ⊆ S) (hx : xmin ∈ S)
+    (hmin : ∀ z ∈ S, f xmin ≤ f z) (hmax : ∀ z ∈ S, f z ≤ fmax)
+    (hgmin : gmin ∈ G) (hgmax : gmax ∈ G) (ha : answer ∈ G)
+    (hgridmin : ∀ z ∈ G, f gmin ≤ f z)
+    (hrange : fmax = f xmin ∨ rho ≤ fmax - f xmin)
+    (hnear : ∃ z ∈ G, dist z xmin ≤ eps * rho / (2 * K))
+    (hlipschitz : ∀ z ∈ G, |f z - f xmin| ≤ K * dist z xmin)
+    (hsolver : Q^D * f answer - Q^D * f gmin ≤
+      (eps / 2) * (Q^D * f gmax - Q^D * f gmin)) :
+    answer ∈ S ∧ 0 ≤ f answer - f xmin ∧
+      f answer - f xmin ≤ eps * (fmax - f xmin) := by
+  apply mixed_integer_grid_transfer S G f xmin gmin gmax answer fmax eps rho K
+    heps hrho hK hsub hx hmin hmax hgmin hgmax ha hgridmin hrange hnear hlipschitz
+  exact positive_scaling_transfer (pow_pos hQ D) hsolver
+
+/-- A complete same-slice grid approximation preserves nonemptiness. -/
+theorem grid_nonempty_iff {α : Type*} (S G : Set α) (hsub : G ⊆ S)
+    (hgrid : ∀ x ∈ S, ∃ y ∈ G, True) : G.Nonempty ↔ S.Nonempty := by
+  constructor
+  · rintro ⟨x, hx⟩
+    exact ⟨x, hsub hx⟩
+  · rintro ⟨x, hx⟩
+    obtain ⟨y, hy, _⟩ := hgrid x hx
+    exact ⟨y, hy⟩
+
 end FPTASCalculations
 
 

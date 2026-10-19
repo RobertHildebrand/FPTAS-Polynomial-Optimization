@@ -1,0 +1,151 @@
+REFERENCE AND ATTRIBUTION AUDIT — 2026-10-19
+Scope: the 15 references in the current short manuscript. Shared corrections
+are also applied to the extended manuscript. This is a source audit, not an
+independent proof or a novelty certificate. The six additional references
+unique to the extended discussion were not re-audited in this pass.
+
+AH — arXiv:2609.18266v2
+https://arxiv.org/html/2609.18266v2
+Title, authors, version and date confirmed. Definition 2.1 and Theorem 2.2
+are the symmetric displacement cover and reflecting-cell decomposition.
+The attribution of the cover is appropriate; our refined parameter and
+sampled Markov estimate are not attributed to that theorem. The v2 explicitly
+supersedes AHIQP; the two references should not be presented as independent
+sources of the same result.
+
+AHIQP — arXiv:2609.17889
+https://arxiv.org/abs/2609.17889
+Metadata confirmed. Its cover uses Goemans–Rothvoss parallelepipeds; the
+short paper accurately calls this a related symmetric cover, not the same
+dyadic construction. "Convic" is the actual title, not a typo to fix.
+
+Wei — Optimization Online, September 2026
+https://optimization-online.org/wp-content/uploads/2026/09/integer-quadratic-programming-arxiv.pdf
+Read the supplied preprint, in particular Section 4.1, "Dyadic slack regions."
+It supports the dyadic-slack attribution; a Section 4.1 locator was added.
+No arXiv record was located in this search. Retained the explicitly supplied
+repository PDF rather than inventing an arXiv ID or journal publication.
+This remains the one Optimization Online reference, not a professor's site.
+
+Stanley — Geometric Combinatorics, 2007, 389–496
+https://doi.org/10.1090/pcms/013/08
+AMS search metadata confirmed chapter title and page range. Direct chapter
+access failed; the chapter DOI's resolution should be checked before final
+submission. Used only as general background; the paper gives its own
+face-count induction and does not claim that Stanley proves this exact
+algorithm or count with this notation.
+
+CHKM — Combinatorica 12 (1992), 27–37
+https://link.springer.com/article/10.1007/BF01191202
+Publisher metadata confirmed authors, title, volume, year and pages. The
+historical reflecting-cell connection is also explicit in AH Theorem 2.2.
+The full publisher PDF was unavailable in this pass: the specific pp. 30–31
+integer-hull-vertex-count locator is still a human source-check item. Do not
+confuse a vertex bound with a bound for every face of our refined arrangement.
+
+DHKW06 — Mathematics of Operations Research 31 (2006), 147–153
+https://pubsonline.informs.org/doi/10.1287/moor.1050.0169
+Read the supplied journal PDF (EBSCO-FullText-10_14_2026.pdf). Metadata and
+weighted power-sum approach agree. Its nonnegative maximization guarantee
+must not be described as a multiplicative FPTAS for arbitrary minimization.
+The short paper preserves this distinction and cites DHKW08 for the weak
+range-relative extension.
+
+DHKW08 — Mathematical Programming 115 (2008), 273–290
+https://doi.org/10.1007/s10107-007-0175-8
+Read supplied published PDF s10107-007-0175-8.pdf. Confirmed numbering:
+Theorem 8 = compatible grid approximation, Lemma 9 = integral scaling,
+Lemma 11 = local Lipschitz bound, Theorem 14 = constancy test/range lower
+bound. Theorem 8 requires a multiple of Delta and sufficiently large grid
+multiplier; Theorem 14 requires integer coefficients and k >= D*d_c.
+The draft's q0=(D+1)*d_c*Delta satisfies that requirement. The grid variable
+is unrelated to the power-sum exponent and requires no point counting.
+The adaptation to a single grid and one integer approximation call is our
+argument, not a verbatim theorem from DHKW08. The conditional error budget is now Lean checked (October 19 update);
+the scaled-polynomial identity, integer coefficients, support and degree are
+also now checked. The scaled feasible-set identification and coefficient binary-length bounds
+are also checked, as are the scaled constraint binary-length bounds. Review the
+grid/range-gap hypotheses and full running-time analysis independently; these
+remain external to Lean. Rational row normalization now has checked feasibility
+and encoding bounds.
+
+Pak–Panova — Computational Complexity 26 (2017), 1–36
+https://link.springer.com/article/10.1007/s00037-015-0109-4
+https://arxiv.org/pdf/1404.0653
+Journal metadata confirmed. Theorem 2.3 in arXiv v3 states Barvinok counting
+in input-length^{O(d log d)} time. This is a reported upper bound for
+counting, not a lower bound or the complete DHKW FPTAS runtime. The draft
+explicitly avoids claiming practical superiority or a runtime separation.
+The numbered theorem was inspected in the arXiv version, not the journal PDF.
+
+PY — FOCS 2000, 86–92, DOI 10.1109/SFCS.2000.892068
+https://ieeexplore.ieee.org/document/892068/
+Publisher landing page was reachable but full metadata/text was not exposed
+by the reader. The title and connection are corroborated by HWZ, which
+explicitly credits PY's subdivision strategy. This remains a conceptual
+connection, not an application of an uninspected numbered theorem.
+Remaining source check: title/page metadata against the proceedings PDF.
+
+HWZ — SODA 2016, 1715–1723
+https://epubs.siam.org/doi/10.1137/1.9781611974331.ch118
+https://arxiv.org/pdf/1507.00969
+Publisher metadata and arXiv text inspected. Added the missing page range.
+Section 2 defines sliceable functions and multiplicative affine slices;
+the comparison is accurate. Do not attribute an arbitrary-degree FPTAS
+without the paper's sliceability and oracle hypotheses to HWZ.
+
+Del Pia — Mathematical Programming 201 (2023), 263–293
+https://doi.org/10.1007/s10107-022-01907-3
+Read supplied published PDF s10107-022-01907-3.pdf. The journal reference is
+already correct (2022 online publication, 2023 volume). Proposition 3 gives
+the box/MILP approximation and Section 6.2 bounds the flatness recursion for
+fixed rank and integer dimension. This supports the epsilon exponent
+comparison, but not a claim that our method recovers low-rank dependence.
+
+Lenstra — Mathematics of Operations Research 8 (1983), 538–548
+https://pubsonline.informs.org/doi/10.1287/moor.8.4.538
+Publisher metadata confirmed. Used for the original fixed-variable IP
+algorithm, not as the source of the improved dimension factor.
+
+Kannan — Mathematics of Operations Research 12 (1987), 415–440
+https://pubsonline.informs.org/doi/10.1287/moor.12.3.415
+Publisher metadata and abstract confirm n^{O(n)} dimension dependence.
+The input-size exponent and witness-production use should still be checked
+in the algorithmic complexity argument; this source is not a Lean theorem.
+
+Pierzchala — Mathematische Annalen 366 (2016), 57–82
+https://link.springer.com/article/10.1007/s00208-015-1294-9
+Publisher full text inspected. Theorem 1.1 states the classical univariate
+Markov inequality with degree squared on [-1,1]. The two interval scalings
+in Lean are hypotheses justified by this classical result. The derivative
+inequality itself has not been formalized in this development.
+
+Piazzon–Vianello — Optimization Letters 13 (2019), 1325–1343
+https://link.springer.com/article/10.1007/s11590-018-1377-0
+Publisher metadata and abstract confirm the norming-mesh/polynomial
+optimization comparison. Full text remained inaccessible. Removed the
+unconfirmed Section 2 and Proposition 1 pinpoints; retained the broad
+analogy. The paper does not attribute the integer sampled-minimum lemma
+or the reflecting-cell algorithm to this continuous norming-mesh result.
+
+SUMMARY OF CHANGES AND LIMITS
+Added HWZ pages, added Wei's Section 4.1, removed unconfirmed PV pinpoints.
+No professor-hosted draft links added. Published proceedings and the AMS
+chapter are legitimate publication references and were not replaced with
+websites. Remaining manual checks are explicitly listed above: CHKM page
+locator, Stanley chapter DOI, PY metadata, journal numbering for Pak–Panova
+if a pinpoint to the journal edition is retained. These are not assertions
+that the references are wrong; they are limits of the sources accessible
+in this audit. Review novelty and priority independently.
+
+Introduction editorial update: Borwein–Erdelyi (1995), Chapter 5, added for the polynomial derivative inequality; publisher chapter abstract explicitly lists Markov and higher-derivative inequalities. Publisher DOI: 10.1007/978-1-4612-0793-1_5. Barvinok (1994), Mathematics of Operations Research 19(4), 769–779, DOI 10.1287/moor.19.4.769, added for counting/generating-function provenance. DHKW08 Theorems 1(a), 2(b), 8 and Lemma 9 checked against the supplied journal PDF; DHKW06 Theorem 1.1 also identified in DHKW08 Theorem 5. Overview is now a numbered figure, so the pentagonal illustration becomes Figure 2.
+
+Schrijver textbook added as Chapter 10 background for standard polyhedral encoding bounds. Publisher table of contents identifies Chapter 10 as “Sizes and the theoretical complexity of linear inequalities and linear programming.” The manuscript retains its explicit determinant/slack proof; the exact formula for Phi is not attributed as a verbatim textbook theorem. No unverified theorem number is cited. Exponent vectors are now bold alpha, with scalar components alpha_j unchanged.
+
+Schrijver Theorem 10.2 is now cited directly in the short manuscript, based on the theorem statement and proof excerpt supplied by the user (pp. 121–122). Facet complexity is denoted lambda locally, not varphi. The explicit determinant argument and sharper exponent remain in the extended manuscript.
+
+2026-10-19: Eliminated lambda from the short manuscript. Under Schrijver Section 2.1, an integral scalar viewed as a rational has size at most tau+2; vector dimension overhead and inequality overhead give 1+d+(d+1)*(tau+2)=(d+1)*(tau+3). Substitute this facet-complexity bound in Theorem 10.2. The long determinant proof is unchanged. This encoding substitution and textbook theorem remain human-review obligations.
+
+2026-10-19 shifted chambers: inspected published CHKM pp.29-30. The proof of Theorem 2.1 explicitly replaces rational rows by 2*D_i*a_i*x <= 2*D_i*b_i+1 to move integer points into the interior, and chooses theta_i in general position. Our half-unit shift after integer normalization is an adaptation of this idea, not an attributed prime construction. The chamber-count bound replaces the former total-face count; Stanley remains the general arrangement reference.
+
+2026-10-19: Checked user-supplied BF01191202 (3).pdf, p.29. Replaced the short coordinate/slack lemma with the integer-hull estimates in the proof of CHKM Theorem 2.1. Translate the maximum normalized row size by (d+1)*(tau+3), use Phi=5*d^2*(d+1)*(tau+3)+2, and identify their doubled shifted row slack with 2*s_i. Bounds extend by linearity over the bounded integer hull; d=1 is treated separately via interval endpoints. No claim is made about every real point of P. Long proof unchanged.

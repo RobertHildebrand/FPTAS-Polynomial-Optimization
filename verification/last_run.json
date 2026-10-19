@@ -1,19 +1,27 @@
 {
-  "started_utc": "2026-10-17T12:25:05.804331+00:00",
+  "started_utc": "2026-10-19T22:02:32.151282+00:00",
   "success": true,
   "toolchain": "leanprover/lean4:v4.34.0-rc2",
   "sha256": {
-    "verification/lean/FPTASCalculations.lean": "43cff967f9717a6588f4711a02365bb355c6e1d646ca189f55089ddf382d599b",
+    "verification/lean/FPTASCalculations.lean": "7bb9ed8beacfec6f40e94cd513758cd64f3de24924f0707973df87fd4eb4ff6d",
     "verification/lean/SampledMarkov.lean": "f9e5201485b552674d6060197ee6f2ad9dd24c1d1e9cbf5cfd61688e29426a92",
-    "verification/lean/LineRestriction.lean": "d9ec13297e84a481b1d8e0e9c77ca687de25d6d136bb29dbe3647cfe328d4a4a",
+    "verification/lean/LineRestriction.lean": "ec6cb2063c02eb8fea18d1bd22204ea2788913daa9bba3162bfe0fb2b54c725a",
+    "verification/lean/ScaledPolynomial.lean": "10e1ddb60d940538c954b4dce515cdc49e1d91697c60fed6257a955a947caeac",
     "verification/lean/lake-manifest.json": "a1da68f56dd0335866aceca8129ac21a11702e523b33d4b58474c24b9d5edb43",
-    "verification/lean/lakefile.toml": "883e392ea991159012334d8aadd8233abba2c019293e710bb172c9b23f6ecdd0",
+    "verification/lean/lakefile.toml": "1205b5ca265d3fda167250ac3ba02a1e2ad47227ef347ff1f0fa79b5bec118b4",
     "verification/lean/lean-toolchain": "8190e75a201741065fe508b28955dd64dd72d090babe5f70ce6848879d68ae88",
-    "verification/lean/check_fptas_calculations.py": "fd5e8f194861dfc5c7e2a02ec51f9e46aed8c38b7aef7a9a5179adb270da4a48",
-    "verification/lean/check_sampled_markov.py": "268eef0b460f7d4b99ac3ed8f6ed7ad99243229ae82e6ea374ebb38f00a7e269",
-    "verification/lean/check_line_restriction.py": "b7ec2c73f649cebb2385eadef562f09ae8e20a70bcbd90739b577a6f43a01cc5",
-    "verification/check_all.py": "96d2450281a0a89b715d2c32d1506d2dbfca0049dd8745044d5b70db69da0b02",
-    "experiments/check_reflecting_cells.py": "78e4e4e79b3032a1e60e7140a90818f517959eb390c9a525a8ed3f909c6b639d"
+    "verification/lean/check_fptas_calculations.py": "c86a1e334df1368c3fbcbfacca9ed994b2429f1219c4c943aa86178810792b1d",
+    "verification/lean/check_sampled_markov.py": "20c523fb3cf94ef2c4e067567d65d0fb6425961d2a6031242f79f9754e71ba01",
+    "verification/lean/check_line_restriction.py": "e23dbb4f58407fa7e22644cc59cf0eb4b0554e347b967eac840ce0442ca1e744",
+    "verification/lean/check_scaled_polynomial.py": "103844dfc55e8bb8f68109df165e22d678f022097902d9e1d86b109514a44bbc",
+    "verification/check_all.py": "2d9ae7d5ffa2e7cfb6b28c9a9f67eecf894f2cb7333c0f17ac3f20f4ca3b6cf5",
+    "verification/make_review_draft.py": "ad179e675fd638f5cdd24b6b41c1d800f515277cc930e089e773bc0cfe832067",
+    "verification/README.md": "6099f9c6f166b8de22f70589e61b7d61a6bd1dd26901e5572575b3632e08ae7d",
+    "verification/reference_audit.txt": "a4e5812548a352b0f56ae3cda35cf3f02c3d3dca82697a99a33e7487ed974e94",
+    "README.md": "136f168b39e6d59bf1c745efb7a0398046f5a79377448ca0ec19028a91613183",
+    "reflecting_cells_fptas_review.tex": "db246e8a47275c395e4c7f2f1d8982f260b2733b0a76108fcd718d8f31e05954",
+    "reflecting_cells_fptas_short.tex": "dca8f3ac9d89e181e209d788ac004e3694d877b9ac881a47c04c3e5ef00c2722",
+    "reflecting_cells_fptas.tex": "a30762760d68a7def83433ea8f7095f127c4197ca162e06e2ce7d6e291e00293"
   },
   "checks": [
     {
@@ -29,9 +37,9 @@
       "exit_code": 0
     },
     {
-      "script": "experiments/check_reflecting_cells.py",
+      "script": "verification/lean/check_scaled_polynomial.py",
       "exit_code": 0
     }
   ],
-  "finished_utc": "2026-10-17T12:25:49.943766+00:00"
+  "finished_utc": "2026-10-19T22:03:19.023843+00:00"
 }

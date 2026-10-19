@@ -34,7 +34,7 @@ for command in [base + ['-o', str(build/'SampledMarkov.olean'), 'SampledMarkov.l
     log.append(result.stdout)
     if result.returncode or 'sorryAx' in result.stdout or re.search(r"uses .sorry.", result.stdout):
         raise SystemExit('Verification failed')
-reports = re.findall(r'depends on axioms: \[([^\]]*)\]', log[-1])
+reports = re.findall(r'depends on axioms: \[([^\]]*)\]|does not depend on any axioms', log[-1])
 if len(reports) != len(names):
     raise SystemExit('Missing axiom report')
 for report in reports:
