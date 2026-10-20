@@ -1,5 +1,5 @@
 {
-  "started_utc": "2026-10-20T23:06:20.865903+00:00",
+  "started_utc": "2026-10-20T23:32:42.037781+00:00",
   "success": true,
   "toolchain": "leanprover/lean4:v4.34.0-rc2",
   "sha256": {
@@ -26,10 +26,10 @@
     "verification/make_review_draft.py": "685d42fdf1bf8a8d953794c8223896eea04f5dbc70231e17675e4423ee4d4a0d",
     "verification/README.md": "2b0b97242cbb460e03d71d98ba126eff189082e1533015e87cdea5cb73802f0e",
     "verification/reference_audit.txt": "15c4a986b93de022a5ec8e86b1bf3a092d6cf0fc4b04aefa347c040439a57be4",
-    "README.md": "680d8a44e512c903aad3d61801176c6a832d2fd797150aa3ff95ae514ba67669",
-    "reflecting_cells_fptas_review.tex": "b00d75e7a168bba0db398a775520645ee634407a144a923ae48b29aeedd9804b",
-    "reflecting_cells_fptas_short.tex": "513fb9c8b038a8834c51671a72f4806bdf4ce2caf63073806e6cda9e9f5321ff",
-    "reflecting_cells_fptas.tex": "4b99bd8e9050f64d7af6f01c3ca158ee291e0fdccaad60b0d667d5e2716117b9"
+    "README.md": "5f39731cb8b928ad1bd81ae1e74a9d92ac652d11ab439fef94dd8f7eda81a0e2",
+    "reflecting_cells_fptas_review.tex": "52dd9b45a47f47baa31157b43b2193ffc50435b87674293cda74b3b922cb2eda",
+    "reflecting_cells_fptas_short.tex": "c25ffe4a998f3a1169e232738161a0d7ae054e79af78cd0bb6a48c7dcbd76a35",
+    "reflecting_cells_fptas.tex": "044a56303b910f6b850120eb56980cfe6ab694fb635d1ff7890c879826bd8eb0"
   },
   "checks": [
     {
@@ -65,5 +65,5 @@
       "exit_code": 0
     }
   ],
-  "finished_utc": "2026-10-20T23:09:02.649046+00:00"
+  "finished_utc": "2026-10-20T23:35:20.444117+00:00"
 }

@@ -1,0 +1,15 @@
+cff-version: 1.2.0
+message: "Please cite the accompanying manuscript when using this work. See the extended manuscript for contribution and AI-assistance disclosures."
+type: article
+title: "A short proof of a range-relative FPTAS for polynomial integer optimization over bounded polyhedra"
+authors:
+  - family-names: Hildebrand
+    given-names: Robert
+repository-code: "https://github.com/RobertHildebrand/FPTAS-Polynomial-Optimization"
+url: "https://github.com/RobertHildebrand/FPTAS-Polynomial-Optimization"
+abstract: "A reflecting-cell and Markov-inequality approach to range-relative polynomial integer optimization in fixed dimension, accompanied by conditional Lean verification and exact finite-instance experiments."
+keywords:
+  - polynomial optimization
+  - integer programming
+  - approximation algorithms
+  - Lean

@@ -1,14 +1,33 @@
-# Polynomial approximation by reflecting cells
+# Polynomial optimization by reflecting cells
 
-Start with the [short, two-column paper](reflecting_cells_fptas_short.tex). The [extended paper](reflecting_cells_fptas.tex) includes additional discussion and a detailed account of AI assistance and formal verification. Both are standalone LaTeX sources with embedded figures.
+**A short proof of a range-relative FPTAS for polynomial integer optimization over bounded polyhedra.**
 
-## Reproduce the verification
+Refine dyadic intervals for the constraint slacks, find one feasible integer representative in each cell, and return the representative with the best objective value. Reflecting geometry supplies long integer progressions; Markov’s polynomial derivative inequality controls the approximation error. The dimension is fixed, and the feasible polyhedron is bounded.
 
-**256 Lean theorems are checked; the entire FPTAS is not formally verified.** The development now proves the symmetrization identity, its degree bound, the strengthened `D^2 / ell^2` approximation estimate, and the refinement `max(D^2, ceil(D / sqrt(epsilon)))`. Classical Markov inequalities remain explicit hypotheses. The half-unit right-hand-side shift, equality of integer feasible sets, and the closed shifted-slack-to-progression connection are checked, as is the conditional mixed-integer error transfer. The revised grid checks include actual upward-rounded barycentric weights, residual convex weights, the coordinatewise segment and grid identities, and the Markov-based grid multiplier. Integral-slice scaling and Caratheodory representations remain external inputs; `mixed_integer_reduction` now assembles convex rounding, grid membership, actual polynomial scaling and the error transfer. The denominator-cleared polynomial is now constructed over the integers, with its evaluation identity, unchanged support and degree proved. The scaled feasible-set bijection and polynomial coefficient binary-length bounds and scaled constraint encoding bounds are now checked. Rational constraint denominator clearing now has verified feasibility and encoding bounds. Determinant, coordinate-exponent, convex-combination and slack estimates are also checked, conditional on Cramer data and a convex representation of each point. The actual determinant/lcm size estimates and the mixed-integer exponent calculation are checked under explicit encoding and subroutine cost hypotheses. The actual rational grid-multiplier bit bound, combined scaled-input payload (including epsilon/2), and shifted integer-slack interval rounding are also checked. The short-version CHKM exponent translation is checked under explicit published hypotheses. Threshold coverage and the geometric chamber-count theorem are now proved: ChamberInsertion establishes the split-chamber injection, dimension reduction, and binomial bound for the actual retained chamber family. The new `chamber_approximation` proves coverage and relative widths for closures of the actual slack-threshold sign regions, including boundary points, and connects them to the approximation guarantee. The retained closures are now proved equal to explicit rational halfspace systems, compressed to two slack bounds per original row; rounded integer membership tests are also checked. The common-margin LP criterion for nonempty interior is proved for both full and compressed systems, assuming proper rows and a feasible optimal LP solution. Threshold and compressed-cell coefficient payloads are checked in `CellEncoding`, including reduced rational thresholds, original right-hand sides, rounded integer rows, and common-margin LP overhead. Complete LP query encoding now includes the objective and an explicit metadata schema; a concrete polynomial query-size bound is checked using the actual refinement and explicit input-parameter bounds. Enumeration, oracle implementations, arithmetic costs and full bit complexity remain mathematical proofs in the paper.
+## Start here
 
-See the **[paper-to-Lean coverage guide](verification/README.md)** for exact declarations, assumptions, exclusions and troubleshooting.
+| If you want to… | Open |
+| --- | --- |
+| Explore the algorithm visually | [Interactive field guide](docs/index.html) — open locally in a browser |
+| Read the concise proof | [Short paper](reflecting_cells_fptas_short.tex) |
+| See details and provenance | [Extended paper](reflecting_cells_fptas.tex) |
+| Check the mathematics by hand | [Annotated review draft](reflecting_cells_fptas_review.tex) |
+| Find the corresponding Lean theorems | [Verification guide](verification/README.md) |
+| Inspect the reference checks | [Reference audit](verification/reference_audit.txt) |
 
-With Python 3, Git and [elan](https://github.com/leanprover/elan) installed, run from this repository:
+The interactive guide runs offline with no installation or external libraries. Download or clone the repository, then open `docs/index.html`. GitHub’s file viewer displays HTML source; it does not run the guide. The page includes a pentagonal cell explorer, quadratic/cubic/quartic objectives, exhaustive comparisons on a small lattice, and an interactive symmetrization plot. [Demo details and tests](docs/README.md).
+
+## What is verified?
+
+**256 Lean theorem declarations across eight modules pass the axiom audit. The complete FPTAS is not formally verified.**
+
+The checked mathematics includes the shifted-slack geometry, sampled approximation estimate, chamber coverage and counting, mixed-integer reduction, scaled polynomial representation, and complete LP query encoding with polynomial-size absorption. Results retain their explicit hypotheses. Classical Markov inequalities, published geometric inputs, oracle implementations, and full algorithmic bit costs remain outside the certification.
+
+The [coverage guide](verification/README.md) maps paper statements to declarations and explains every boundary of the formalization. The [run record](verification/last_run.json) binds the successful audit to the exact source and draft hashes.
+
+## Run the checks
+
+Prerequisites: Python 3, Git, and [elan](https://github.com/leanprover/elan). From the repository root:
 
 ```sh
 cd verification/lean
@@ -17,37 +36,52 @@ cd ../..
 python3 verification/check_all.py
 ```
 
-The committed toolchain and dependency manifest pin Lean and Mathlib. Do not run `lake update` as part of reproduction: it can change the dependency lock. The first setup needs network access and disk space for Lean/Mathlib. The checker rebuilds all eight modules and audits every theorem's transitive axioms. Expected total: **256 theorems; no custom axioms or sorryAx**.
-
-Optionally include the exact small-instance experiments:
+The toolchain and Mathlib revision are pinned. Do not run `lake update` for reproduction. Initial setup requires network access and disk space for dependencies. A successful check reports **256 theorems; no custom axioms or `sorryAx`**.
 
 ```sh
+# Check recorded hashes only (does not rerun Lean)
+python3 verification/check_all.py --check-record
+
+# Also run the exact small-instance experiments
 python3 verification/check_all.py --experiments
+
+# Test the interactive guide (Node.js; no package install)
+node --test docs/explorer.test.js
 ```
 
-These experiments are independent sanity checks, not an implementation with the paper's running-time bound. The original unshifted tests include a negative control showing why refinement matters. The current `check_shifted_chambers.py` enumerates exact rational polygons, checks boundary overlaps and a lower-dimensional original polytope, and verifies integer feasibility, progression samples and approximation against exhaustive optima. Run it directly with `python3 experiments/check_shifted_chambers.py`.
+The Python experiments are exact finite-instance sanity checks, not a runtime-qualified implementation of the FPTAS. The browser guide uses floating-point illustration and exhaustive enumeration; it is not Lean-certified code.
 
-## Build the papers
+## Build and review the paper
 
-With a standard LaTeX installation including TikZ and PGFPlots:
+With LaTeX, `elsarticle`, TikZ and PGFPlots installed:
 
 ```sh
 pdflatex -interaction=nonstopmode -halt-on-error reflecting_cells_fptas_short.tex
 pdflatex -interaction=nonstopmode -halt-on-error reflecting_cells_fptas_short.tex
 ```
 
-Use `reflecting_cells_fptas.tex` instead for the extended version. Two passes resolve cross-references; no external bibliography database or image files are required.
+The sources are standalone: figures and bibliography are embedded. Substitute `reflecting_cells_fptas.tex` for the extended version.
 
-## Files and provenance
+Regenerate the annotated review copy after editing the short paper:
 
-- `verification/lean/`: checked sources, pinned dependencies and individual audit logs.
-- `verification/check_all.py`: single entry point; records source hashes and run status.
-- `experiments/`: exhaustive finite-instance tests and their results.
+```sh
+python3 verification/make_review_draft.py
+```
 
-The project was transferred from `Unbounded-Cubic-Integer-Programming` on October 14, 2026. The 45 earlier cubic calculations mentioned in the extended disclosure belong to that separate project and do not certify this FPTAS. `verification/lean/ReflectingCells.lean` is an unchecked historical exploration, excluded from the build and audit.
+Blue notes identify conditional Lean coverage; amber notes identify human-review obligations. The review copy is not the submission version. See [CONTRIBUTING.md](CONTRIBUTING.md) for the update workflow.
 
-## Review the accompanying draft
+## Repository map
 
-`python3 verification/make_review_draft.py` regenerates `reflecting_cells_fptas_review.tex` from the short submission source. Blue notes mark conditional Lean coverage; amber notes identify human-review obligations. The review copy is not a submission layout or a certification of the whole paper. See `verification/reference_audit.txt` for the reference audit and its remaining limitations.
+```text
+reflecting_cells_fptas_short.tex   Concise manuscript
+reflecting_cells_fptas.tex         Extended manuscript and disclosure
+reflecting_cells_fptas_review.tex  Generated annotated review copy
+docs/                             Offline interactive field guide and tests
+verification/                     Coverage guide, audit runner and run record
+  lean/                           Eight checked modules, pinned build and logs
+experiments/                      Exact rational finite-instance checks
+```
 
-`python3 verification/check_all.py --check-record` checks whether the successful audit record still matches the current drafts and checked sources; it does not rerun Lean. Run the full check after any mathematical changes.
+`verification/lean/ReflectingCells.lean` and its standalone checker are historical explorations, excluded from the current build and 256-theorem audit. They remain at their original paths for provenance. The earlier cubic calculations mentioned in the extended disclosure belong to the separate `Unbounded-Cubic-Integer-Programming` project and do not certify this FPTAS.
+
+The project was transferred to this repository on October 14, 2026. Authorship, AI assistance, and verification scope are documented in the extended manuscript. Repository citation metadata is provided in [CITATION.cff](CITATION.cff); this is a research manuscript, not a claim of journal acceptance.
