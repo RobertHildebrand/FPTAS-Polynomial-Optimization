@@ -314,6 +314,21 @@ theorem select_representative {α : Type*} (X : Set α) (Y : Finset α)
   have := hselect y hy
   linarith [herr.2]
 
+
+/-- Range-based grid error on a feasible segment, assuming classical Markov. -/
+theorem unit_interval_markov_error {D : ℕ} (p : Polynomial ℝ)
+    (hdeg : p.natDegree ≤ D) (R t : ℝ)
+    (hmarkov : IntervalMarkovBound D 0 1)
+    (hbound : ∀ u ∈ Set.Icc (0 : ℝ) 1, |p.eval u| ≤ R)
+    (ht : t ∈ Set.Icc (0 : ℝ) 1) :
+    |p.eval t-p.eval 0| ≤ 2*(D : ℝ)^2*t*R := by
+  have h := Convex.norm_image_sub_le_of_norm_deriv_le
+    (f := fun u => p.eval u)
+    (fun u _ => p.differentiableAt)
+    (fun u hu => by simpa [Polynomial.deriv, Real.norm_eq_abs] using hmarkov p hdeg R hbound u hu)
+    (convex_Icc (0 : ℝ) 1) (show (0 : ℝ) ∈ Set.Icc 0 1 by constructor <;> norm_num) ht
+  simpa [Real.norm_eq_abs, abs_of_nonneg ht.1, mul_assoc, mul_left_comm, mul_comm] using h
+
 end SampledMarkov
 
 

@@ -12,6 +12,12 @@ Hint: The binding can be removed (if unused) or named `_` (if used implicitly). 
   [apply] _hx
 
 Note: This linter can be disabled with `set_option linter.unusedVariables false`
+FPTASCalculations.lean:380:37: warning: Variable name `hx` is not explicitly referenced.
+
+Hint: The binding can be removed (if unused) or named `_` (if used implicitly). Alternatively, prefix the name with `_` to silence this warning:
+  [apply] _hx
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
 
 'FPTASCalculations.interval_width' depends on axioms: [propext, Classical.choice, Quot.sound]
 'FPTASCalculations.slack_extrapolation' depends on axioms: [propext, Classical.choice, Quot.sound]
@@ -34,5 +40,15 @@ Note: This linter can be disabled with `set_option linter.unusedVariables false`
 'FPTASCalculations.mixed_integer_grid_transfer' depends on axioms: [propext, Classical.choice, Quot.sound]
 'FPTASCalculations.scaled_mixed_integer_grid_transfer' depends on axioms: [propext, Classical.choice, Quot.sound]
 'FPTASCalculations.grid_nonempty_iff' does not depend on any axioms
+'FPTASCalculations.ceil_weight_bounds' depends on axioms: [propext, Classical.choice, Quot.sound]
+'FPTASCalculations.rounded_barycentric_weights' depends on axioms: [propext, Classical.choice, Quot.sound]
+'FPTASCalculations.barycentric_segment' depends on axioms: [propext, Classical.choice, Quot.sound]
+'FPTASCalculations.rounded_grid_coordinate' depends on axioms: [propext, Classical.choice, Quot.sound]
+'FPTASCalculations.markov_grid_multiplier' depends on axioms: [propext, Classical.choice, Quot.sound]
+'FPTASCalculations.markov_segment_error' depends on axioms: [propext, Classical.choice, Quot.sound]
+'FPTASCalculations.markov_grid_transfer' depends on axioms: [propext, Classical.choice, Quot.sound]
+'FPTASCalculations.rounded_segment_weights' depends on axioms: [propext, Classical.choice, Quot.sound]
+'FPTASCalculations.barycentric_coordinate_segment' depends on axioms: [propext, Classical.choice, Quot.sound]
+'FPTASCalculations.markov_grid_multiplier_bounds' depends on axioms: [propext, Classical.choice, Quot.sound]
 
-PASS: 21 theorems; no custom axioms or sorryAx.
+PASS: 31 theorems; no custom axioms or sorryAx.

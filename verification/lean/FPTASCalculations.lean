@@ -281,6 +281,168 @@ theorem grid_nonempty_iff {α : Type*} (S G : Set α) (hsub : G ⊆ S)
     obtain ⟨y, hy, _⟩ := hgrid x hx
     exact ⟨y, hy⟩
 
+/-- Upward rounding, with no coefficient- or coordinate-dependent constant. -/
+theorem ceil_weight_bounds (a k : ℝ) (hk : 0 < k) :
+    a ≤ (⌈k*a⌉ : ℝ) / k ∧ (⌈k*a⌉ : ℝ) / k ≤ a + 1/k := by
+  constructor
+  · exact (le_div_iff₀ hk).2 (by simpa [mul_comm] using Int.le_ceil (k*a))
+  · apply (div_le_iff₀ hk).2
+    have h := Int.ceil_lt_add_one (k*a)
+    have he : (a+1/k)*k = k*a+1 := by field_simp
+    rw [he]
+    exact le_of_lt h
+
+/-- Round all but a largest barycentric coordinate upwards. -/
+theorem rounded_barycentric_weights {r : ℕ} (a : Fin r → ℝ) (a0 k : ℝ)
+    (hk : 0 < k) (ha : ∀ i, 0 ≤ a i)
+    (hs : a0 + ∑ i, a i = 1) (hlarge : 1 ≤ (r+1 : ℝ)*a0)
+    (hsize : (r : ℝ)*(r+1) ≤ k) :
+    let mu := fun i => (⌈k*a i⌉ : ℝ)/k
+    let mu0 := 1-∑ i, mu i
+    let t := (r : ℝ)*(r+1)/k
+    0 ≤ t ∧ t ≤ 1 ∧ 0 ≤ mu0 ∧
+    (1-t)*a0 ≤ mu0 ∧ (∀ i, 0 ≤ mu i ∧ (1-t)*a i ≤ mu i) := by
+  dsimp
+  have hr : (0 : ℝ) ≤ r := Nat.cast_nonneg r
+  have ht0 : 0 ≤ (r : ℝ)*(r+1)/k := div_nonneg (by positivity) (le_of_lt hk)
+  have ht1 : (r : ℝ)*(r+1)/k ≤ 1 := (div_le_iff₀ hk).2 (by simpa using hsize)
+  have ha0 : 0 ≤ a0 := by nlinarith
+  have hsum : (∑ i, (⌈k*a i⌉ : ℝ)/k) ≤ (∑ i, a i) + (r : ℝ)/k := by
+    calc
+      _ ≤ ∑ i, (a i + 1/k) := Finset.sum_le_sum (fun i _ => (ceil_weight_bounds (a i) k hk).2)
+      _ = _ := by simp [Finset.sum_add_distrib]; ring
+  have hprod : (r : ℝ)/k ≤ ((r : ℝ)*(r+1)/k)*a0 := by
+    have h := mul_le_mul_of_nonneg_left hlarge hr
+    rw [div_mul_eq_mul_div]
+    exact (div_le_div_iff_of_pos_right hk).2 (by nlinarith)
+  have hmu0 : (1-(r : ℝ)*(r+1)/k)*a0 ≤ 1-∑ i, (⌈k*a i⌉ : ℝ)/k := by nlinarith
+  refine ⟨ht0, ht1, le_trans (mul_nonneg (sub_nonneg.2 ht1) ha0) hmu0, hmu0, ?_⟩
+  intro i
+  have hi := (ceil_weight_bounds (a i) k hk).1
+  exact ⟨le_trans (ha i) hi, le_trans (by nlinarith [mul_nonneg ht0 (ha i)]) hi⟩
+
+/-- Dominating barycentric weights give a feasible-segment representation. -/
+theorem barycentric_segment {r : ℕ} (a b : Fin r → ℝ) (t : ℝ)
+    (ht : 0 < t) (ha : ∑ i, a i = 1) (hb : ∑ i, b i = 1)
+    (hdom : ∀ i, (1-t)*a i ≤ b i) :
+    let w := fun i => (b i-(1-t)*a i)/t
+    (∀ i, 0 ≤ w i) ∧ (∑ i, w i = 1) ∧
+    (∀ i, b i = (1-t)*a i+t*w i) := by
+  dsimp
+  refine ⟨fun i => div_nonneg (sub_nonneg.2 (hdom i)) (le_of_lt ht), ?_, ?_⟩
+  · rw [← Finset.sum_div, Finset.sum_sub_distrib, ← Finset.mul_sum, hb, ha]
+    field_simp; ring
+  · intro i; field_simp; ring
+
+/-- The actual rounded barycenter has denominator k*Delta coordinatewise. -/
+theorem rounded_grid_coordinate {r : ℕ} (a : Fin r → ℝ)
+    (v : Fin r → ℤ) (v0 : ℤ) (k Delta : ℕ)
+    (hk : k ≠ 0) (hDelta : Delta ≠ 0) :
+    (1-∑ i, (⌈(k:ℝ)*a i⌉ : ℝ)/(k:ℝ)) * ((v0:ℝ)/Delta) +
+      ∑ i, ((⌈(k:ℝ)*a i⌉ : ℝ)/(k:ℝ))*((v i:ℝ)/Delta) =
+    (((k:ℤ)-∑ i, ⌈(k:ℝ)*a i⌉)*v0 + ∑ i, ⌈(k:ℝ)*a i⌉*v i : ℤ) /
+      ((k:ℝ)*Delta) := by
+  push_cast
+  rw [← Finset.sum_div]
+  simp_rw [div_mul_div_comm]
+  rw [← Finset.sum_div]
+  field_simp
+
+/-- Ceiling choice of grid multiplier gives the half-error budget. -/
+theorem markov_grid_multiplier (D r eps : ℝ)
+    (hD : 1 ≤ D) (hr : 1 ≤ r) (heps : 0 < eps) (heps1 : eps ≤ 1) :
+    let k : ℝ := ⌈4*D^2*r*(r+1)/eps⌉
+    0 < k ∧ r*(r+1) ≤ k ∧ 2*D^2*(r*(r+1)/k) ≤ eps/2 := by
+  dsimp
+  have hceil := Int.le_ceil (4*D^2*r*(r+1)/eps)
+  have hnum : 0 < 4*D^2*r*(r+1) := by positivity
+  have hk : 0 < (⌈4*D^2*r*(r+1)/eps⌉ : ℝ) := lt_of_lt_of_le (div_pos hnum heps) hceil
+  have hmul := (div_le_iff₀ heps).1 hceil
+  have hrr : 0 < r*(r+1) := by positivity
+  have hD2 : 1 ≤ D^2 := by nlinarith
+  have hbase : r*(r+1) ≤ 4*D^2*r*(r+1) := by nlinarith
+  have hepk := mul_le_of_le_one_left (le_of_lt hk) heps1
+  refine ⟨hk, by nlinarith, ?_⟩
+  rw [← mul_div_assoc]
+  apply (div_le_iff₀ hk).2
+  nlinarith
+
+/-- A range-normalized segment Markov bound controls discretization error. -/
+theorem markov_segment_error (p : ℝ → ℝ) (D t R eps : ℝ)
+    (hR : 0 ≤ R) (hbudget : 2*D^2*t ≤ eps/2)
+    (hmarkov : |p t-p 0| ≤ 2*D^2*t*R) :
+    |p t-p 0| ≤ (eps/2)*R := by
+  exact hmarkov.trans (mul_le_mul_of_nonneg_right hbudget hR)
+
+/-- Grid transfer needs no positive range-gap or coefficient Lipschitz bound. -/
+theorem markov_grid_transfer {α : Type*} (S G : Set α) (f : α → ℝ)
+    (xmin gmin gmax answer : α) (fmax eps : ℝ)
+    (heps : 0 ≤ eps) (hsub : G ⊆ S) (hx : xmin ∈ S)
+    (hmin : ∀ z ∈ S, f xmin ≤ f z) (hmax : ∀ z ∈ S, f z ≤ fmax)
+    (hgmin : gmin ∈ G) (hgmax : gmax ∈ G) (ha : answer ∈ G)
+    (hgridmin : ∀ z ∈ G, f gmin ≤ f z)
+    (hnear : ∃ y ∈ G, |f y-f xmin| ≤ (eps/2)*(fmax-f xmin))
+    (hsolver : f answer-f gmin ≤ (eps/2)*(f gmax-f gmin)) :
+    answer ∈ S ∧ 0 ≤ f answer-f xmin ∧ f answer-f xmin ≤ eps*(fmax-f xmin) := by
+  obtain ⟨y, hy, herr⟩ := hnear
+  have hymin := hgridmin y hy
+  have hyerr := (le_abs_self (f y-f xmin)).trans herr
+  have hgm := hmin gmin (hsub hgmin)
+  have hgM := hmax gmax (hsub hgmax)
+  have hprod := mul_le_mul_of_nonneg_left (show f gmax-f gmin ≤ fmax-f xmin by linarith) (show 0 ≤ eps/2 by positivity)
+  exact ⟨hsub ha, sub_nonneg.2 (hmin answer (hsub ha)), by linarith⟩
+
+/-- The upward-rounded weights admit explicit residual convex weights. -/
+theorem rounded_segment_weights {r : ℕ} (a : Fin r → ℝ) (a0 k : ℝ)
+    (hr : 0 < r) (hk : 0 < k) (ha : ∀ i, 0 ≤ a i)
+    (hs : a0+∑ i, a i = 1) (hlarge : 1 ≤ (r+1 : ℝ)*a0)
+    (hsize : (r : ℝ)*(r+1) ≤ k) :
+    let mu := fun i => (⌈k*a i⌉ : ℝ)/k
+    let mu0 := 1-∑ i, mu i
+    let t := (r : ℝ)*(r+1)/k
+    ∃ w0 : ℝ, ∃ w : Fin r → ℝ,
+      0 ≤ w0 ∧ (∀ i, 0 ≤ w i) ∧ w0+∑ i, w i = 1 ∧
+      mu0 = (1-t)*a0+t*w0 ∧ (∀ i, mu i = (1-t)*a i+t*w i) := by
+  dsimp
+  let t : ℝ := (r : ℝ)*(r+1)/k
+  let mu := fun i => (⌈k*a i⌉ : ℝ)/k
+  have ht : 0 < t := by dsimp [t]; positivity
+  obtain ⟨_, _, _, h0, hi⟩ := rounded_barycentric_weights a a0 k hk ha hs hlarge hsize
+  refine ⟨(1-∑ i, mu i-(1-t)*a0)/t, fun i => (mu i-(1-t)*a i)/t, ?_, ?_, ?_, ?_, ?_⟩
+  · exact div_nonneg (sub_nonneg.2 h0) (le_of_lt ht)
+  · intro i; exact div_nonneg (sub_nonneg.2 (hi i).2) (le_of_lt ht)
+  · change (1-∑ i, mu i-(1-t)*a0)/t + (∑ i, (mu i-(1-t)*a i)/t) = 1
+    have hsum : (∑ i, (mu i-(1-t)*a i)/t) = ((∑ i, mu i)-(1-t)*(∑ i, a i))/t := by
+      rw [← Finset.sum_div, Finset.sum_sub_distrib, ← Finset.mul_sum]
+    rw [hsum, ← add_div]
+    apply (div_eq_one_iff_eq (ne_of_gt ht)).2
+    nlinarith [hs]
+  · change 1-∑ i, mu i = (1-t)*a0+t*((1-∑ i, mu i-(1-t)*a0)/t)
+    rw [mul_div_cancel₀ _ (ne_of_gt ht)]
+    ring
+  · intro i
+    change mu i = (1-t)*a i+t*((mu i-(1-t)*a i)/t)
+    rw [mul_div_cancel₀ _ (ne_of_gt ht)]
+    ring
+
+/-- A barycentric segment identity holds in every coordinate. -/
+theorem barycentric_coordinate_segment {r : ℕ} (a b w v : Fin r → ℝ)
+    (a0 b0 w0 v0 t : ℝ)
+    (h0 : b0 = (1-t)*a0+t*w0) (hi : ∀ i, b i = (1-t)*a i+t*w i) :
+    b0*v0+∑ i, b i*v i =
+      (1-t)*(a0*v0+∑ i, a i*v i)+t*(w0*v0+∑ i, w i*v i) := by
+  rw [h0]
+  simp_rw [hi, add_mul]
+  rw [Finset.sum_add_distrib]
+  simp_rw [mul_assoc, ← Finset.mul_sum]
+  ring
+
+/-- Both sides of the grid multiplier bound, including rounding overhead. -/
+theorem markov_grid_multiplier_bounds (D r eps : ℝ) :
+    4*D^2*r*(r+1)/eps ≤ (⌈4*D^2*r*(r+1)/eps⌉ : ℝ) ∧
+    (⌈4*D^2*r*(r+1)/eps⌉ : ℝ) < 4*D^2*r*(r+1)/eps+1 := by
+  exact ⟨Int.le_ceil _, Int.ceil_lt_add_one _⟩
+
 end FPTASCalculations
 
 

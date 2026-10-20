@@ -60,6 +60,8 @@ For continuous convex bodies, Piazzon and Vianello~\cite[Propositions~1--2]{PV} 
 
 The key ingredient is decomposition by relative constraint slacks. The reflecting sets of Cook, Hartmann, Kannan, and McDiarmid~\cite{CHKM} underpin their integer-hull analysis; related symmetric covers appear in the quadratic and cubic algorithms of Ari and Hildebrand~\cite{AHIQP,AH}, and dyadic slack grouping also appears in Wei's quadratic algorithm~\cite[Section~4.1]{Wei}. Here refinement produces long feasible integer progressions. Markov's polynomial derivative inequality~\cite[Theorem~5.1.8]{BorweinErdelyi} on these progressions controls the error at an integer optimum, allowing any feasible representative of its cell. The same representatives work for all polynomials of a prescribed degree.
 
+Markov's inequality is essential to the polynomial cell bound: it controls variation relative to the integer objective range, so the required refinement depends only on degree and accuracy. A coefficient-based Lipschitz estimate alone could require refinement exponential in the input encoding size. The Lipschitz-based grid reduction of~\cite{DHKW08} can tolerate a large denominator because its integer solver depends polynomially on the denominator's bit length; explicit cell enumeration requires polynomially many cells.
+
 \begin{figure*}[t]
 \centering
 \begin{tikzpicture}[
@@ -121,7 +123,7 @@ Since the input explicitly lists the $m$ inequalities in $d$ variables, $m,d\le\
 
 Rational inequalities can be normalized to integral data in polynomial time, as detailed below. Rational objective coefficients can likewise be reduced to integer coefficients by clearing denominators in polynomial time; positive scaling preserves the approximation guarantee, as in~\cite[Section~5]{DHKW08}. The remaining construction parameters and the exact feasibility-query count are introduced in the proof. For fixed $d$, the bound is polynomial in $\varphi$ and $1/\eps$, hence gives an FPTAS in Definition~\ref{def:fptas}. The same explicit bound remains valid for binary-encoded exponents, but then its numerical dependence on $D$ does not assert an FPTAS in the sparse binary input size.
 
-The next two corollaries recover known guarantees of De Loera et al.: nonnegative integer maximization~\cite[Theorem~1.1]{DHKW06} and mixed-integer approximation~\cite[Theorems~1(a) and~2(b)]{DHKW08}. The first follows directly from our range-relative bound. For the second, we use their compatible-grid reduction~\cite[Theorem~8 and Lemma~9]{DHKW08}, replacing the integer approximation subroutine by Theorem~\ref{thm:main}.
+The next two corollaries recover known guarantees of De Loera et al.: nonnegative integer maximization~\cite[Theorem~1.1]{DHKW06} and mixed-integer approximation~\cite[Theorems~1(a) and~2(b)]{DHKW08}. The first follows directly from our range-relative bound. For the second, we combine their integral-slice scaling~\cite[Lemma~9]{DHKW08} with upward barycentric rounding and Markov's inequality, then apply Theorem~\ref{thm:main} on the resulting grid.
 
 \begin{corollary}[Nonnegative maximization {\cite[Theorem~1.1]{DHKW06}}]\label{cor:max}
 Under the same assumptions and encoding conventions, if $f\ge0$ on $P\cap\Z^d$, choosing the largest objective value among the representatives yields
@@ -314,6 +316,11 @@ The insertion argument counts intersections involving at most one hyperplane fro
 
 We next combine the sample-to-supremum argument used in polynomial norming meshes~\cite[proof of Proposition~2]{PV} with a second-difference bound at a discrete minimum. Long progressions control variation between integer samples without assuming continuous stationarity.
 
+We use the classical Markov inequality~\cite[Theorem~5.1.8]{BorweinErdelyi}, rescaled to an interval: every real polynomial $q$ of degree at most $D$ satisfies
+\[
+ \|q'\|_{\infty,[u,v]}\le\frac{2D^2}{v-u}\|q\|_{\infty,[u,v]},\qquad u<v.
+\]
+
 \begin{lemma}[Approximation at a discrete minimum]\label{lem:markov}
 Let $D\ge1$ and $\ell\ge D^2$ be integers, and let $p\in\R[t]$ have degree at most $D$. Suppose
 \[
@@ -420,32 +427,38 @@ Applying Proposition~\ref{prop:extrema} to $-f$ gives $f_{\max}-f(\mathbf{x}_{\e
 \end{proof}
 
 \begin{proof}[Proof of Corollary~\ref{cor:mixed}]
-If $d_c=0$, apply Theorem~\ref{thm:main}. Otherwise write $S=P\cap(\R^{d_c}\times\Z^{d_i})$. The compatible-grid construction of~\cite[Theorem~8 and Lemma~9]{DHKW08} supplies an integer $\Delta>0$ of polynomial encoding size for fixed dimension. Choose an integer coordinate bound $B\ge1$ for $P$ and a rational Lipschitz bound $K\ge1$ for $f$ on its bounding box, both of polynomial encoding size; see~\cite[Lemma~11]{DHKW08}. Set
+If $d_c=0$, apply Theorem~\ref{thm:main}. Otherwise set $r=d_c$ and $S=P\cap(\R^r\times\Z^{d_i})$. By~\cite[Lemma~9]{DHKW08}, an integer $\Delta>0$ of polynomial encoding size in fixed dimension can be computed such that every nonempty slice $\Delta P_{\mathbf z}$ is integral. We modify the barycentric rounding in~\cite[Lemma~10]{DHKW08} and use Markov's inequality instead of a coefficient-based Lipschitz estimate. Set
 \[
-\begin{gathered}
- q_0=(D+1)d_c\Delta,\qquad \rho=q_0^{-D},\\
- \delta=\frac{\eps\rho}{2K},\qquad
- Q=\Delta\left\lceil\frac{2d_cB}{\delta}\right\rceil.
-\end{gathered}
+ k=\left\lceil\frac{4D^2r(r+1)}{\eps}\right\rceil,
+ \qquad Q=k\Delta,\qquad t=\frac{r(r+1)}k.
 \]
-The grid $S_Q=S\cap(Q^{-1}\Z^{d_c}\times\Z^{d_i})$ approximates every point of $S$ within $\delta$ in its integer slice. In particular, $S_Q$ is nonempty exactly when $S$ is. If $R=f_{\max}-f_{\min}>0$, then $R\ge\rho$ by~\cite[Theorem~14]{DHKW08}, and
+For any $\mathbf x\in P_{\mathbf z}$, Carath\'eodory's theorem gives $\mathbf x=\sum_{i=0}^r\lambda_i\mathbf v_i$ for slice vertices $\mathbf v_i\in\Delta^{-1}\Z^r$ and convex weights, indexed so that $\lambda_0\ge1/(r+1)$. Put
 \[
- \min_{S_Q}f-\min_Sf\le K\delta\le\eps R/2.
+ \mu_i=\frac{\lceil k\lambda_i\rceil}{k}\ (i\ge1),
+ \qquad \mu_0=1-\sum_{i=1}^r\mu_i.
 \]
-Apply Theorem~\ref{thm:main} on this grid with accuracy $\eps/2$. Its objective range is at most $R$, so its returned point satisfies
+For $i\ge1$, $\lambda_i\le\mu_i\le\lambda_i+1/k$, while
+$\mu_0\ge\lambda_0-r/k\ge(1-t)\lambda_0$. Since $0<t\le1$, all weights are nonnegative and $\mu_i\ge(1-t)\lambda_i$. Therefore
 \[
- f(\mathbf{x}_{\eps})-\min_Sf\le\eps R/2+\eps R/2=\eps R.
+ \mathbf y=\sum_{i=0}^r\mu_i\mathbf v_i
+ =(1-t)\mathbf x+t\mathbf w\in P_{\mathbf z}\cap Q^{-1}\Z^r
 \]
-If $R=0$, every feasible grid point is optimal; no constancy test is needed.
+for some $\mathbf w\in P_{\mathbf z}$: its convex weights are $(\mu_i-(1-t)\lambda_i)/t$.
 
-For the reduction, write the continuous coordinates as $\mathbf x=\mathbf u/Q$ and use the integer-coefficient polynomial $g(\mathbf u,\mathbf z)=Q^D f(\mathbf u/Q,\mathbf z)$. Its degree and monomial support are unchanged, and coefficient bit lengths increase by at most $O(D\log(Q+1))$. Since
+Write $R=f_{\max}-f_{\min}$ over $S$. The polynomial
+$p(u)=f((1-u)\mathbf x+u\mathbf w,\mathbf z)-f_{\min}$ has degree at most $D$ and lies in $[0,R]$ on $[0,1]$. Markov's inequality gives
 \[
-\begin{split}
- \log Q=O\bigl(&\log\Delta+\log(d_cB)+\log K\\
-              &+D\log q_0+\log(1/\eps)+1\bigr),
-\end{split}
+ |f(\mathbf y,\mathbf z)-f(\mathbf x,\mathbf z)|
+ \le2D^2tR\le\eps R/2.
 \]
-the scaled input has polynomial encoding size for fixed total dimension. Positive objective scaling preserves the guarantee. Negating $f$ gives maximization, and nonnegativity gives its multiplicative guarantee. This proves the corollary with one integer approximation call, without an objective shift or lattice-point counting. The dimension dependence of $\Delta$ does not establish the uniform bound~\eqref{eq:runtime-coarse} for the mixed-integer problem; that bound remains restricted to pure integers.
+Thus the grid preserves nonemptiness and approximates the minimum within $\eps R/2$, including when $R=0$. Apply Theorem~\ref{thm:main} on the grid with accuracy $\eps/2$. Its objective range is at most $R$, so the total error is at most $\eps R$.
+
+Substitute $\mathbf x=\mathbf u/Q$ and use the integer polynomial $g(\mathbf u,\mathbf z)=Q^D f(\mathbf u/Q,\mathbf z)$. Its degree and support are unchanged, and coefficient bit lengths increase by $O(D\log(Q+1))$. Since
+\[
+ \log Q=\log\Delta+
+ O\!\left(\log(D+1)+\log(r+1)+\log(1/\eps)\right),
+\]
+the scaled input has polynomial encoding size in fixed total dimension. Positive scaling preserves the guarantee; negation and nonnegativity give the maximization claim. This coefficient-independent grid multiplier avoids a Lipschitz constant and a positive range-gap bound. The construction of $\Delta$ still prevents us from claiming the pure-integer dimension bound~\eqref{eq:runtime-coarse} for this reduction.
 \end{proof}
 
 \section{Discussion and extensions}\label{sec:conclusion}
@@ -464,7 +477,7 @@ For continuous extensions, Pierzcha\l a~\cite[Theorem~1.4]{Pierzchala} proves th
 \section*{AI assistance and formal verification}
 Robert Hildebrand posed the approximation question, proposed using the CHKM decomposition from the Ari--Hildebrand work, and directed the mathematical scope, encoding analysis, comparisons, and revisions. OpenAI's Codex assistant contributed mathematical exploration, proposed arguments, literature searches, drafting, and computational checks. The extended manuscript records these contributions in detail; responsibility for the manuscript remains with the human author.
 
-The accompanying Lean development contains 97 checked results, including the even-part polynomial identity and degree bound, the strengthened $D^2/\ell^2$ sampled Markov estimate, affine line restriction, and representative selection. It also verifies $\ell=\max\{D^2,\lceil D/\sqrt\eps\rceil\}\ge D^2$ and $D^2/\ell^2\le\eps$. The classical Markov inequalities on $[-\ell,\ell]$ and $[0,\ell^2]$ are explicit hypotheses, not custom axioms. The shifted cover theorem verifies the half-unit relaxation for actual integer rows and derives samples feasible in the original polytope from closed shifted-slack widths and integrality. The conditional mixed-integer reduction verifies grid-parameter arithmetic, positive objective scaling, nonemptiness, and the final error budget from grid-approximation, Lipschitz, range-gap, and solver hypotheses. The scaled polynomial is constructed over the integers with its substitution identity, support and degree verified. The scaled feasible-set bijection and binary-length bounds for polynomial coefficients and scaled constraints are also verified. Rational row normalization preserves feasibility with verified bit-length bounds. The extended version's determinant and slack estimates are checked conditional on Cramer data and convex representations; the invocation of CKHM's integer-hull estimates here is not formalized. Cover and grid construction and full bit complexity remain unverified. Sources, checker scripts, and verification logs are maintained with the extended manuscript.
+The accompanying Lean development contains 108 checked results, including the even-part polynomial identity and degree bound, the strengthened $D^2/\ell^2$ sampled Markov estimate, affine line restriction, and representative selection. It also verifies $\ell=\max\{D^2,\lceil D/\sqrt\eps\rceil\}\ge D^2$ and $D^2/\ell^2\le\eps$. The classical Markov inequalities on $[-\ell,\ell]$ and $[0,\ell^2]$ are explicit hypotheses, not custom axioms. The shifted cover theorem verifies the half-unit relaxation for actual integer rows and derives samples feasible in the original polytope from closed shifted-slack widths and integrality. The mixed-integer checks verify upward-rounded barycentric weights, their residual convex weights and segment identity, the grid-coordinate identity, the ceiling multiplier, and the final error budget. The segment estimate assumes the classical Markov bound on $[0,1]$. Integral-slice scaling, Carath\'eodory representations and their geometric assembly remain external inputs. The scaled polynomial is constructed over the integers with its substitution identity, support and degree verified. The scaled feasible-set bijection and binary-length bounds for polynomial coefficients and scaled constraints are also verified. Rational row normalization preserves feasibility with verified bit-length bounds. The extended version's determinant and slack estimates are checked conditional on Cramer data and convex representations; the invocation of CKHM's integer-hull estimates here is not formalized. Cover and grid construction and full bit complexity remain unverified. Sources, checker scripts, and verification logs are maintained with the extended manuscript.
 
 \begin{thebibliography}{99}
 \bibitem{AH} C.~Ari and R.~Hildebrand.

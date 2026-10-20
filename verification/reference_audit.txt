@@ -166,3 +166,10 @@ Schrijver Theorem 10.2 is now cited directly in the short manuscript, based on t
 2026-10-19 shifted chambers: inspected published CHKM pp.29-30. The proof of Theorem 2.1 explicitly replaces rational rows by 2*D_i*a_i*x <= 2*D_i*b_i+1 to move integer points into the interior, and chooses theta_i in general position. Our half-unit shift after integer normalization is an adaptation of this idea, not an attributed prime construction. The chamber-count bound replaces the former total-face count; Stanley remains the general arrangement reference.
 
 2026-10-19: Checked user-supplied BF01191202 (3).pdf, p.29. Replaced the short coordinate/slack lemma with the integer-hull estimates in the proof of CHKM Theorem 2.1. Translate the maximum normalized row size by (d+1)*(tau+3), use Phi=5*d^2*(d+1)*(tau+3)+2, and identify their doubled shifted row slack with 2*s_i. Bounds extend by linearity over the bounded integer hull; d=1 is treated separately via interval endpoints. No claim is made about every real point of P. Long proof unchanged.
+
+2026-10-20 mixed-integer update: the proof now uses DHKW Lemma 9 for
+integral-slice scaling, and explicitly modifies the barycentric rounding in
+Lemma 10 to upward rounding except at a largest weight. Classical Markov
+on [0,1] replaces the coefficient Lipschitz and positive range-gap bounds.
+The multiplier is ceil(4 D^2 r(r+1)/epsilon). No novelty claim is made for
+this modification, nor is an improved uniform dimension bound claimed.

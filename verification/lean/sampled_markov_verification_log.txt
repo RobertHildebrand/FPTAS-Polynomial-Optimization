@@ -13,5 +13,6 @@ Mathlib: 85e3a25e006c35636f0e53b0e9296caca2685bc0
 'SampledMarkov.representative_at_minimum' depends on axioms: [propext, Classical.choice, Quot.sound]
 'SampledMarkov.representative_at_maximum' depends on axioms: [propext, Classical.choice, Quot.sound]
 'SampledMarkov.select_representative' depends on axioms: [propext, Classical.choice, Quot.sound]
+'SampledMarkov.unit_interval_markov_error' depends on axioms: [propext, Classical.choice, Quot.sound]
 
-PASS: 12 theorems; no custom axioms or sorryAx.
+PASS: 13 theorems; no custom axioms or sorryAx.
