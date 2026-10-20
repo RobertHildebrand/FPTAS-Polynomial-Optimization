@@ -1,3 +1,5 @@
+import Mathlib.Algebra.GCDMonoid.FinsetLemmas
+import Mathlib.Data.Nat.Choose.Bounds
 import Mathlib.LinearAlgebra.Matrix.Determinant.Basic
 import Mathlib.Algebra.MvPolynomial.Degrees
 import Mathlib.Algebra.MvPolynomial.Eval
@@ -574,5 +576,126 @@ theorem unified_point_bounds {κ : Type*} [Fintype κ]
   · intro i
     exact (h.1 i).trans_le (pow_le_pow_right₀ (by norm_num : (1:ℝ) ≤ 2) he)
   · simpa only [unified_exponent_eq] using h.2
+
+/-- Candidate continuous bases are r-subsets of the m constraint rows. -/
+theorem continuous_basis_count (m r : ℕ) :
+    ((Finset.univ : Finset (Fin m)).powersetCard r).card = m.choose r := by simp
+
+/-- Polynomial bound on the number of candidate bases. -/
+theorem continuous_basis_power_bound (m r phi : ℕ) (hm : m ≤ phi) :
+    m.choose r ≤ phi^r := (Nat.choose_le_pow m r).trans (Nat.pow_le_pow_left hm r)
+
+/-- The actual lcm is positive and a multiple of every nonzero determinant. -/
+theorem basis_lcm_spec (s : Finset σ) (v : σ → ℕ)
+    (hv : ∀ i ∈ s, v i ≠ 0) :
+    0 < s.lcm v ∧ ∀ i ∈ s, v i ∣ s.lcm v := by
+  exact ⟨Nat.pos_of_ne_zero (Finset.lcm_ne_zero_iff.2 hv), fun _ hi => Finset.dvd_lcm hi⟩
+
+/-- Encoding length of the actual lcm, including the empty family. -/
+theorem basis_lcm_size (s : Finset σ) (v : σ → ℕ) (N E : ℕ)
+    (hv : ∀ i ∈ s, v i ≠ 0) (hcard : s.card ≤ N)
+    (hbits : ∀ i ∈ s, (v i).size ≤ E) :
+    (s.lcm v).size ≤ 1+N*E := by
+  have hp : 0 < ∏ i ∈ s, v i := Finset.prod_pos (fun i hi => Nat.pos_of_ne_zero (hv i hi))
+  have hl := Nat.le_of_dvd hp (Finset.lcm_dvd_prod s v)
+  have hb := (Nat.size_le_size hl).trans (size_prod_le s v)
+  have hsum : (∑ i ∈ s, (v i).size) ≤ s.card*E := by
+    calc
+      _ ≤ ∑ _i ∈ s, E := Finset.sum_le_sum hbits
+      _ = _ := by simp
+  have hc := Nat.mul_le_mul_right E hcard
+  omega
+
+/-- Bits of Q=k*Delta, with the determinant-lcm estimate substituted. -/
+theorem mixed_grid_size (s : Finset σ) (v : σ → ℕ) (N E k : ℕ)
+    (hv : ∀ i ∈ s, v i ≠ 0) (hcard : s.card ≤ N)
+    (hbits : ∀ i ∈ s, (v i).size ≤ E) :
+    (k*s.lcm v).size ≤ k.size+1+N*E := by
+  have h := size_mul_le k (s.lcm v)
+  have hl := basis_lcm_size s v N E hv hcard hbits
+  omega
+
+/-- Absorb basis count, determinant bits and grid multiplier bits into a power. -/
+theorem mixed_grid_polynomial_size (phi r c N E K Qbits : ℕ)
+    (hphi : 2 ≤ phi) (hN : N ≤ phi^r) (hE : E ≤ phi^c)
+    (hK : K ≤ phi^c) (hQ : Qbits ≤ K+1+N*E) :
+    Qbits ≤ phi^(r+c+2) := by
+  have hp : 1 ≤ phi := by omega
+  have hpow : 1 ≤ phi^(r+c) := Nat.one_le_pow _ _ hp
+  have hcp : phi^c ≤ phi^(r+c) := Nat.pow_le_pow_right hp (by omega)
+  have hne : N*E ≤ phi^(r+c) := by
+    calc
+      _ ≤ phi^r*phi^c := Nat.mul_le_mul hN hE
+      _ = _ := (pow_add _ _ _).symm
+  have hphi2 : 3 ≤ phi^2 := by nlinarith
+  calc
+    Qbits ≤ 3*phi^(r+c) := by omega
+    _ ≤ phi^(r+c)*phi^2 := by nlinarith
+    _ = _ := (pow_add _ _ _).symm
+
+/-- Aggregate scaled input size from the established payload-increase bound. -/
+theorem mixed_scaled_input_size (phi r a b W Qbits S : ℕ)
+    (hphi : 2 ≤ phi) (ha : 1 ≤ a) (hW : W ≤ phi^b)
+    (hQ : Qbits ≤ phi^(a*(r+1))) (hS : S ≤ phi+W*Qbits) :
+    S ≤ phi^((a+b+1)*(r+1)) := by
+  have hp : 1 ≤ phi := by omega
+  have he : 1 ≤ b+a*(r+1) := by nlinarith
+  have hbase : phi ≤ phi^(b+a*(r+1)) := by
+    simpa using Nat.pow_le_pow_right hp he
+  have hmul : W*Qbits ≤ phi^(b+a*(r+1)) := by
+    calc
+      _ ≤ phi^b*phi^(a*(r+1)) := Nat.mul_le_mul hW hQ
+      _ = _ := (pow_add _ _ _).symm
+  calc
+    S ≤ 2*phi^(b+a*(r+1)) := by omega
+    _ ≤ phi^(b+a*(r+1))*phi := by nlinarith
+    _ = phi^(b+a*(r+1)+1) := (pow_succ _ _).symm
+    _ ≤ phi^((a+b+1)*(r+1)) := Nat.pow_le_pow_right hp (by nlinarith)
+
+/-- Compose preprocessing and the fixed-dimensional integer solver cost. -/
+theorem mixed_runtime_composition (X S F prep run a r c d : ℕ)
+    (hX : 2 ≤ X) (hc : 1 ≤ c) (hd : 1 ≤ d)
+    (hS : S ≤ X^(a*(r+1))) (hF : F ≤ X)
+    (hprep : prep ≤ X^(a*(r+1))) (hrun : run ≤ (S*F)^(c*d)) :
+    prep+run ≤ X^((a*(r+1)+1)*(c*d)+1) := by
+  have hx : 1 ≤ X := by omega
+  have hcd : 1 ≤ c*d := by nlinarith
+  have hm : S*F ≤ X^(a*(r+1)+1) := by
+    calc
+      _ ≤ X^(a*(r+1))*X := Nat.mul_le_mul hS hF
+      _ = _ := (pow_succ _ _).symm
+  have hr : run ≤ X^((a*(r+1)+1)*(c*d)) := by
+    calc
+      _ ≤ (X^(a*(r+1)+1))^(c*d) := hrun.trans (Nat.pow_le_pow_left hm (c*d))
+      _ = _ := (pow_mul _ _ _).symm
+  have hp : prep ≤ X^((a*(r+1)+1)*(c*d)) := hprep.trans
+    (Nat.pow_le_pow_right hx (by
+      have hh := Nat.mul_le_mul_left (a*(r+1)+1) hcd
+      omega))
+  calc
+    prep+run ≤ 2*X^((a*(r+1)+1)*(c*d)) := by omega
+    _ ≤ X^((a*(r+1)+1)*(c*d))*X := by nlinarith
+    _ = _ := (pow_succ _ _).symm
+
+/-- Explicit absolute constant in the O(d(r+1)) exponent. -/
+theorem mixed_runtime_exponent (a r c d : ℕ) (hd : 1 ≤ d) :
+    (a*(r+1)+1)*(c*d)+1 ≤ ((a+1)*c+1)*d*(r+1) := by
+  have h : 1 ≤ d*(r+1) := by nlinarith
+  nlinarith [Nat.zero_le (c*d*r)]
+
+/-- Integer determinant encoding bound from the already checked Leibniz estimate. -/
+theorem integer_basis_determinant_size (B : Matrix σ σ ℝ) (z : ℤ) (tau : ℕ)
+    (hz : B.det = (z : ℝ)) (hB : ∀ i j, |B i j| ≤ (2 : ℝ)^tau) :
+    z.natAbs.size ≤ coordinateExponent (Fintype.card σ) tau := by
+  have h := determinant_bound B ((2 : ℝ)^tau) (by positivity) hB
+  have he : ((2 : ℝ)^tau)^(Fintype.card σ) = 2^(Fintype.card σ*tau) := by
+    rw [← pow_mul, Nat.mul_comm]
+  rw [he] at h
+  have hlt := h.trans_lt (factorial_power_bound (Fintype.card σ) tau)
+  rw [hz] at hlt
+  have hnat : (z.natAbs : ℝ) < (2 : ℝ)^coordinateExponent (Fintype.card σ) tau := by
+    simpa using hlt
+  apply Nat.size_le.2
+  exact_mod_cast hnat
 
 end ScaledPolynomial

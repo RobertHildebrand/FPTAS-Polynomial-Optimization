@@ -1,12 +1,12 @@
 {
-  "started_utc": "2026-10-20T09:35:25.183818+00:00",
+  "started_utc": "2026-10-20T09:58:47.585675+00:00",
   "success": true,
   "toolchain": "leanprover/lean4:v4.34.0-rc2",
   "sha256": {
     "verification/lean/FPTASCalculations.lean": "b1f73fd4e0a55bd00cde81f9d785ada87ce25c65db9c7d3925a16c5d3133d588",
     "verification/lean/SampledMarkov.lean": "802a39f25315ce5f008807bac255834075af1c6de94a176b1364b95589c68bca",
     "verification/lean/LineRestriction.lean": "ec6cb2063c02eb8fea18d1bd22204ea2788913daa9bba3162bfe0fb2b54c725a",
-    "verification/lean/ScaledPolynomial.lean": "10e1ddb60d940538c954b4dce515cdc49e1d91697c60fed6257a955a947caeac",
+    "verification/lean/ScaledPolynomial.lean": "e4cfc8f73ad8d112769643f4e7235cd5981a16c2c3162d5ef93576908f9b45c1",
     "verification/lean/lake-manifest.json": "a1da68f56dd0335866aceca8129ac21a11702e523b33d4b58474c24b9d5edb43",
     "verification/lean/lakefile.toml": "1205b5ca265d3fda167250ac3ba02a1e2ad47227ef347ff1f0fa79b5bec118b4",
     "verification/lean/lean-toolchain": "8190e75a201741065fe508b28955dd64dd72d090babe5f70ce6848879d68ae88",
@@ -15,13 +15,13 @@
     "verification/lean/check_line_restriction.py": "e23dbb4f58407fa7e22644cc59cf0eb4b0554e347b967eac840ce0442ca1e744",
     "verification/lean/check_scaled_polynomial.py": "103844dfc55e8bb8f68109df165e22d678f022097902d9e1d86b109514a44bbc",
     "verification/check_all.py": "2d9ae7d5ffa2e7cfb6b28c9a9f67eecf894f2cb7333c0f17ac3f20f4ca3b6cf5",
-    "verification/make_review_draft.py": "99f50de2e309ba09ad36f89ceb4061ba2adafdf092474abeb835236b418d2999",
-    "verification/README.md": "f7a6015212a64c1c3258c3768d94b764fcf2c7539c58dcc9e7c79225460530f1",
-    "verification/reference_audit.txt": "964c3fe5bcc4e815919fb7c711e080ac58a51721ff4aca66fa791389d01f845b",
-    "README.md": "1467e803d0529039160ae7e530da39872ea9145089339b99eda1db9b3adb2275",
-    "reflecting_cells_fptas_review.tex": "43c6251bfaeebbf65c63adc671d5e3d05ef51c7c2d7e8276ee7152a8c45ab8bb",
-    "reflecting_cells_fptas_short.tex": "0520fcb3663259ed8d7f5f89339e5340dfa6bc393731c5091efe5dd4e8af46c5",
-    "reflecting_cells_fptas.tex": "f76b9feff940430cb7b6d903351f180b8574872ecc55bd408e47a0be0acf78b0"
+    "verification/make_review_draft.py": "99b293b7b3b2a4ed1ab8f16360abd83a7c7a3a4a5680968598fdb169a1a42f68",
+    "verification/README.md": "4d11a7ceb2130b7341945b230f7ee29c6222b8aa946257aa19c7049721d256d9",
+    "verification/reference_audit.txt": "233da8f62f6e78883f4cbf2c83b2f3a92d703b30a649d111e8197b91e7e2c0f1",
+    "README.md": "917c032d8b496a10999c835dfbcec41812ffde80dfda6ee9b45cf285f70d4e1d",
+    "reflecting_cells_fptas_review.tex": "8bd9f0fda008485db8b7b43283050e6d8827782c0f2307a89365710dc847ac92",
+    "reflecting_cells_fptas_short.tex": "f845780cb4e91b0f1b2964da75be4b2b5c756327da7a37df377a7e6d4a2f6546",
+    "reflecting_cells_fptas.tex": "a10e7da2b1675ce1491b7aa7061ba8fb4aa8b86eb8bb47306c8603bf329d7556"
   },
   "checks": [
     {
@@ -41,5 +41,5 @@
       "exit_code": 0
     }
   ],
-  "finished_utc": "2026-10-20T09:38:36.714302+00:00"
+  "finished_utc": "2026-10-20T10:08:49.812077+00:00"
 }

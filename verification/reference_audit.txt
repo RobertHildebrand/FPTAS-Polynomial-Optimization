@@ -173,3 +173,12 @@ Lemma 10 to upward rounding except at a largest weight. Classical Markov
 on [0,1] replaces the coefficient Lipschitz and positive range-gap bounds.
 The multiplier is ceil(4 D^2 r(r+1)/epsilon). No novelty claim is made for
 this modification, nor is an improved uniform dimension bound claimed.
+
+Explicit mixed-integer runtime added: DHKW Lemma 9 constructs Delta from
+the lcm of nonzero basis determinants. With r continuous variables there
+are at most binomial(m,r) bases and each determinant has O(r(tau+log(r+1)))
+bits by Hadamard. Enumeration, lcm computation, and scaling thus yield
+input size phi^{O(r+1)}, giving (phi D/epsilon)^{O(d(r+1))} with our
+integer subroutine. The determinant/lcm size and exponent algebra are now Lean checked under explicit entry, encoding, and subroutine-cost bounds. The algorithmic costs and their instantiation remain human-reviewed.
+The smaller sufficient grid denominator alone does not establish a better
+overall asymptotic complexity class than the earlier reduction.

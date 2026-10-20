@@ -1,6 +1,6 @@
 # What Lean verifies
 
-The current audit covers **31 + 13 + 15 + 49 = 108 theorems**. Where numbering differs, both short and extended numbers are given; theorem names are the stable identifiers. Every result is conditional on its displayed Lean hypotheses. An axiom audit does not discharge those hypotheses.
+The current audit covers **31 + 13 + 15 + 59 = 118 theorems**. Where numbering differs, both short and extended numbers are given; theorem names are the stable identifiers. Every result is conditional on its displayed Lean hypotheses. An axiom audit does not discharge those hypotheses.
 
 ## Scope after the symmetrization revision (October 17, 2026)
 
@@ -114,3 +114,15 @@ The extended manuscript uses a single exponent Phi = (d+1)*(tau+Nat.clog 2 (d+1)
 The short manuscript replaces its former coordinate/slack lemma with a paragraph citing the proof of CHKM Theorem 2.1, p.29. Their per-inequality size is bounded by (d+1)*(tau+3), including the right-hand side, and the short version uses Phi = 5*d^2*(d+1)*(tau+3)+2. The cited estimates apply to vertices of the integer hull and extend by linearity to all integer feasible points. CHKM's doubled shifted rows have twice our shifted slack. The one-dimensional case is handled directly. The resulting Phi remains O(d^3*(tau+1)), so the asymptotic complexity is unchanged.
 
 This imported bound and its encoding translation remain human-review obligations. Lean's determinant and unified-exponent theorems continue to concern the sharper extended-version proof; they do not certify the new short-version Phi. The extended manuscript and its detailed proof are unchanged by this citation revision.
+
+### Mixed-integer complexity calculation
+
+Ten additional ScaledPolynomial results check the new bound.
+- `continuous_basis_count`, `continuous_basis_power_bound`: candidate r-row basis count and its power bound.
+- `integer_basis_determinant_size`: determinant magnitude-to-bit bound using the checked Leibniz estimate (given an integer determinant value and entry magnitude bounds).
+- `basis_lcm_spec`, `basis_lcm_size`: positivity, divisibility, and encoding length of the actual finite lcm of nonzero determinant magnitudes.
+- `mixed_grid_size`: binary length of Q=k*Delta.
+- `mixed_grid_polynomial_size`, `mixed_scaled_input_size`: polynomial absorption of basis count, determinant sizes, multiplier sizes, and aggregate payload.
+- `mixed_runtime_composition`, `mixed_runtime_exponent`: composition of preprocessing and integer-solver cost bounds and explicit absorption into a constant multiple of d(r+1).
+
+The runtime theorems assume the cost bounds; they do not verify basis enumeration, gcd/lcm implementation, or Kannan's algorithm. The polynomial bounds on normalization and k's encoding, and the connection of each abstract payload/cost parameter to the concrete algorithm, remain human-review obligations. This is a verification of the complexity calculation under explicit inputs, not of the complete algorithm.
