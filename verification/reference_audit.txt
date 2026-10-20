@@ -113,23 +113,40 @@ Publisher metadata and abstract confirm n^{O(n)} dimension dependence.
 The input-size exponent and witness-production use should still be checked
 in the algorithmic complexity argument; this source is not a Lean theorem.
 
+Full-text review updated 2026-10-20 from the three user-supplied published PDFs.
+
+Borwein–Erdelyi — Polynomials and Polynomial Inequalities, GTM 161 (1995)
+https://doi.org/10.1007/978-1-4612-0793-1
+Theorem 5.1.8 (p. 233) states the real univariate Markov inequality.
+Affine changes of variable give both derivative bounds used in the proof.
+Theorem 5.1.7 is the interior Bernstein bound. Section 5.2 treats higher
+ derivatives, including Duffin–Schaeffer bounds at Chebyshev nodes; these
+are not a direct replacement for our equally spaced integer samples and
+even-part argument. The classical derivative estimates remain hypotheses
+in Lean, not formalized conclusions.
+
 Pierzchala — Mathematische Annalen 366 (2016), 57–82
-https://link.springer.com/article/10.1007/s00208-015-1294-9
-Publisher full text inspected. Theorem 1.1 states the classical univariate
-Markov inequality with degree squared on [-1,1]. The two interval scalings
-in Lean are hypotheses justified by this classical result. The derivative
-inequality itself has not been formalized in this development.
+https://doi.org/10.1007/s00208-015-1294-9
+Theorem 1.1 restates classical univariate Markov. Theorem 1.4 (p. 59)
+preserves the Markov property under polynomial maps of full generic target
+rank. Its proof supplies constants depending on the set and map, but is not
+a uniform bit-complexity theorem or an integer sampling theorem. We cite
+it for continuous extensions, not for a low-rank integer FPTAS.
 
 Piazzon–Vianello — Optimization Letters 13 (2019), 1325–1343
-https://link.springer.com/article/10.1007/s11590-018-1377-0
-Publisher metadata and abstract confirm the norming-mesh/polynomial
-optimization comparison. Full text remained inaccessible. Removed the
-unconfirmed Section 2 and Proposition 1 pinpoints; retained the broad
-analogy. The paper does not attribute the integer sampled-minimum lemma
-or the reflecting-cell algorithm to this continuous norming-mesh result.
+https://doi.org/10.1007/s11590-018-1377-0
+Full text now inspected. Proposition 1 (p. 1327) converts norming to
+range-relative optimization; its elementary proof also applies to finite
+sets whenever the stated norming inequality holds. Proposition 2 and proof
+(pp. 1328–1329) choose arbitrary feasible representatives in grid boxes,
+using a Markov derivative bound. Proposition 3 (p. 1332) uses affine
+normalization for general convex bodies with O((D^2/epsilon)^d) samples
+for fixed dimension. Smooth-body improvements have additional geometric
+hypotheses. These continuous results do not establish our integer-range
+bound. Pinpoint citations replace the earlier abstract-only comparison.
 
 SUMMARY OF CHANGES AND LIMITS
-Added HWZ pages, added Wei's Section 4.1, removed unconfirmed PV pinpoints.
+Added HWZ pages and Wei's Section 4.1. PV pinpoints are now checked against the supplied full text.
 No professor-hosted draft links added. Published proceedings and the AMS
 chapter are legitimate publication references and were not replaced with
 websites. Remaining manual checks are explicitly listed above: CHKM page

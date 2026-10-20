@@ -1,5 +1,5 @@
 {
-  "started_utc": "2026-10-19T22:02:32.151282+00:00",
+  "started_utc": "2026-10-20T09:03:35.288790+00:00",
   "success": true,
   "toolchain": "leanprover/lean4:v4.34.0-rc2",
   "sha256": {
@@ -15,13 +15,13 @@
     "verification/lean/check_line_restriction.py": "e23dbb4f58407fa7e22644cc59cf0eb4b0554e347b967eac840ce0442ca1e744",
     "verification/lean/check_scaled_polynomial.py": "103844dfc55e8bb8f68109df165e22d678f022097902d9e1d86b109514a44bbc",
     "verification/check_all.py": "2d9ae7d5ffa2e7cfb6b28c9a9f67eecf894f2cb7333c0f17ac3f20f4ca3b6cf5",
-    "verification/make_review_draft.py": "ad179e675fd638f5cdd24b6b41c1d800f515277cc930e089e773bc0cfe832067",
+    "verification/make_review_draft.py": "a0ebc1b9241a35574b779376d51826935cc307edbe203323be81273f4b736fb7",
     "verification/README.md": "6099f9c6f166b8de22f70589e61b7d61a6bd1dd26901e5572575b3632e08ae7d",
-    "verification/reference_audit.txt": "a4e5812548a352b0f56ae3cda35cf3f02c3d3dca82697a99a33e7487ed974e94",
+    "verification/reference_audit.txt": "b31bab82f6575ab1e9a9a7c7f7d14a919d17e01b9c72ac1e8d068c83e99c7fd6",
     "README.md": "136f168b39e6d59bf1c745efb7a0398046f5a79377448ca0ec19028a91613183",
-    "reflecting_cells_fptas_review.tex": "db246e8a47275c395e4c7f2f1d8982f260b2733b0a76108fcd718d8f31e05954",
-    "reflecting_cells_fptas_short.tex": "dca8f3ac9d89e181e209d788ac004e3694d877b9ac881a47c04c3e5ef00c2722",
-    "reflecting_cells_fptas.tex": "a30762760d68a7def83433ea8f7095f127c4197ca162e06e2ce7d6e291e00293"
+    "reflecting_cells_fptas_review.tex": "70fa4dce3d54c0dc9926e304bdc6c3e3f30902880c32dc1a731be3b7c9da36e9",
+    "reflecting_cells_fptas_short.tex": "7b277cca2ab9bde301283b511254beb02075979867f71df4f48e753171fdab0c",
+    "reflecting_cells_fptas.tex": "2d29dde106f4972a729f7cefe2b275d8a35c2d37d37a1a87377111d1c6d3ebc0"
   },
   "checks": [
     {
@@ -41,5 +41,5 @@
       "exit_code": 0
     }
   ],
-  "finished_utc": "2026-10-19T22:03:19.023843+00:00"
+  "finished_utc": "2026-10-20T09:04:26.429748+00:00"
 }

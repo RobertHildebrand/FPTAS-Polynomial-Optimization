@@ -54,7 +54,7 @@ De Loera, Hemmecke, K\"oppe, and Weismantel established fully polynomial approxi
 
 \emph{The common geometric ingredient is a decomposition by relative slack scales.} The dyadic reflecting sets of Cook--Hartmann--Kannan--McDiarmid (CHKM) are central to their integer-hull analysis~\cite{CHKM}. Symmetric displacement covers likewise underpin the quadratic and cubic algorithms of Ari and Hildebrand~\cite{AHIQP,AH}. In parallel work on exact integer quadratic programming, Wei explicitly uses dyadic grouping of constraint slacks to obtain regions supporting two-sided feasible moves~\cite[Section~1.1]{Wei}. These uses suggest that relative-slack decompositions are a useful common tool for polynomial integer optimization: they convert proximity measured against the constraints into feasible algebraic comparisons, without reference to objective coefficients.
 
-Here refinement strengthens one-step reflection to a long feasible arithmetic progression. Restricting a degree-$D$ polynomial to that progression and applying Markov's polynomial derivative inequality~\cite[Chapter~5]{BorweinErdelyi} then yields an objective-independent representative set that approximates both integer extrema; see Proposition~\ref{prop:extrema}. Thus the geometric cover serves all polynomial objectives of the prescribed degree simultaneously. The essential feature is multiplicative control of positive slacks, not the choice of base two: Remark~\ref{rem:slack-characterization} makes the connection to extrapolation exact. Related continuous sampling arguments based on Markov inequalities and norming meshes appear in Piazzon and Vianello~\cite{PV}; here the samples remain feasible integer points, so the error is measured against the integer objective range.
+Here refinement strengthens one-step reflection to a long feasible arithmetic progression. Restricting a degree-$D$ polynomial to that progression and applying Markov's polynomial derivative inequality~\cite[Theorem~5.1.8]{BorweinErdelyi} then yields an objective-independent representative set that approximates both integer extrema; see Proposition~\ref{prop:extrema}. Thus the geometric cover serves all polynomial objectives of the prescribed degree simultaneously. The essential feature is multiplicative control of positive slacks, not the choice of base two: Remark~\ref{rem:slack-characterization} makes the connection to extrapolation exact. Piazzon and Vianello~\cite[Propositions~1--2]{PV} obtain range-relative approximation from norming meshes by choosing arbitrary feasible representatives in sufficiently small boxes. Our refined reflecting cells instead supply feasible integer progressions, so the error is measured against the integer objective range.
 
 \begin{figure}[htbp]
 \centering
@@ -344,7 +344,7 @@ The insertion argument counts intersections involving at most one hyperplane fro
 
 We now turn to the objective. A polynomial can vary substantially between consecutive integer samples, so bounded sample values do not immediately bound its derivatives. Markov's inequality resolves this in two steps: first it controls the polynomial between the samples, and then symmetrization reduces the needed second difference to a first difference of a lower-degree polynomial. At an integer minimizer, the backward sample supplies the additional inequality needed to turn that derivative bound into an approximation guarantee. This avoids imposing a continuous stationarity condition or approximating the objective uniformly on every cell.
 
-The following elementary consequence of the classical Markov inequality combines the standard sample-to-supremum argument used in polynomial norming meshes (see~\cite{PV}) with a convexity bound for a centered second difference. We include the short proof for the discrete-minimum formulation needed here.
+The following elementary consequence of the classical Markov inequality combines the standard sample-to-supremum argument used in polynomial norming meshes (see~\cite[proof of Proposition~2]{PV}) with an even-part bound for a centered second difference. We include the short proof for the discrete-minimum formulation needed here.
 
 \begin{lemma}[Approximation at a discrete minimum]\label{lem:markov}
 Let $D\ge1$ and $\ell\ge D^2$ be integers, and let $p\in\R[t]$ have degree at most $D$. Suppose
@@ -357,7 +357,7 @@ Then
 \]
 \end{lemma}
 \begin{proof}
-Set $q=p-(a+b)/2$ and $W=\|q\|_{\infty,[-\ell,\ell]}$. The scaled classical Markov inequality gives $\|q'\|_\infty\le D^2W/\ell$; see~\cite[Theorem~1.1]{Pierzchala}. Every point of $[-\ell,\ell]$ lies within $1/2$ of a sampled integer, so
+Set $q=p-(a+b)/2$ and $W=\|q\|_{\infty,[-\ell,\ell]}$. The scaled classical Markov inequality gives $\|q'\|_\infty\le D^2W/\ell$; see~\cite[Theorem~5.1.8]{BorweinErdelyi}. Every point of $[-\ell,\ell]$ lies within $1/2$ of a sampled integer, so
 \[
  W\le \frac{b-a}{2}+\frac{D^2}{2\ell}W\le\frac{b-a+W}{2},
  \qquad W\le b-a.
@@ -378,7 +378,7 @@ Thus $\|h\|_{\infty,[0,\ell^2]}\le W$. Markov's inequality on $[0,\ell^2]$ gives
 For $D=1$, $h$ is constant and the bound is zero. The argument also covers $a=b$.
 \end{proof}
 
-The estimate is needed only on the cell containing a global minimizer, and holds for any representative of that cell. Applying it also to $-f$ gives the following simultaneous approximation of both extrema. This passage from sampling to optimization is standard; compare~\cite{PV}. The reflecting geometry supplies the feasible integer samples needed here.
+The estimate is needed only on the cell containing a global minimizer, and holds for any representative of that cell. Applying it also to $-f$ gives the following simultaneous approximation of both extrema. The general conversion from a polynomial norming inequality to range-relative optimization is given in~\cite[Proposition~1]{PV}; here we use the discrete-minimum estimate directly. The reflecting geometry supplies the feasible integer samples needed here.
 
 \begin{proposition}[Representatives approximate extrema]\label{prop:extrema}
 Choose one integer representative from each integer-feasible closed cell, forming $Y$. If $P\cap\Z^d\ne\varnothing$ and $\ell\ge D^2$, then every real polynomial $f$ of degree at most $D$ satisfies
@@ -630,6 +630,8 @@ Simplex grids and norming meshes~\cite{DKLP,DKLSV,PV} & Neighborhoods assigned t
 \caption{Related decomposition and sampling approaches. Each row retains the hypotheses and fixed parameters of the cited work. These connections do not assert identical partitions or approximation guarantees.}
 \label{tab:framework}
 \end{table}
+
+For continuous extensions, Pierzcha\l a~\cite[Theorem~1.4]{Pierzchala} proves that polynomial images of compact Markov sets remain Markov sets when the map has full generic rank in the target. Combined with~\cite[Proposition~2]{PV}, this supplies norming meshes on further continuous sets. It does not supply integer representatives or uniform encoding bounds for the Markov constants, and hence does not by itself extend our integer FPTAS.
 
 \appendix
 \section{A local comparison principle}\label{app:comparison}
