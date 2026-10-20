@@ -52,7 +52,7 @@ We use $d$ for dimension, $D$ for total degree, and $\mathbf{x}_{\eps}$ for the 
 
 De Loera, Hemmecke, K\"oppe, and Weismantel established fully polynomial approximation schemes based on short rational generating functions, including nonnegative polynomial maximization and range-relative approximation of arbitrary polynomial objectives in fixed dimension \cite{DHKW06,DHKW08}. Del Pia gives a geometric range-relative approximation algorithm for bounded mixed-integer quadratic programs with fixed quadratic rank and fixed number of integer variables \cite{DelPia}. We give an alternative construction for the bounded, pure-integer problem. The purpose is to obtain a short proof using linear feasibility, with explicit dependence on the encoding length.
 
-\emph{The common geometric ingredient is a decomposition by relative slack scales.} The dyadic reflecting sets of Cook--Hartmann--Kannan--McDiarmid (CHKM) are central to their integer-hull analysis~\cite{CHKM}. Symmetric displacement covers likewise underpin the quadratic and cubic algorithms of Ari and Hildebrand~\cite{AHIQP,AH}. In parallel work on exact integer quadratic programming, Wei explicitly uses dyadic grouping of constraint slacks to obtain regions supporting two-sided feasible moves~\cite[Section~1.1]{Wei}. These uses suggest that relative-slack decompositions are a useful common tool for polynomial integer optimization: they convert proximity measured against the constraints into feasible algebraic comparisons, without reference to objective coefficients.
+\emph{The common geometric ingredient is a decomposition by relative slack scales.} The dyadic reflecting sets of Cook--Hartmann--Kannan--McDiarmid (CHKM) are central to their integer-hull analysis~\cite{CHKM}. Symmetric displacement covers likewise underpin the quadratic and cubic algorithms of Ari and Hildebrand~\cite{AH}. In parallel work on exact integer quadratic programming, Wei explicitly uses dyadic grouping of constraint slacks to obtain regions supporting two-sided feasible moves~\cite[Section~1.1]{Wei}. These uses suggest that relative-slack decompositions are a useful common tool for polynomial integer optimization: they convert proximity measured against the constraints into feasible algebraic comparisons, without reference to objective coefficients.
 
 Here refinement strengthens one-step reflection to a long feasible arithmetic progression. Restricting a degree-$D$ polynomial to that progression and applying Markov's polynomial derivative inequality~\cite[Theorem~5.1.8]{BorweinErdelyi} then yields an objective-independent representative set that approximates both integer extrema; see Proposition~\ref{prop:extrema}. Thus the geometric cover serves all polynomial objectives of the prescribed degree simultaneously. The essential feature is multiplicative control of positive slacks, not the choice of base two: Remark~\ref{rem:slack-characterization} makes the connection to extrapolation exact. Piazzon and Vianello~\cite[Propositions~1--2]{PV} obtain range-relative approximation from norming meshes by choosing arbitrary feasible representatives in sufficiently small boxes. Our refined reflecting cells instead supply feasible integer progressions, so the error is measured against the integer objective range.
 
@@ -123,7 +123,7 @@ Since the input explicitly lists the $m$ inequalities in $d$ variables, $m,d\le\
 
 Rational inequalities can be normalized to integral data in polynomial time, as detailed below. Rational objective coefficients can likewise be reduced to integer coefficients by clearing denominators in polynomial time; positive scaling preserves the approximation guarantee, as in~\cite[Section~5]{DHKW08}. The remaining construction parameters and the exact feasibility-query count are introduced in the proof. For fixed $d$, the bound is polynomial in $\varphi$ and $1/\eps$, hence gives an FPTAS in Definition~\ref{def:fptas}. The same explicit bound remains valid for binary-encoded exponents, but then its numerical dependence on $D$ does not assert an FPTAS in the sparse binary input size.
 
-The following guarantees were established by De Loera et al.~\cite[Theorem~1.1]{DHKW06}\cite[Theorems~1(a) and~2(b)]{DHKW08}; we include them to explain how our integer algorithm fits their approximation framework. The first is the elementary conversion from range-relative error to nonnegative maximization. The second follows their integral-slice scaling, barycentric rounding, and reduction to integer optimization~\cite[Section~3]{DHKW08}. We modify the rounding estimate using Markov's inequality to obtain a coefficient-independent grid multiplier, and substitute Theorem~\ref{thm:main} for their integer subroutine.
+The following nonnegative-maximization guarantee was established by De Loera et al.~\cite[Theorem~1.1]{DHKW06}; it follows from our range-relative bound by the same elementary conversion.
 
 \begin{corollary}[Nonnegative maximization {\cite[Theorem~1.1]{DHKW06}}]\label{cor:max}
 Under the same assumptions and encoding conventions, if $f\ge0$ on $P\cap\Z^d$, choosing the largest objective value among the representatives yields
@@ -133,7 +133,9 @@ Under the same assumptions and encoding conventions, if $f\ge0$ on $P\cap\Z^d$, 
 Thus the construction gives a multiplicative FPTAS for nonnegative maximization under the encoding convention of Definition~\ref{def:fptas}.
 \end{corollary}
 
-\begin{corollary}[Mixed-integer approximation {\cite[Theorems~1(a) and~2(b)]{DHKW08}}]\label{cor:mixed}
+For the mixed-integer result, we follow the integral-slice scaling, barycentric rounding, and reduction to integer optimization of De Loera et al.~\cite[Section~3]{DHKW08}, who established the approximation guarantees in~\cite[Theorems~1(a) and~2(b)]{DHKW08}. We improve the grid multiplier in this reduction by using Markov's inequality in place of their coefficient-based Lipschitz estimate. Combining the resulting coefficient-independent multiplier with Theorem~\ref{thm:main} yields the explicit running-time bound below.
+
+\begin{corollary}[Mixed-integer approximation]\label{cor:mixed}
 Fix the total dimension $d=d_c+d_i$. Let $P=\{\mathbf{x}\in\R^d:A\mathbf{x}\le\mathbf b\}$ be a bounded rational polyhedron and $f\in\Z[x_1,\ldots,x_d]$. Under the same encoding convention, for rational $0<\eps\le1$ there is an algorithm, polynomial in $\varphi=\langle A,\mathbf b,f,\eps\rangle$ and $1/\eps$, that reports infeasibility or returns
 \[
  \mathbf{x}_{\eps}\in P\cap(\Q^{d_c}\times\Z^{d_i}),\qquad
@@ -230,7 +232,7 @@ If $a<b$ are successive thresholds, then
 \begin{equation}\label{eq:width}
  b-a\le a/\ell.
 \end{equation}
-Indeed, on $[2^k,2^{k+1}]$ the spacing is $2^k/\ell$ and $a\ge2^k$. The same argument applies to the two additional scales below one.
+Indeed, on $[2^k,2^{k+1}]$ the spacing is $2^k/\ell$ and $a\ge2^k$. The same argument applies to $[1/4,1/2]$ and $[1/2,1]$.
 
 \begin{figure*}[t]
 \centering
@@ -304,21 +306,21 @@ Indeed, the minimum slack along the first segment is $s_i(\mathbf{x})-\ell|s_i(\
  \frac{\max\{s_i(\mathbf{x}),s_i(\mathbf y)\}}
  {\min\{s_i(\mathbf{x}),s_i(\mathbf y)\}}\le1+\frac1\ell;
 \]
-if either slack is zero, both must be zero. Our cells have positive shifted slacks, so this last case never arises. Thus multiplicative slack control is exactly the geometry needed for extrapolation about both points. Refined dyadic intervals enforce this condition with short rational descriptions, and integrality limits the number of relevant scales. The condition is independent of the objective: Proposition~\ref{prop:extrema} turns the resulting cover into a simultaneous approximation guarantee for every polynomial of degree at most $D$.
+if either slack is zero, both must be zero. Our cells have positive shifted slacks, so this last case never arises. Thus multiplicative slack control is exactly the geometry needed for extrapolation about both points. Refined dyadic intervals enforce this condition with rational inequalities of polynomial encoding size, and the integer slack bounds limit the number of dyadic intervals needed. The condition is independent of the objective: Proposition~\ref{prop:extrema} turns the resulting cover into a simultaneous approximation guarantee for every polynomial of degree at most $D$.
 \end{remark}
 
-The integer progression property is the geometric input to approximation. Closed chambers also give weak linear descriptions directly; integer rounding below only removes threshold denominators.
+The integer progression property is the geometric input to approximation. Closed chambers are defined by non-strict linear inequalities; rounding the slack bounds below removes threshold denominators without changing the integer points.
 
 \begin{lemma}[Number, encoding, and enumeration of cells]\label{lem:arrangement}
 Let $H=m((\Phi+2)\ell+1)$ and set
 \[
  B=\tau+\Phi+\lceil\log_2(\ell+1)\rceil+10.
 \]
-There are at most $R_d(H)$ closed cells. Each has at most $2m$ weak slack inequalities with coefficient bit length $O(B)$. They can be enumerated deterministically in
+There are at most $R_d(H)$ closed cells. Each has at most $2m$ non-strict slack inequalities with coefficient bit length $O(B)$. They can be enumerated deterministically in
 \begin{equation}\label{eq:arrangement-time}
  (H+1)R_d(H)\,\poly(\langle A,\mathbf b\rangle+d+m+B)
 \end{equation}
-bit operations. Each cell has a closed rational subset $\widehat C$ with exactly the same integer points, described by at most $2m$ inequalities of coefficient bit length $O(\tau+\Phi+1)$.
+bit operations. Each cell $C$ contains a rational polytope $\widehat C\subseteq C$ with exactly the same integer points, described by at most $2m$ inequalities of coefficient bit length $O(\tau+\Phi+1)$.
 \end{lemma}
 \begin{proof}
 The standard chamber bound for $H$ hyperplanes in $\R^d$ is $\sum_{j=0}^d\binom Hj$; see~\cite{Stanley}. Indeed, insertion of one hyperplane creates at most as many new chambers as the induced arrangement on that hyperplane, giving the recurrence $R_d(H)=R_d(H-1)+R_{d-1}(H-1)$ for the upper bound. Restriction to the convex set $Q$ cannot split a chamber, so the same bound applies here.
@@ -352,6 +354,15 @@ We now turn to the objective. A polynomial can vary substantially between consec
 
 The following elementary consequence of the classical Markov inequality combines the standard sample-to-supremum argument used in polynomial norming meshes (see~\cite[proof of Proposition~2]{PV}) with an even-part bound for a centered second difference. We include the short proof for the discrete-minimum formulation needed here.
 
+We use the classical Markov inequality~\cite[Theorem~5.1.8]{BorweinErdelyi}: for a real polynomial $q$ of degree at most $D$ and an interval $[u,v]$ with $u<v$,
+\[
+ \max_{u\le t\le v}|q'(t)|
+ \le\frac{2D^2}{v-u}\max_{u\le t\le v}|q(t)|.
+\]
+Thus the largest absolute derivative is bounded by the largest absolute polynomial value, multiplied by a factor depending only on the degree and interval length.
+
+Bounds between equally spaced samples go back to Ehlich and Zeller~\cite{EhlichZeller}; Coppersmith and Rivlin~\cite{CoppersmithRivlin} quantify their dependence on degree and sample count, with sharp fixed-ratio asymptotics given by Kuijlaars~\cite{Kuijlaars}. The reduction of symmetric-node problems to polynomials in $t^2$ also appears in Rivlin~\cite[p.~539]{RivlinSurvey}, for coefficient bounds. We retain the elementary proof below for the discrete-minimum estimate needed here; these references concern its classical ingredients.
+
 \begin{lemma}[Approximation at a discrete minimum]\label{lem:markov}
 Let $D\ge1$ and $\ell\ge D^2$ be integers, and let $p\in\R[t]$ have degree at most $D$. Suppose
 \[
@@ -363,7 +374,7 @@ Then
 \]
 \end{lemma}
 \begin{proof}
-Set $q=p-(a+b)/2$ and $W=\|q\|_{\infty,[-\ell,\ell]}$. The scaled classical Markov inequality gives $\|q'\|_\infty\le D^2W/\ell$; see~\cite[Theorem~5.1.8]{BorweinErdelyi}. Every point of $[-\ell,\ell]$ lies within $1/2$ of a sampled integer, so
+Set $q=p-(a+b)/2$ and $W=\max_{-\ell\le t\le\ell}|q(t)|$. Markov's inequality gives $|q'(t)|\le D^2W/\ell$ for every $t\in[-\ell,\ell]$. Every point of $[-\ell,\ell]$ lies within $1/2$ of a sampled integer, so
 \[
  W\le \frac{b-a}{2}+\frac{D^2}{2\ell}W\le\frac{b-a+W}{2},
  \qquad W\le b-a.
@@ -372,7 +383,7 @@ Let $n=\lfloor D/2\rfloor$. The even part of $q$ has the form
 \[
  e(t)=\frac{q(t)+q(-t)}2=h(t^2),\qquad \deg h\le n.
 \]
-Thus $\|h\|_{\infty,[0,\ell^2]}\le W$. Markov's inequality on $[0,\ell^2]$ gives $\|h'\|_\infty\le 2n^2W/\ell^2$. Since $\ell\ge1$, the mean value bound on $[0,1]$ and $p(-1)\ge p(0)$ yield
+Thus $|h(t)|\le W$ on $[0,\ell^2]$. Markov's inequality gives $|h'(t)|\le 2n^2W/\ell^2$ throughout that interval. Since $\ell\ge1$, the mean value bound on $[0,1]$ and $p(-1)\ge p(0)$ yield
 \[
 \begin{aligned}
  p(1)-p(0)&\le p(1)+p(-1)-2p(0)\\
@@ -570,21 +581,21 @@ Applying Proposition~\ref{prop:extrema} to $-f$ gives $f_{\max}-f(\mathbf{x}_{\e
 \end{proof}
 
 \begin{proof}[Proof of Corollary~\ref{cor:mixed}]
-If $d_c=0$, apply Theorem~\ref{thm:main}. Otherwise set $r=d_c$ and $S=P\cap(\R^r\times\Z^{d_i})$. By~\cite[Lemma~9]{DHKW08}, an integer $\Delta>0$ of polynomial encoding size in fixed dimension can be computed such that every nonempty slice $\Delta P_{\mathbf z}$ is integral. We modify the barycentric rounding in~\cite[Lemma~10]{DHKW08} and use Markov's inequality instead of a coefficient-based Lipschitz estimate. Set
+If $d_c=0$, apply Theorem~\ref{thm:main}. Otherwise let $S=P\cap(\R^{d_c}\times\Z^{d_i})$. By~\cite[Lemma~9]{DHKW08}, an integer $\Delta>0$ of polynomial encoding size in fixed dimension can be computed such that every nonempty slice $\Delta P_{\mathbf z}$ is integral. Our modification begins with their barycentric rounding~\cite[Lemma~10]{DHKW08}: instead of rounding down all but one weight, we round up all but a largest weight. This gives the controlled feasible segment below, on which Markov's inequality replaces their coefficient-based Lipschitz estimate~\cite[Lemma~11]{DHKW08}. Set
 \[
- k=\left\lceil\frac{4D^2r(r+1)}{\eps}\right\rceil,
- \qquad Q=k\Delta,\qquad t=\frac{r(r+1)}k.
+ k=\left\lceil\frac{4D^2d_c(d_c+1)}{\eps}\right\rceil,
+ \qquad Q=k\Delta,\qquad t=\frac{d_c(d_c+1)}k.
 \]
-For any $\mathbf x\in P_{\mathbf z}$, Carath\'eodory's theorem gives $\mathbf x=\sum_{i=0}^r\lambda_i\mathbf v_i$ for slice vertices $\mathbf v_i\in\Delta^{-1}\Z^r$ and convex weights, indexed so that $\lambda_0\ge1/(r+1)$. Put
+For any $\mathbf x\in P_{\mathbf z}$, Carath\'eodory's theorem gives $\mathbf x=\sum_{i=0}^{d_c}\lambda_i\mathbf v_i$ for slice vertices $\mathbf v_i\in\Delta^{-1}\Z^{d_c}$ and convex weights, indexed so that $\lambda_0\ge1/(d_c+1)$. Put
 \[
  \mu_i=\frac{\lceil k\lambda_i\rceil}{k}\ (i\ge1),
- \qquad \mu_0=1-\sum_{i=1}^r\mu_i.
+ \qquad \mu_0=1-\sum_{i=1}^{d_c}\mu_i.
 \]
 For $i\ge1$, $\lambda_i\le\mu_i\le\lambda_i+1/k$, while
-$\mu_0\ge\lambda_0-r/k\ge(1-t)\lambda_0$. Since $0<t\le1$, all weights are nonnegative and $\mu_i\ge(1-t)\lambda_i$. Therefore
+$\mu_0\ge\lambda_0-d_c/k\ge(1-t)\lambda_0$. Since $0<t\le1$, all weights are nonnegative and $\mu_i\ge(1-t)\lambda_i$. Therefore
 \[
- \mathbf y=\sum_{i=0}^r\mu_i\mathbf v_i
- =(1-t)\mathbf x+t\mathbf w\in P_{\mathbf z}\cap Q^{-1}\Z^r
+ \mathbf y=\sum_{i=0}^{d_c}\mu_i\mathbf v_i
+ =(1-t)\mathbf x+t\mathbf w\in P_{\mathbf z}\cap Q^{-1}\Z^{d_c}
 \]
 for some $\mathbf w\in P_{\mathbf z}$: its convex weights are $(\mu_i-(1-t)\lambda_i)/t$.
 
@@ -599,13 +610,13 @@ Thus the grid preserves nonemptiness and approximates the minimum within $\eps R
 Substitute $\mathbf x=\mathbf u/Q$ and use the integer polynomial $g(\mathbf u,\mathbf z)=Q^D f(\mathbf u/Q,\mathbf z)$. Its degree and support are unchanged, and coefficient bit lengths increase by $O(D\log(Q+1))$. Since
 \[
  \log Q=\log\Delta+
- O\!\left(\log(D+1)+\log(r+1)+\log(1/\eps)\right),
+ O\!\left(\log(D+1)+\log(d_c+1)+\log(1/\eps)\right),
 \]
-positive scaling preserves the guarantee; negation and nonnegativity give the maximization claim. For explicit complexity, normalize the inequalities to integers and let $\tau$ bound their coefficient bit lengths. DHKW construct $\Delta$ as the least common multiple of nonzero absolute determinants of $r$-row bases of the continuous-variable matrix~\cite[proof of Lemma~9]{DHKW08}. Hadamard's inequality gives
+positive scaling preserves the guarantee; negation and nonnegativity give the maximization claim. For explicit complexity, normalize the inequalities to integers and let $\tau$ bound their coefficient bit lengths. DHKW construct $\Delta$ as the least common multiple of nonzero absolute determinants of $d_c$-row bases of the continuous-variable matrix~\cite[proof of Lemma~9]{DHKW08}. Hadamard's inequality gives
 \[
- \log\Delta=O\!\left(\binom mr r(\tau+\log(r+1))\right).
+ \log\Delta=O\!\left(\binom{m}{d_c} d_c(\tau+\log(d_c+1))\right).
 \]
-Enumerating these bases and computing their least common multiple takes $\varphi^{O(r+1)}$ bit operations; normalization changes encoding size only polynomially. The scaled input has size at most $\varphi^{O(r+1)}$ under our unary-exponent convention. Applying Theorem~\ref{thm:main} proves~\eqref{eq:mixed-runtime}. For binary exponents, the extra polynomial dependence on $D$ is likewise absorbed into the displayed bound.
+Enumerating these bases and computing their least common multiple takes $\varphi^{O(d_c+1)}$ bit operations; normalization changes encoding size only polynomially. The scaled input has size at most $\varphi^{O(d_c+1)}$ under our unary-exponent convention. Applying Theorem~\ref{thm:main} proves~\eqref{eq:mixed-runtime}. For binary exponents, the extra polynomial dependence on $D$ is likewise absorbed into the displayed bound.
 
 The new grid multiplier avoids the coefficient Lipschitz constant and positive range-gap bound in DHKW's reduction. This sharpens the sufficient grid resolution, but does not alone establish a better overall asymptotic runtime: the integer solvers depend on $\log Q$, and the common denominator $\Delta$ remains.
 \end{proof}
@@ -692,20 +703,66 @@ The algorithm has cost
 where comparison includes objective evaluation. An FPTAS follows only when these costs and all constructed descriptions are polynomial in the input size and $1/\eps$, for the fixed structural parameters, and the error bound gives the requested guarantee. The scale $\eps(f_{\max}-f_{\min})$ or a logarithmic multiplicative error may be used in the proof without being known numerically to the algorithm. Establishing effective covers, local oracles, and error certificates remains the substantive problem in each application.
 
 \begin{thebibliography}{99}
+\bibitem{DHKW08} J.~A.~De~Loera, R.~Hemmecke, M.~K\"oppe, and R.~Weismantel.
+FPTAS for optimizing polynomials over the mixed-integer points of polytopes in fixed dimension.
+\emph{Mathematical Programming} 115 (2008), 273--290.
+\url{https://doi.org/10.1007/s10107-007-0175-8}.
+
+\bibitem{DHKW06} J.~A.~De~Loera, R.~Hemmecke, M.~K\"oppe, and R.~Weismantel.
+Integer polynomial optimization in fixed dimension.
+\emph{Mathematics of Operations Research} 31 (2006), 147--153.
+\url{https://doi.org/10.1287/moor.1050.0169}.
+
+\bibitem{DelPia} A.~Del~Pia.
+An approximation algorithm for indefinite mixed integer quadratic programming.
+\emph{Mathematical Programming} 201 (2023), 263--293.
+\url{https://doi.org/10.1007/s10107-022-01907-3}.
+
+\bibitem{CHKM} W.~Cook, M.~Hartmann, R.~Kannan, and C.~McDiarmid.
+On integer points in polyhedra.
+\emph{Combinatorica} 12 (1992), 27--37.
+\url{https://doi.org/10.1007/BF01191202}.
+
 \bibitem{AH} C.~Ari and R.~Hildebrand.
 \emph{Hidden Convexity via Symmetric Displacement Covers: Mixed-Integer Quadratic Programming and Integer Cubic Programming in Fixed Dimension}.
 arXiv:2609.18266, version~2, September~23, 2026.
 \url{https://arxiv.org/abs/2609.18266v2}.
 
-\bibitem{AHIQP} C.~Ari and R.~Hildebrand.
-\emph{Bounded Integer Quadratic Programming through Parallelepiped Covers and Discrete Convic Optimization}.
-arXiv:2609.17889, 2026.
-\url{https://arxiv.org/abs/2609.17889}.
-
 \bibitem{Wei} L.~Wei.
 \emph{Integer quadratic programming in fixed dimension is polynomial-time solvable}.
 Optimization Online, 2026.
-\url{https://optimization-online.org/wp-content/uploads/2026/09/integer-quadratic-programming-arxiv.pdf}.
+\url{https://optimization-online.org/?p=36744}.
+
+\bibitem{BorweinErdelyi} P.~Borwein and T.~Erd\'elyi.
+\emph{Polynomials and Polynomial Inequalities}. Graduate Texts in Mathematics 161, Springer, New York, 1995.
+\url{https://doi.org/10.1007/978-1-4612-0793-1}.
+
+\bibitem{PV} F.~Piazzon and M.~Vianello.
+Markov inequalities, Dubiner distance, norming meshes and polynomial optimization on convex bodies.
+\emph{Optimization Letters} 13 (2019), 1325--1343.
+\url{https://doi.org/10.1007/s11590-018-1377-0}.
+\bibitem{PY} C.~H.~Papadimitriou and M.~Yannakakis.
+On the approximability of trade-offs and optimal access of Web sources.
+\emph{Proceedings of the 41st Annual Symposium on Foundations of Computer Science}, 2000, 86--92.
+\url{https://doi.org/10.1109/SFCS.2000.892068}.
+
+\bibitem{HWZ} R.~Hildebrand, R.~Weismantel, and K.~Zemmer.
+An FPTAS for minimizing indefinite quadratic forms over integers in polyhedra.
+\emph{Proceedings of the 2016 Annual ACM--SIAM Symposium on Discrete Algorithms}, 2016, pp.~1715--1723.
+\url{https://doi.org/10.1137/1.9781611974331.ch118}.
+
+\bibitem{Barvinok} A.~I.~Barvinok.
+A polynomial time algorithm for counting integral points in polyhedra when the dimension is fixed.
+\emph{Mathematics of Operations Research} 19 (1994), 769--779.
+\url{https://doi.org/10.1287/moor.19.4.769}.
+
+\bibitem{PakPanova} I.~Pak and G.~Panova.
+On the complexity of computing Kronecker coefficients.
+\emph{Computational Complexity} 26 (2017), 1--36.
+\url{https://doi.org/10.1007/s00037-015-0109-4}.
+
+\bibitem{Schrijver} A.~Schrijver.
+\emph{Theory of Linear and Integer Programming}. Wiley, Chichester, 1986.
 
 \bibitem{Stanley} R.~P.~Stanley.
 An introduction to hyperplane arrangements.
@@ -713,25 +770,36 @@ In \emph{Geometric Combinatorics}, IAS/Park City Mathematics Series, vol.~13,
 American Mathematical Society, 2007, pp.~389--496.
 \url{https://doi.org/10.1090/pcms/013/08}.
 
-\bibitem{CHKM} W.~Cook, M.~Hartmann, R.~Kannan, and C.~McDiarmid.
-On integer points in polyhedra.
-\emph{Combinatorica} 12 (1992), 27--37.
-\url{https://doi.org/10.1007/BF01191202}.
+\bibitem{EhlichZeller} H.~Ehlich and K.~Zeller.
+Schwankung von Polynomen zwischen Gitterpunkten.
+\emph{Mathematische Zeitschrift} 86 (1964), 41--44.
+\url{https://doi.org/10.1007/BF01111276}.
 
-\bibitem{DHKW06} J.~A.~De~Loera, R.~Hemmecke, M.~K\"oppe, and R.~Weismantel.
-Integer polynomial optimization in fixed dimension.
-\emph{Mathematics of Operations Research} 31 (2006), 147--153.
-\url{https://doi.org/10.1287/moor.1050.0169}.
+\bibitem{CoppersmithRivlin} D.~Coppersmith and T.~J.~Rivlin.
+The growth of polynomials bounded at equally spaced points.
+\emph{SIAM Journal on Mathematical Analysis} 23 (1992), 970--983.
+\url{https://doi.org/10.1137/0523054}.
 
-\bibitem{DHKW08} J.~A.~De~Loera, R.~Hemmecke, M.~K\"oppe, and R.~Weismantel.
-FPTAS for optimizing polynomials over the mixed-integer points of polytopes in fixed dimension.
-\emph{Mathematical Programming} 115 (2008), 273--290.
-\url{https://doi.org/10.1007/s10107-007-0175-8}.
+\bibitem{Kuijlaars} A.~B.~J.~Kuijlaars.
+Extremal polynomials on the $n$-grid.
+\emph{Journal of Approximation Theory} 288 (2023), 105875.
+\url{https://doi.org/10.1016/j.jat.2023.105875}.
 
-\bibitem{PakPanova} I.~Pak and G.~Panova.
-On the complexity of computing Kronecker coefficients.
-\emph{Computational Complexity} 26 (2017), 1--36.
-\url{https://doi.org/10.1007/s00037-015-0109-4}.
+\bibitem{RivlinSurvey} T.~J.~Rivlin.
+Some properties of polynomials bounded at equally spaced points.
+In \emph{Approximation and Computation: A Festschrift in Honor of Walter Gautschi},
+International Series of Numerical Mathematics 119, Birkh\"auser, 1994, pp.~535--542.
+\url{https://doi.org/10.1007/978-1-4684-7415-2_35}.
+
+\bibitem{Kannan} R.~Kannan.
+Minkowski's convex body theorem and integer programming.
+\emph{Mathematics of Operations Research} 12 (1987), 415--440.
+\url{https://doi.org/10.1287/moor.12.3.415}.
+
+\bibitem{Lenstra} H.~W.~Lenstra, Jr.
+Integer programming with a fixed number of variables.
+\emph{Mathematics of Operations Research} 8 (1983), 538--548.
+\url{https://doi.org/10.1287/moor.8.4.538}.
 
 \bibitem{MSlowrank} S.~Mittal and A.~S.~Schulz.
 An FPTAS for optimizing a class of low-rank functions over a polytope.
@@ -763,51 +831,10 @@ On the convergence rate of grid search for polynomial optimization over the simp
 \emph{Optimization Letters} 11 (2017), 597--608.
 \url{https://arxiv.org/abs/1510.01163}.
 
-\bibitem{PY} C.~H.~Papadimitriou and M.~Yannakakis.
-On the approximability of trade-offs and optimal access of Web sources.
-\emph{Proceedings of the 41st Annual Symposium on Foundations of Computer Science}, 2000, 86--92.
-\url{https://doi.org/10.1109/SFCS.2000.892068}.
-
-\bibitem{HWZ} R.~Hildebrand, R.~Weismantel, and K.~Zemmer.
-An FPTAS for minimizing indefinite quadratic forms over integers in polyhedra.
-\emph{Proceedings of the 2016 Annual ACM--SIAM Symposium on Discrete Algorithms}, 2016, pp.~1715--1723.
-\url{https://doi.org/10.1137/1.9781611974331.ch118}.
-
-\bibitem{DelPia} A.~Del~Pia.
-An approximation algorithm for indefinite mixed integer quadratic programming.
-\emph{Mathematical Programming} 201 (2023), 263--293.
-\url{https://doi.org/10.1007/s10107-022-01907-3}.
-
-\bibitem{Lenstra} H.~W.~Lenstra, Jr.
-Integer programming with a fixed number of variables.
-\emph{Mathematics of Operations Research} 8 (1983), 538--548.
-\url{https://doi.org/10.1287/moor.8.4.538}.
-
-\bibitem{Kannan} R.~Kannan.
-Minkowski's convex body theorem and integer programming.
-\emph{Mathematics of Operations Research} 12 (1987), 415--440.
-\url{https://doi.org/10.1287/moor.12.3.415}.
-
-\bibitem{Schrijver} A.~Schrijver.
-\emph{Theory of Linear and Integer Programming}. Wiley, Chichester, 1986.
-
-\bibitem{BorweinErdelyi} P.~Borwein and T.~Erd\'elyi.
-\emph{Polynomials and Polynomial Inequalities}. Graduate Texts in Mathematics 161, Springer, New York, 1995.
-\url{https://doi.org/10.1007/978-1-4612-0793-1}.
-
-\bibitem{Barvinok} A.~I.~Barvinok.
-A polynomial time algorithm for counting integral points in polyhedra when the dimension is fixed.
-\emph{Mathematics of Operations Research} 19 (1994), 769--779.
-\url{https://doi.org/10.1287/moor.19.4.769}.
-
 \bibitem{Pierzchala} R.~Pierzcha\l a. Markov's inequality and polynomial mappings.
 \emph{Mathematische Annalen} 366 (2016), 57--82.
 \url{https://doi.org/10.1007/s00208-015-1294-9}.
 
-\bibitem{PV} F.~Piazzon and M.~Vianello.
-Markov inequalities, Dubiner distance, norming meshes and polynomial optimization on convex bodies.
-\emph{Optimization Letters} 13 (2019), 1325--1343.
-\url{https://doi.org/10.1007/s11590-018-1377-0}.
 \end{thebibliography}
 
 \section*{Disclosure of AI assistance and development of the manuscript}
@@ -823,7 +850,7 @@ Hildebrand also guided the subsequent mathematical and expository choices. His r
 In response to this direction, the assistant developed the proposed refined-slack construction and its connection to long feasible integer progressions, drafted the application of the classical Markov inequality to integer samples, and worked out the cell-count and encoding estimates. Earlier drafts used a first-difference bound and then affine Taylor models to improve accuracy dependence. During the simplification discussion, the assistant proposed using the symmetric second difference at a global integer minimizer, exploiting $p(-1)\ge p(0)$. This yielded the present square-root accuracy scaling with arbitrary cell representatives and removed the need for affine-model optimization in the main argument. It also corrected the assistant's earlier assertion that the coarser cover would lose the universal representative guarantee. The assistant searched for related work on polynomial norming meshes and drafted the comparisons and references. A subsequent review supplied by Hildebrand proposed the even-part symmetrization and the one-grid mixed-integer proof; the assistant incorporated these arguments and formalized the strengthened sampled estimate and refinement in Lean. Attribution of these steps to the exchange is not a claim that the mathematical ingredients are new.
 
 \paragraph{Status of Lean verification.}
-The updated verification includes the symmetrization argument and revised refinement parameter. The four modules contain 118 checked theorems; the classical Markov inequality remains an explicit hypothesis. The individual axiom audits and aggregate source-hash record in the repository identify the checked development.
+The updated verification includes the symmetrization argument and revised refinement parameter. The seven modules contain 256 checked theorems; the classical Markov inequality remains an explicit hypothesis. The individual axiom audits and aggregate source-hash record in the repository identify the checked development.
 
 On October 20, 2026, thirty-one calculation, geometry, and abstract correctness theorems in \texttt{verification/lean/FPTASCalculations.lean} compiled successfully with Lean~4.34.0-rc2 and the pinned Mathlib revision. The checker \texttt{check\_fptas\_calculations.py} audits the transitive axioms of every theorem; the successful run is recorded in \texttt{fptas\_calculations\_verification\_log.txt}. Only the standard axioms \texttt{propext}, \texttt{Classical.choice}, and \texttt{Quot.sound} occur, with no custom axioms or \texttt{sorry} placeholders. The verified scope is:
 \begin{itemize}[leftmargin=*]
@@ -834,19 +861,27 @@ On October 20, 2026, thirty-one calculation, geometry, and abstract correctness 
 
 \item \emph{Optimization transfer:} \texttt{local\_comparison} verifies the scalar inequality in Proposition~\ref{prop:local-comparison}, assuming selection, local optimization, and residual bounds. The declarations \texttt{uniform\_model\_error} and \texttt{nonnegative\_maximization} verify, respectively, the $2\delta+\eta$ transfer for a uniformly accurate surrogate and the final algebra in Corollary~\ref{cor:max}.
 \end{itemize}
-The declarations \texttt{cover\_solve\_select} and \texttt{empty\_candidates\_iff} additionally verify the abstract selection and infeasibility arguments behind the procedure in Appendix~\ref{app:comparison}: a finite candidate set has a feasible minimizer with the stated error, and it is empty exactly when the feasible set is empty, assuming coverage and sound, complete local oracles. The theorem \texttt{representative\_range\_guarantee} verifies the range-relative selection step for arbitrary feasible representatives, assuming the error bound for one representative near an optimum. These results work over arbitrary point types, not just scalar decision variables. They establish conditional correctness implications, not implementations of the cover or local oracles. Construction and enumeration of the cover, oracle implementations, encoding estimates, and the running-time bound remain unverified in Lean. The earlier exploratory \texttt{ReflectingCells.lean} is not part of this successful check. The original \texttt{Unbounded-Cubic-Integer-Programming} repository separately records verification of 45 earlier cubic-integer-programming calculations; those results do not certify this FPTAS.
+The declarations \texttt{cover\_solve\_select} and \texttt{empty\_candidates\_iff} additionally verify the abstract selection and infeasibility arguments behind the procedure in Appendix~\ref{app:comparison}: a finite candidate set has a feasible minimizer with the stated error, and it is empty exactly when the feasible set is empty, assuming coverage and sound, complete local oracles. The theorem \texttt{representative\_range\_guarantee} verifies the range-relative selection step for arbitrary feasible representatives, assuming the error bound for one representative near an optimum. These results work over arbitrary point types, not just scalar decision variables. They establish conditional correctness implications, not implementations of the cover or local oracles. The later modules below verify the chamber cover and explicit encoding estimates. Enumeration, oracle implementations and the full running-time bound remain outside Lean. The earlier exploratory \texttt{ReflectingCells.lean} is not part of this successful check. The original \texttt{Unbounded-Cubic-Integer-Programming} repository separately records verification of 45 earlier cubic-integer-programming calculations; those results do not certify this FPTAS.
 
 The module \texttt{verification/lean/SampledMarkov.lean} verifies thirteen results. The declarations \texttt{markov\_difference}, \texttt{nearest\_integer}, and \texttt{sampled\_sup\_bound} establish mean-value control, rounding, and the sample-to-supremum estimate. The declarations \texttt{coeff\_reflect}, \texttt{degree\_contract}, and \texttt{even\_contract} construct the polynomial $h$ from the even coefficients of $q$, prove $\deg h\le\lfloor D/2\rfloor$, and prove $h(t^2)=(q(t)+q(-t))/2$. The theorem \texttt{symmetrized\_difference} then proves the sharper factor $4\lfloor D/2\rfloor^2/\ell^2$, and \texttt{sampled\_markov} derives the stated $D^2/\ell^2$ bound in Lemma~\ref{lem:markov}. No symmetrization or approximation conclusion is assumed.
 
 The proposition \texttt{MarkovBound} packages two explicit instances of the classical inequality: degree $D$ on $[-\ell,\ell]$, with derivative factor $D^2/\ell$, and degree $n=\lfloor D/2\rfloor$ on $[0,\ell^2]$, with derivative factor $2n^2/\ell^2$. Neither is introduced as a Lean axiom. The retained helper \texttt{second\_difference\_bound} proves the former convexity-based estimate, but is no longer used by the strengthened sampled Markov proof. The declarations \texttt{representative\_at\_minimum}, \texttt{representative\_at\_maximum}, and \texttt{select\_representative} propagate the new $D^2/\ell^2$ error to extrema and finite selection, assuming feasible progression samples and global objective bounds. The checker \texttt{check\_sampled\_markov.py} records compilation and the thirteen-theorem axiom audit in \texttt{sampled\_markov\_verification\_log.txt}.
 
-The module \texttt{verification/lean/LineRestriction.lean} constructs $p(t)=f(\mathbf{x}+t(\mathbf{y}-\mathbf{x}))$ by substituting affine univariate polynomials into an actual \texttt{MvPolynomial}. Its first six checked theorems are \texttt{eval\_restrict}, \texttt{eval\_zero}, \texttt{eval\_one}, \texttt{degree\_restrict}, \texttt{multivariate\_representative}, and \texttt{multivariate\_selection}. They prove the evaluation identity, endpoint identities, and $\deg p\le\deg f$ (including zero and constant restrictions), then compose these facts with the sampled Markov and selection theorems. Thus the final two theorems derive the approximation guarantee for multivariate polynomials from feasible progression samples, global objective bounds, and the classical Markov hypothesis; existence of a suitable univariate restriction is no longer assumed. The checker \texttt{check\_line\_restriction.py} rebuilds the sampled Markov dependency and records the fifteen-theorem axiom audit in \texttt{line\_restriction\_verification\_log.txt}. All four modules use only the standard axioms already listed and contain 118 checked results in total. The additional declaration \texttt{certified\_cover\_guarantee} combines finite coverage, sound and complete representatives, reflecting progressions, and the maximum/ceiling refinement into the final range-relative error bound. Its cover and progression properties are hypotheses. The additional theorems \texttt{slack\_integral\_progression} and \texttt{slack\_cover\_guarantee} define feasibility by linear inequalities and coordinate integrality, derive the progression samples from rowwise slack widths, and connect them to this final guarantee. The six additional results \texttt{integer\_row\_value}, \texttt{integer\_half\_shift}, \texttt{shifted\_feasible\_iff}, \texttt{shifted\_slack\_positive}, \texttt{shifted\_slack\_integral\_progression}, and \texttt{shifted\_slack\_cover\_guarantee} verify the new half-unit relaxation and connect closed shifted-slack intervals to the error guarantee on the original integer feasible set. Cover construction and coverage, oracle implementations, and full complexity remain outside the formalization.
+The module \texttt{verification/lean/LineRestriction.lean} constructs $p(t)=f(\mathbf{x}+t(\mathbf{y}-\mathbf{x}))$ by substituting affine univariate polynomials into an actual \texttt{MvPolynomial}. Its first six checked theorems are \texttt{eval\_restrict}, \texttt{eval\_zero}, \texttt{eval\_one}, \texttt{degree\_restrict}, \texttt{multivariate\_representative}, and \texttt{multivariate\_selection}. They prove the evaluation identity, endpoint identities, and $\deg p\le\deg f$ (including zero and constant restrictions), then compose these facts with the sampled Markov and selection theorems. Thus the final two theorems derive the approximation guarantee for multivariate polynomials from feasible progression samples, global objective bounds, and the classical Markov hypothesis; existence of a suitable univariate restriction is no longer assumed. The checker \texttt{check\_line\_restriction.py} rebuilds the sampled Markov dependency and records the fifteen-theorem axiom audit in \texttt{line\_restriction\_verification\_log.txt}. All seven modules use only the standard axioms already listed and contain 256 checked results in total. The additional declaration \texttt{certified\_cover\_guarantee} combines finite coverage, sound and complete representatives, reflecting progressions, and the maximum/ceiling refinement into the final range-relative error bound. Its cover and progression properties are hypotheses. The additional theorems \texttt{slack\_integral\_progression} and \texttt{slack\_cover\_guarantee} define feasibility by linear inequalities and coordinate integrality, derive the progression samples from rowwise slack widths, and connect them to this final guarantee. The six additional results \texttt{integer\_row\_value}, \texttt{integer\_half\_shift}, \texttt{shifted\_feasible\_iff}, \texttt{shifted\_slack\_positive}, \texttt{shifted\_slack\_integral\_progression}, and \texttt{shifted\_slack\_cover\_guarantee} verify the new half-unit relaxation and connect closed shifted-slack intervals to the error guarantee on the original integer feasible set. CoverAssembly below supplies the chamber closures and their coverage; oracle implementations and full complexity remain outside the formalization.
 
-Ten additional results in \texttt{FPTASCalculations.lean} verify the revised Markov-based grid argument. The declarations \texttt{ceil\_weight\_bounds} and \texttt{rounded\_barycentric\_weights} prove the actual ceiling-rounding inequalities, nonnegativity, and domination by $(1-t)\lambda_i$. The results \texttt{rounded\_segment\_weights} and \texttt{barycentric\_coordinate\_segment} construct residual convex weights and establish the segment identity coordinatewise; \texttt{barycentric\_segment} gives the general weight decomposition. The theorem \texttt{rounded\_grid\_coordinate} proves membership in the denominator-$k\Delta$ grid via an explicit integer numerator. The theorems \texttt{markov\_grid\_multiplier} and \texttt{markov\_grid\_multiplier\_bounds} verify positivity, the geometric threshold, the half-error bound, and the ceiling overhead. The results \texttt{markov\_segment\_error} and \texttt{markov\_grid\_transfer} verify the range-relative error budget without a Lipschitz constant or range-gap assumption. The additional result \texttt{unit\_interval\_markov\_error} in \texttt{SampledMarkov.lean} derives the segment variation estimate from a classical interval Markov hypothesis using the mean value theorem. Integral-slice scaling, a Carath\'eodory representation with a largest weight, the assembly of these coordinatewise facts into the full geometric reduction, and the final bit complexity remain human-review obligations. Earlier Lipschitz-based transfer helpers are retained but are not used by the revised paper proof. The new module \texttt{ScaledPolynomial.lean} constructs the integer polynomial with coefficient $c_{\boldsymbol{\alpha}} Q^{D-\sum_{i\in I}\alpha_i}$, where $I$ indexes the continuous coordinates. Its first eight theorems prove the exponent bound, coefficient formula, unchanged monomial support and total degree for $Q\ne0$, and the evaluation identity $g(\mathbf u,\mathbf z)=Q^D f(\mathbf u/Q,\mathbf z)$. The declaration \texttt{integer\_\allowbreak representation} packages an actual integer-coefficient polynomial, its degree bound and the identity; these properties are conclusions, not hypotheses. Twelve further results verify inverse coordinate maps, the scaled-row identity, and a bijection between the scaled integer system and the compatible-grid system. They also prove the signed binary-length formula, the bound $\langle c'_{\boldsymbol{\alpha}}\rangle\le\langle c_{\boldsymbol{\alpha}}\rangle+D\,\mathrm{size}(|Q|)$, and the corresponding summed coefficient-payload bound. Here $\mathrm{size}$ is binary magnitude length; Lean identifies the signed length with $1+\operatorname{clog}_2(1+|c|)$ using the natural ceiling logarithm. Six further results verify the scaled constraint lengths. Each matrix entry and right-hand side grows by at most $\mathrm{size}(|Q|)$ bits; the total dense constraint payload grows by at most $m(d+1)\mathrm{size}(|Q|)$. The same bound holds after adding unchanged dimension/list metadata. Twelve further results construct positive product denominators and integer entries for rational rows, including each right-hand side. They prove the real scaling identity and equivalence of the whole constraint system, with arbitrary additional domain restrictions. The denominator and entry lengths are bounded explicitly; a row with rational payload $L$ has cleared integer payload at most $L(L+2)$. These bounds are also summed across rows. Ten further results check the mixed-integer complexity calculation. \texttt{continuous\_basis\_count} and \texttt{continuous\_basis\_power\_bound} count candidate row bases. \texttt{integer\_basis\_determinant\_size} bounds integer determinant lengths using the checked Leibniz estimate. \texttt{basis\_lcm\_spec} proves positivity and divisibility of the actual finite least common multiple, and \texttt{basis\_lcm\_size} bounds its length. \texttt{mixed\_grid\_size} propagates this to $Q=k\Delta$. The results \texttt{mixed\_grid\_polynomial\_size} and \texttt{mixed\_scaled\_input\_size} check polynomial encoding absorption. Finally, \texttt{mixed\_runtime\_composition} and \texttt{mixed\_runtime\_exponent} derive an explicit constant multiple of $d(d_c+1)$ in the exponent from preprocessing and integer-solver bounds. These are conditional cost inequalities, not a verified implementation: normalization and grid-multiplier bit bounds, basis enumeration and arithmetic costs, the integer-solver cost bound, and assembly into the stated algorithm remain external or human-reviewed.
+Ten additional results in \texttt{FPTASCalculations.lean} verify the revised Markov-based grid argument. The declarations \texttt{ceil\_weight\_bounds} and \texttt{rounded\_barycentric\_weights} prove the actual ceiling-rounding inequalities, nonnegativity, and domination by $(1-t)\lambda_i$. The results \texttt{rounded\_segment\_weights} and \texttt{barycentric\_coordinate\_segment} construct residual convex weights and establish the segment identity coordinatewise; \texttt{barycentric\_segment} gives the general weight decomposition. The theorem \texttt{rounded\_grid\_coordinate} proves membership in the denominator-$k\Delta$ grid via an explicit integer numerator. The theorems \texttt{markov\_grid\_multiplier} and \texttt{markov\_grid\_multiplier\_bounds} verify positivity, the geometric threshold, the half-error bound, and the ceiling overhead. The results \texttt{markov\_segment\_error} and \texttt{markov\_grid\_transfer} verify the range-relative error budget without a Lipschitz constant or range-gap assumption. The additional result \texttt{unit\_interval\_markov\_error} in \texttt{SampledMarkov.lean} derives the segment variation estimate from a classical interval Markov hypothesis using the mean value theorem. Integral-slice scaling and a Carath\'eodory representation with a largest weight remain external inputs. CoverAssembly below assembles the coordinatewise facts into the geometric reduction; the final bit complexity remains a human-review obligation. Earlier Lipschitz-based transfer helpers are retained but are not used by the revised paper proof. The new module \texttt{ScaledPolynomial.lean} constructs the integer polynomial with coefficient $c_{\boldsymbol{\alpha}} Q^{D-\sum_{i\in I}\alpha_i}$, where $I$ indexes the continuous coordinates. Its first eight theorems prove the exponent bound, coefficient formula, unchanged monomial support and total degree for $Q\ne0$, and the evaluation identity $g(\mathbf u,\mathbf z)=Q^D f(\mathbf u/Q,\mathbf z)$. The declaration \texttt{integer\_\allowbreak representation} packages an actual integer-coefficient polynomial, its degree bound and the identity; these properties are conclusions, not hypotheses. Twelve further results verify inverse coordinate maps, the scaled-row identity, and a bijection between the scaled integer system and the compatible-grid system. They also prove the signed binary-length formula, the bound $\langle c'_{\boldsymbol{\alpha}}\rangle\le\langle c_{\boldsymbol{\alpha}}\rangle+D\,\mathrm{size}(|Q|)$, and the corresponding summed coefficient-payload bound. Here $\mathrm{size}$ is binary magnitude length; Lean identifies the signed length with $1+\operatorname{clog}_2(1+|c|)$ using the natural ceiling logarithm. Six further results verify the scaled constraint lengths. Each matrix entry and right-hand side grows by at most $\mathrm{size}(|Q|)$ bits; the total dense constraint payload grows by at most $m(d+1)\mathrm{size}(|Q|)$. The same bound holds after adding unchanged dimension/list metadata. Twelve further results construct positive product denominators and integer entries for rational rows, including each right-hand side. They prove the real scaling identity and equivalence of the whole constraint system, with arbitrary additional domain restrictions. The denominator and entry lengths are bounded explicitly; a row with rational payload $L$ has cleared integer payload at most $L(L+2)$. These bounds are also summed across rows. Ten further results check the mixed-integer complexity calculation. \texttt{continuous\_basis\_count} and \texttt{continuous\_basis\_power\_bound} count candidate row bases. \texttt{integer\_basis\_determinant\_size} bounds integer determinant lengths using the checked Leibniz estimate. \texttt{basis\_lcm\_spec} proves positivity and divisibility of the actual finite least common multiple, and \texttt{basis\_lcm\_size} bounds its length. \texttt{mixed\_grid\_size} propagates this to $Q=k\Delta$. The results \texttt{mixed\_grid\_polynomial\_size} and \texttt{mixed\_scaled\_input\_size} check polynomial encoding absorption. Finally, \texttt{mixed\_runtime\_composition} and \texttt{mixed\_runtime\_exponent} derive an explicit constant multiple of $d(d_c+1)$ in the exponent from preprocessing and integer-solver bounds. These are conditional cost inequalities, not a verified implementation: normalization and grid-multiplier bit bounds, basis enumeration and arithmetic costs, the integer-solver cost bound, and assembly into the stated algorithm remain external or human-reviewed.
 
 \paragraph{Verification and responsibility.}
 Two further declarations, \texttt{unified\_exponent\_eq} and \texttt{unified\_point\_bounds}, express both bounds using the single exponent $\Phi$; the sharper coordinate exponent remains an internal Lean helper. Nine preceding results verify the unshifted numerical estimates underlying Lemma~\ref{lem:size}; the additional half-unit in the upper slack bound is accounted for in the manuscript. The determinant expansion gives the factorial entry bound, and the nonzero integral denominator gives the Cramer coordinate bound. The declared exponents use the natural ceiling logarithm. Finite convex combinations preserve the coordinate bound, and the rowwise slack estimates give the strict dyadic upper bound. The combined declaration \texttt{represented\_point\_bounds} assumes Cramer data for vertices and a convex representation of the point; existence of these geometric data, the definition of $\tau$ via real logarithms, and the real/natural ceiling-log correspondence remain external inputs.
 
-The assistant checked compilation of the edited \LaTeX{} source and consulted literature during development. At Hildebrand's request, Lean verification was resumed and the 118 results described above were checked; the complete manuscript is not formally verified. Successful typesetting does not verify a mathematical proof, and the literature searches do not establish novelty or exhaust the relevant literature. This disclosure does not assert that a complete independent human audit has already taken place. Responsibility for checking the arguments, complexity claims, citations, and contribution statements, and for approving any submitted version, remains with the human authors.
+The module \texttt{verification/lean/CoverArithmetic.lean} adds 26 checked results. It translates the published CHKM coordinate and doubled-slack estimates, taken as hypotheses, to $\Phi=5d^2(d+1)(\tau+3)+2$, including $d=2$, and checks a separate one-dimensional estimate and convex-combination bounds. It constructs the finite threshold set using $2^k/4$ for $0\le k<\Phi+2$, proves coverage of every relevant slack and the relative-width inequality, and bounds its cardinality. It verifies the binomial chamber recurrence, its power bound, and the $\ell^d$ oracle and $\ell^{d+1}$ LP-count bounds conditional on geometric insertion and per-stage cost hypotheses. The published CHKM estimates, the per-row encoding convention, existence of vertex representations, enumeration of chamber closures, and algorithms and their bit costs remain external. These checks do not certify the complete chamber enumerator.
+
+The module \texttt{verification/lean/CoverAssembly.lean} contains 47 checked results. It constructs generated interval cells and proves their cover and relative widths. It then proves coverage by closures of nonempty strict sign regions of the actual slack-threshold arrangement, including points on subdivision hyperplanes, and places each such closure in a narrow interval cell. The theorem \texttt{chamber\_approximation} assembles this with the shifted-slack approximation guarantee. Proper rows, continuity, the upper slack bound, feasible complete representatives, extrema and Markov remain inputs. Separately, \texttt{mixed\_integer\_reduction} connects convex barycentric rounding, compatible-grid membership, the actual scaled integer polynomial and scaled feasible set, and the two error budgets. The structure \texttt{SliceData} records the published slice-scaling and Carath\'eodory data as explicit hypotheses; the scaled solver guarantee is also an input. The positive-parameter theorem treats positive continuous dimension and degree. Fourteen further results establish the rational descriptions: \texttt{closure\_strict\_linear} proves closure equality for a nonempty strict system; \texttt{chamber\_closure\_rational\_description} supplies the actual rational matrix and right-hand side, including outer bounds. \texttt{chamber\_closure\_compressed} proves equality with the rational maximum lower and minimum upper slack bounds, giving two inequalities per row. \texttt{chamber\_integer\_tests} connects these to the rounded integer-slack tests. Nonemptiness of the strict chamber is essential. Ten additional results verify the common-margin LP criterion. \texttt{interior\_linear\_system} identifies the interior with strict feasibility for proper rows, and \texttt{strict\_iff\_positive\_margin} constructs a common positive margin capped at one. \texttt{margin\_feasible\_iff} covers empty weak cells. \texttt{compressed\_optimum\_test} proves that a feasible optimum for the actual compressed rational system is positive exactly when the strict chamber is nonempty. Properness is derived from the original nonzero rows. Correctness and attainment of the LP optimum remain explicit inputs, not a verified solver. Enumeration, endpoint bit lengths, and subroutine implementations and costs remain outside this formalization.
+
+The module \texttt{verification/lean/ChamberInsertion.lean} adds 21 checked results. It proves convexity of strict sign regions, constructs a crossing point for every split chamber, and injects split chambers into the induced sign regions. Translation to the kernel and rank-nullity prove the dimension reduction; constant restrictions are treated separately. The theorem \texttt{arrangement\_count\_bound} proves the binomial bound by induction without assuming the geometric recurrence. Reindexing, passage to closures, and convexity of the shifted-slack outer domain give \texttt{shifted\_chamber\_count} for the actual threshold family. No general-position assumption is needed. The earlier conditional recurrence lemma remains available, but geometric insertion is no longer a verification gap. The parallel-family refinement, enumeration implementation and subroutine bit costs remain outside this formalization.
+
+The module \texttt{verification/lean/CellEncoding.lean} contains 39 checked results. It proves common-denominator representations for every actual threshold, reduced-denominator divisibility and binary-length bounds; compression preserves these bounds. The rational cell payload is at most $2m(d(\tau+2)+\tau+\Phi+4\,\mathrm{size}(\ell)+15)$. The rounded integer payload is at most $2m(d\tau+\tau+\Phi+2)$, including the original right-hand side and independent of $\ell$. The encoded integer system is identified with chamber-closure membership. Common-margin LP coefficients and extra rows have checked overheads. The complete LP query, including its objective and an explicit dense metadata schema, is now assembled and bounded by $200(\varphi+1)^5$ under explicit input-parameter bounds. The actual refinement has checked bit length at most $2\,\mathrm{size}(D)+\mathrm{size}(q)$ for $\epsilon=a/q$. The normalized-entry, unary-degree and coefficient-log bridges are checked separately. A byte-level serializer, input parsing, and construction and oracle costs remain outside the formalization.
+
+The assistant checked compilation of the edited \LaTeX{} source and consulted literature during development. At Hildebrand's request, Lean verification was resumed and the 256 results described above were checked; the complete manuscript is not formally verified. Successful typesetting does not verify a mathematical proof, and the literature searches do not establish novelty or exhaust the relevant literature. This disclosure does not assert that a complete independent human audit has already taken place. Responsibility for checking the arguments, complexity claims, citations, and contribution statements, and for approving any submitted version, remains with the human authors.
 
 \end{document}

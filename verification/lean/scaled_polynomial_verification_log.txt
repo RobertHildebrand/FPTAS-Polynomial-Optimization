@@ -175,5 +175,10 @@ Note: This linter can be disabled with `set_option linter.unusedSectionVars fals
 'ScaledPolynomial.mixed_runtime_composition' depends on axioms: [propext, Classical.choice, Quot.sound]
 'ScaledPolynomial.mixed_runtime_exponent' depends on axioms: [propext, Classical.choice, Quot.sound]
 'ScaledPolynomial.integer_basis_determinant_size' depends on axioms: [propext, Classical.choice, Quot.sound]
+'ScaledPolynomial.integer_slack_interval' depends on axioms: [propext, Classical.choice, Quot.sound]
+'ScaledPolynomial.shifted_integer_slack_interval' depends on axioms: [propext, Classical.choice, Quot.sound]
+'ScaledPolynomial.rational_grid_multiplier_le' depends on axioms: [propext, Classical.choice, Quot.sound]
+'ScaledPolynomial.rational_grid_multiplier_size' depends on axioms: [propext, Classical.choice, Quot.sound]
+'ScaledPolynomial.full_scaled_input_payload' depends on axioms: [propext, Classical.choice, Quot.sound]
 
-PASS: 59 theorems; no custom axioms or sorryAx.
+PASS: 64 theorems; no custom axioms or sorryAx.

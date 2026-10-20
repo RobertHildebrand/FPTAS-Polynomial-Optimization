@@ -1,0 +1,147 @@
+Lean (version 4.34.0-rc2, arm64-apple-darwin24.6.0, commit 6a10ac8c22beadecabdbb0919c2b50214762f91d, Release)
+Mathlib: 85e3a25e006c35636f0e53b0e9296caca2685bc0
+ScaledPolynomial.lean:22:0: warning: automatically included section variable(s) unused in theorem `ScaledPolynomial.weight_le`:
+  [DecidableEq σ]
+consider restructuring your `variable` declarations so that the variables are not in scope or explicitly omit them:
+  omit [DecidableEq σ] in theorem ...
+
+Note: This linter can be disabled with `set_option linter.unusedSectionVars false`
+ScaledPolynomial.lean:27:0: warning: automatically included section variable(s) unused in theorem `ScaledPolynomial.coefficient`:
+  [Fintype σ]
+consider restructuring your `variable` declarations so that the variables are not in scope or explicitly omit them:
+  omit [Fintype σ] in theorem ...
+
+Note: This linter can be disabled with `set_option linter.unusedSectionVars false`
+ScaledPolynomial.lean:41:43: warning: This simp argument is unused:
+  mul_ne_zero
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [mem_support_iff, coefficient]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+ScaledPolynomial.lean:44:0: warning: automatically included section variable(s) unused in theorem `ScaledPolynomial.degree_bound`:
+  [Fintype σ]
+  [DecidableEq σ]
+consider restructuring your `variable` declarations so that the variables are not in scope or explicitly omit them:
+  omit [Fintype σ] [DecidableEq σ] in theorem ...
+
+Note: This linter can be disabled with `set_option linter.unusedSectionVars false`
+ScaledPolynomial.lean:55:13: warning: Variable name `hQ` is not explicitly referenced.
+
+Hint: The binding can be removed (if unused) or named `_` (if used implicitly). Alternatively, prefix the name with `_` to silence this warning:
+  [apply] _hQ
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+ScaledPolynomial.lean:152:0: warning: automatically included section variable(s) unused in theorem `ScaledPolynomial.decode_encode`:
+  [Fintype σ]
+consider restructuring your `variable` declarations so that the variables are not in scope or explicitly omit them:
+  omit [Fintype σ] in theorem ...
+
+Note: This linter can be disabled with `set_option linter.unusedSectionVars false`
+ScaledPolynomial.lean:156:52: warning: Used `tac1 <;> tac2` where `(tac1; tac2)` would suffice
+
+Note: This linter can be disabled with `set_option linter.unnecessarySeqFocus false`
+ScaledPolynomial.lean:158:0: warning: automatically included section variable(s) unused in theorem `ScaledPolynomial.encode_decode`:
+  [Fintype σ]
+consider restructuring your `variable` declarations so that the variables are not in scope or explicitly omit them:
+  omit [Fintype σ] in theorem ...
+
+Note: This linter can be disabled with `set_option linter.unusedSectionVars false`
+ScaledPolynomial.lean:162:52: warning: Used `tac1 <;> tac2` where `(tac1; tac2)` would suffice
+
+Note: This linter can be disabled with `set_option linter.unnecessarySeqFocus false`
+ScaledPolynomial.lean:175:0: warning: automatically included section variable(s) unused in theorem `ScaledPolynomial.scaledRow_bits`:
+  [Fintype σ]
+consider restructuring your `variable` declarations so that the variables are not in scope or explicitly omit them:
+  omit [Fintype σ] in theorem ...
+
+Note: This linter can be disabled with `set_option linter.unusedSectionVars false`
+ScaledPolynomial.lean:243:0: warning: automatically included section variable(s) unused in theorem `ScaledPolynomial.grid_coordinates`:
+  [Fintype σ]
+consider restructuring your `variable` declarations so that the variables are not in scope or explicitly omit them:
+  omit [Fintype σ] in theorem ...
+
+Note: This linter can be disabled with `set_option linter.unusedSectionVars false`
+ScaledPolynomial.lean:259:50: warning: Used `tac1 <;> tac2` where `(tac1; tac2)` would suffice
+
+Note: This linter can be disabled with `set_option linter.unnecessarySeqFocus false`
+ScaledPolynomial.lean:296:0: warning: automatically included section variable(s) unused in theorem `ScaledPolynomial.commonDen_pos`:
+  [DecidableEq σ]
+consider restructuring your `variable` declarations so that the variables are not in scope or explicitly omit them:
+  omit [DecidableEq σ] in theorem ...
+
+Note: This linter can be disabled with `set_option linter.unusedSectionVars false`
+ScaledPolynomial.lean:299:0: warning: automatically included section variable(s) unused in theorem `ScaledPolynomial.denominator_dvd`:
+  [DecidableEq σ]
+consider restructuring your `variable` declarations so that the variables are not in scope or explicitly omit them:
+  omit [DecidableEq σ] in theorem ...
+
+Note: This linter can be disabled with `set_option linter.unusedSectionVars false`
+ScaledPolynomial.lean:316:0: warning: automatically included section variable(s) unused in theorem `ScaledPolynomial.size_prod_le`:
+  [Fintype σ]
+consider restructuring your `variable` declarations so that the variables are not in scope or explicitly omit them:
+  omit [Fintype σ] in theorem ...
+
+Note: This linter can be disabled with `set_option linter.unusedSectionVars false`
+ScaledPolynomial.lean:406:54: warning: Variable name `hC` is not explicitly referenced.
+
+Hint: The binding can be removed (if unused) or named `_` (if used implicitly). Alternatively, prefix the name with `_` to silence this warning:
+  [apply] _hC
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+ScaledPolynomial.lean:473:4: warning: `push_neg` has been deprecated. Prefer using `push Not` instead.
+If you'd rather continue using `push_neg` in your project, you can implement it as follows:
+```
+open Lean.Parser.Tactic in
+macro "push_neg" cfg:optConfig loc:(location)? : tactic =>
+  `(tactic| push $cfg:optConfig Not $[$loc]?)
+```
+ScaledPolynomial.lean:488:0: warning: automatically included section variable(s) unused in theorem `ScaledPolynomial.slack_magnitude_bound`:
+  [DecidableEq σ]
+consider restructuring your `variable` declarations so that the variables are not in scope or explicitly omit them:
+  omit [DecidableEq σ] in theorem ...
+
+Note: This linter can be disabled with `set_option linter.unusedSectionVars false`
+ScaledPolynomial.lean:489:18: warning: Variable name `hR` is not explicitly referenced.
+
+Hint: The binding can be removed (if unused) or named `_` (if used implicitly). Alternatively, prefix the name with `_` to silence this warning:
+  [apply] _hR
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+ScaledPolynomial.lean:589:0: warning: automatically included section variable(s) unused in theorem `ScaledPolynomial.basis_lcm_spec`:
+  [Fintype σ]
+  [DecidableEq σ]
+consider restructuring your `variable` declarations so that the variables are not in scope or explicitly omit them:
+  omit [Fintype σ] [DecidableEq σ] in theorem ...
+
+Note: This linter can be disabled with `set_option linter.unusedSectionVars false`
+
+
+'CoverArithmetic.dimension_pow' depends on axioms: [propext, Classical.choice, Quot.sound]
+'CoverArithmetic.chkm_coordinate_absorption' depends on axioms: [propext, Classical.choice, Quot.sound]
+'CoverArithmetic.chkm_slack_absorption' depends on axioms: [propext, Classical.choice, Quot.sound]
+'CoverArithmetic.chkm_vertex_bounds' depends on axioms: [propext, Classical.choice, Quot.sound]
+'CoverArithmetic.chkm_convex_bounds' depends on axioms: [propext, Classical.choice, Quot.sound]
+'CoverArithmetic.one_dimensional_bounds' depends on axioms: [propext, Classical.choice, Quot.sound]
+'CoverArithmetic.threshold_end' depends on axioms: [propext, Classical.choice, Quot.sound]
+'CoverArithmetic.threshold_width' depends on axioms: [propext, Classical.choice, Quot.sound]
+'CoverArithmetic.dyadic_band' depends on axioms: [propext, Classical.choice, Quot.sound]
+'CoverArithmetic.refined_band' depends on axioms: [propext, Classical.choice, Quot.sound]
+'CoverArithmetic.threshold_mem' depends on axioms: [propext, Classical.choice, Quot.sound]
+'CoverArithmetic.final_threshold' depends on axioms: [propext, Classical.choice, Quot.sound]
+'CoverArithmetic.upper_threshold_mem' depends on axioms: [propext, Classical.choice, Quot.sound]
+'CoverArithmetic.threshold_coverage' depends on axioms: [propext, Classical.choice, Quot.sound]
+'CoverArithmetic.threshold_count' depends on axioms: [propext, Classical.choice, Quot.sound]
+'CoverArithmetic.rowwise_threshold_coverage' depends on axioms: [propext, Classical.choice, Quot.sound]
+'CoverArithmetic.chamber_zero_dimension' depends on axioms: [propext, Classical.choice, Quot.sound]
+'CoverArithmetic.chamber_zero_hyperplanes' depends on axioms: [propext, Classical.choice, Quot.sound]
+'CoverArithmetic.chamber_recurrence' depends on axioms: [propext, Classical.choice, Quot.sound]
+'CoverArithmetic.chamber_power_bound' depends on axioms: [propext, Classical.choice, Quot.sound]
+'CoverArithmetic.insertion_count_bound' depends on axioms: [propext, Classical.choice, Quot.sound]
+'CoverArithmetic.oracle_and_lp_counts' depends on axioms: [propext, Classical.choice, Quot.sound]
+'CoverArithmetic.hyperplane_count' depends on axioms: [propext, Classical.choice, Quot.sound]
+'CoverArithmetic.hyperplane_linear_refinement' depends on axioms: [propext, Classical.choice, Quot.sound]
+'CoverArithmetic.refinement_query_counts' depends on axioms: [propext, Classical.choice, Quot.sound]
+'CoverArithmetic.chkm_encoding_translation' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+PASS: 26 theorems; no custom axioms or sorryAx.

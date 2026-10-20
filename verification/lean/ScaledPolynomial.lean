@@ -698,4 +698,69 @@ theorem integer_basis_determinant_size (B : Matrix σ σ ℝ) (z : ℤ) (tau : �
   apply Nat.size_le.2
   exact_mod_cast hnat
 
+/-- Integer slack intervals are exactly equivalent to rounding their endpoints. -/
+theorem integer_slack_interval (s : ℤ) (lo hi : ℝ) :
+    (lo ≤ (s : ℝ) ∧ (s : ℝ) ≤ hi) ↔ (⌈lo⌉ ≤ s ∧ s ≤ ⌊hi⌋) := by
+  rw [Int.ceil_le, Int.le_floor]
+
+/-- The half-unit shifted chamber endpoints round to bounds on integer slacks. -/
+theorem shifted_integer_slack_interval (s : ℤ) (lo hi : ℝ) :
+    (lo ≤ (s : ℝ)+1/2 ∧ (s : ℝ)+1/2 ≤ hi) ↔
+      (⌈lo-1/2⌉ ≤ s ∧ s ≤ ⌊hi-1/2⌋) := by
+  rw [← integer_slack_interval]
+  constructor <;> intro h <;> constructor <;> linarith [h.1, h.2]
+
+/-- For epsilon=a/b, its positive numerator cannot increase the grid multiplier. -/
+theorem rational_grid_multiplier_le (D r a b k : ℕ) (ha : 1 ≤ a) (hb : 0 < b)
+    (hk : (k : ℤ) = ⌈4*(D : ℝ)^2*r*(r+1)/((a : ℝ)/b)⌉) :
+    k ≤ 4*D^2*r*(r+1)*b := by
+  have hap : (0 : ℝ) < a := by exact_mod_cast ha
+  have hbp : (0 : ℝ) < b := by exact_mod_cast hb
+  have hratio : 4*(D : ℝ)^2*r*(r+1)/((a : ℝ)/b) ≤
+      (4*D^2*r*(r+1)*b : ℕ) := by
+    push_cast
+    rw [div_div_eq_mul_div]
+    apply (div_le_iff₀ hap).2
+    have har : (1 : ℝ) ≤ a := by exact_mod_cast ha
+    nlinarith [mul_nonneg (show (0 : ℝ) ≤ 4*(D : ℝ)^2*r*(r+1)*b by positivity)
+      (sub_nonneg.mpr har)]
+  have h := (Int.ceil_le).2 hratio
+  rw [← hk] at h
+  exact_mod_cast h
+
+/-- Explicit binary length of the actual ceiling multiplier; no real logarithms. -/
+theorem rational_grid_multiplier_size (D r a b k : ℕ) (ha : 1 ≤ a) (hb : 0 < b)
+    (hk : (k : ℤ) = ⌈4*(D : ℝ)^2*r*(r+1)/((a : ℝ)/b)⌉) :
+    k.size ≤ 3+2*D.size+r.size+(r+1).size+b.size := by
+  have h := Nat.size_le_size (rational_grid_multiplier_le D r a b k ha hb hk)
+  have h1 := size_mul_pow_le 4 D 2
+  have h2 := size_mul_le (4*D^2) r
+  have h3 := size_mul_le (4*D^2*r) (r+1)
+  have h4 := size_mul_le (4*D^2*r*(r+1)) b
+  have hs4 : Nat.size 4 = 3 := by decide
+  rw [hs4] at h1
+  omega
+
+/-- Combined constraint and polynomial payload, plus the denominator of epsilon/2.
+Metadata includes unchanged exponent vectors, dimensions and list delimiters.
+The accuracy numerator is unchanged; reduction of the fraction is unnecessary. -/
+theorem full_scaled_input_payload {κ : Type*} [Fintype κ]
+    (A : κ → σ → ℤ) (b : κ → ℤ) (f : MvPolynomial σ ℤ)
+    (I : Finset σ) (Q : ℤ) (D metadata accuracyDen : ℕ) (hQ : Q ≠ 0) :
+    metadata + (∑ j, rowPayload (scaledRow (A j) I Q) (Q*b j)) +
+      (∑ a ∈ (scaled f I Q D).support, bitSize ((scaled f I Q D).coeff a)) +
+      (2*accuracyDen).size ≤
+    metadata + (∑ j, rowPayload (A j) (b j)) +
+      (∑ a ∈ f.support, bitSize (f.coeff a)) + accuracyDen.size +
+      (Fintype.card κ*(Fintype.card σ+1)+f.support.card*D)*Q.natAbs.size + 2 := by
+  have hc := scaled_constraints_payload A b I Q
+  have hf := coefficient_payload f I Q D hQ
+  have he := size_mul_le 2 accuracyDen
+  have hs2 : Nat.size 2 = 2 := by decide
+  rw [hs2] at he
+  have hid : Fintype.card κ*((Fintype.card σ+1)*Q.natAbs.size) +
+      f.support.card*(D*Q.natAbs.size) =
+      (Fintype.card κ*(Fintype.card σ+1)+f.support.card*D)*Q.natAbs.size := by ring
+  omega
+
 end ScaledPolynomial

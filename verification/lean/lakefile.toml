@@ -4,7 +4,7 @@ defaultTargets = ["FPTAS"]
 
 [[lean_lib]]
 name = "FPTAS"
-roots = ["FPTASCalculations", "SampledMarkov", "LineRestriction", "ScaledPolynomial"]
+roots = ["FPTASCalculations", "SampledMarkov", "LineRestriction", "ScaledPolynomial", "CoverArithmetic", "CoverAssembly", "ChamberInsertion", "CellEncoding"]
 
 [[require]]
 name = "mathlib"

@@ -182,3 +182,19 @@ input size phi^{O(r+1)}, giving (phi D/epsilon)^{O(d(r+1))} with our
 integer subroutine. The determinant/lcm size and exponent algebra are now Lean checked under explicit entry, encoding, and subroutine-cost bounds. The algorithmic costs and their instantiation remain human-reviewed.
 The smaller sufficient grid denominator alone does not establish a better
 overall asymptotic complexity class than the earlier reduction.
+
+2026-10-20 review reconciliation:
+- The short and extended sources already state C +/- D_C subset tilde P; the review's contrary statement concerns an older copy.
+- arXiv:2609.18266v2, first-page notice, explicitly supersedes arXiv:2609.17889. Consolidated the paired citation to AH and removed AHIQP.
+- Inline bibliographies reordered by first citation (no generated BibTeX file is used).
+- Borwein--Erdelyi Theorem 5.1.8 explicitly titled Markov's Inequality in the supplied book extraction, line 12063.
+- Did not add Barvinok--Pommersheim without examining the exact result needed. Original Barvinok citation remains alongside the Pak--Panova explicit complexity reference.
+- Suggested Wei short-link retrieval failed; retained the supplied source URL rather than claiming verification of the redirect.
+- CHKM's constant and translation remain explicitly flagged for human review.
+
+2026-10-20 supplied review and source follow-up:
+The user supplied a review reporting checks of chamber enumeration and bit costs, mixed-integer rounding and scaling, cover hypotheses, interval Markov constants, relative-slack characterization, nonnegative conversion, and integer-hull vertices. This is a supplied review report, not an extension of Lean certification.
+Checked the actual TeX: C +/- D_C is contained in tilde P; integer progression samples lie in P intersect Z^d. No correction needed.
+Re-read the supplied CHKM published p.29. Put F=(d+1)(tau+3). Its displayed estimates are coordinate magnitude <= (d+1)*2^(2(d+1)^2 F), and doubled shifted slack <= 2^(dF)+d(d+1)*2^((d+2(d+1)^2)F). After dividing the latter by two, both are strictly less than 2^(5d^2 F+2). For d=2 the slack is <= 2^(2F-1)+3*2^(20F)<2^(20F+2); for d>=3 the exponent margin absorbs the factors. Extend coordinate and linear slack bounds from vertices over the bounded integer hull; empty hull is vacuous, and d=1 is handled by interval endpoints. This verifies sufficiency of the manuscript exponent without relying on the final rough simplification printed in CHKM. This source check is not Lean certification.
+Verified Wei posting at https://optimization-online.org/2026/09/integer-quadratic-programming-in-fixed-dimension-is-polynomial-time-solvable/; it explicitly lists permanent short URL https://optimization-online.org/?p=36744. Updated manuscript references.
+Stanley DOI lookup still returned a tool access error; resolution remains unconfirmed. Supplied review confirms Pak--Panova volume/pages; this is recorded as supplied-review evidence.

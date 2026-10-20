@@ -29,8 +29,8 @@ def main():
             return 1
         print('PASS: successful audit matches the recorded drafts and sources; Lean was not rerun.')
         return 0
-    scripts = ['check_fptas_calculations.py', 'check_sampled_markov.py', 'check_line_restriction.py', 'check_scaled_polynomial.py']
-    sources = [LEAN / name for name in ['FPTASCalculations.lean', 'SampledMarkov.lean', 'LineRestriction.lean', 'ScaledPolynomial.lean', 'lake-manifest.json', 'lakefile.toml', 'lean-toolchain'] + scripts]
+    scripts = ['check_fptas_calculations.py', 'check_sampled_markov.py', 'check_line_restriction.py', 'check_scaled_polynomial.py', 'check_cover_arithmetic.py', 'check_cover_assembly.py', 'check_chamber_insertion.py', 'check_cell_encoding.py']
+    sources = [LEAN / name for name in ['FPTASCalculations.lean', 'SampledMarkov.lean', 'LineRestriction.lean', 'ScaledPolynomial.lean', 'CoverArithmetic.lean', 'CoverAssembly.lean', 'ChamberInsertion.lean', 'CellEncoding.lean', 'lake-manifest.json', 'lakefile.toml', 'lean-toolchain'] + scripts]
     sources += [Path(__file__).resolve(), ROOT / 'verification/make_review_draft.py',
                 ROOT / 'verification/README.md', ROOT / 'verification/reference_audit.txt',
                 ROOT / 'README.md', ROOT / 'reflecting_cells_fptas_review.tex']
@@ -68,8 +68,8 @@ def main():
             return 1
     record.update(success=True, finished_utc=datetime.now(timezone.utc).isoformat())
     save()
-    count = sum(len(re.findall(r'^theorem \w+', (LEAN / name).read_text(), re.M)) for name in ['FPTASCalculations.lean', 'SampledMarkov.lean', 'LineRestriction.lean', 'ScaledPolynomial.lean'])
-    print(f'\nPASS: all four Lean modules rebuilt and axiom-audited ({count} theorems).')
+    count = sum(len(re.findall(r'^theorem \w+', (LEAN / name).read_text(), re.M)) for name in ['FPTASCalculations.lean', 'SampledMarkov.lean', 'LineRestriction.lean', 'ScaledPolynomial.lean', 'CoverArithmetic.lean', 'CoverAssembly.lean', 'ChamberInsertion.lean', 'CellEncoding.lean'])
+    print(f'\nPASS: all eight Lean modules rebuilt and axiom-audited ({count} theorems).')
     print('Run record: ' + str(output))
     return 0
 

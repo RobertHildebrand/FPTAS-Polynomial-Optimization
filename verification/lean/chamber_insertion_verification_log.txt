@@ -1,0 +1,194 @@
+Lean (version 4.34.0-rc2, arm64-apple-darwin24.6.0, commit 6a10ac8c22beadecabdbb0919c2b50214762f91d, Release)
+Mathlib: 85e3a25e006c35636f0e53b0e9296caca2685bc0
+FPTASCalculations.lean:113:4: warning: Try `simp at hy` instead of `simpa using hy`
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+FPTASCalculations.lean:118:4: warning: Try `simp at this` instead of `simpa using this`
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+FPTASCalculations.lean:222:20: warning: Variable name `hx` is not explicitly referenced.
+
+Hint: The binding can be removed (if unused) or named `_` (if used implicitly). Alternatively, prefix the name with `_` to silence this warning:
+  [apply] _hx
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+FPTASCalculations.lean:380:37: warning: Variable name `hx` is not explicitly referenced.
+
+Hint: The binding can be removed (if unused) or named `_` (if used implicitly). Alternatively, prefix the name with `_` to silence this warning:
+  [apply] _hx
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+
+
+LineRestriction.lean:49:9: warning: try 'simp' instead of 'simpa'
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+LineRestriction.lean:200:44: warning: This simp argument is unused:
+  mul_left_comm
+
+Hint: Omit it from the simp argument list.
+  [apply] simp [Finset.mul_sum, mul_comm, mul_assoc]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+
+ScaledPolynomial.lean:22:0: warning: automatically included section variable(s) unused in theorem `ScaledPolynomial.weight_le`:
+  [DecidableEq σ]
+consider restructuring your `variable` declarations so that the variables are not in scope or explicitly omit them:
+  omit [DecidableEq σ] in theorem ...
+
+Note: This linter can be disabled with `set_option linter.unusedSectionVars false`
+ScaledPolynomial.lean:27:0: warning: automatically included section variable(s) unused in theorem `ScaledPolynomial.coefficient`:
+  [Fintype σ]
+consider restructuring your `variable` declarations so that the variables are not in scope or explicitly omit them:
+  omit [Fintype σ] in theorem ...
+
+Note: This linter can be disabled with `set_option linter.unusedSectionVars false`
+ScaledPolynomial.lean:41:43: warning: This simp argument is unused:
+  mul_ne_zero
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [mem_support_iff, coefficient]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+ScaledPolynomial.lean:44:0: warning: automatically included section variable(s) unused in theorem `ScaledPolynomial.degree_bound`:
+  [Fintype σ]
+  [DecidableEq σ]
+consider restructuring your `variable` declarations so that the variables are not in scope or explicitly omit them:
+  omit [Fintype σ] [DecidableEq σ] in theorem ...
+
+Note: This linter can be disabled with `set_option linter.unusedSectionVars false`
+ScaledPolynomial.lean:55:13: warning: Variable name `hQ` is not explicitly referenced.
+
+Hint: The binding can be removed (if unused) or named `_` (if used implicitly). Alternatively, prefix the name with `_` to silence this warning:
+  [apply] _hQ
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+ScaledPolynomial.lean:152:0: warning: automatically included section variable(s) unused in theorem `ScaledPolynomial.decode_encode`:
+  [Fintype σ]
+consider restructuring your `variable` declarations so that the variables are not in scope or explicitly omit them:
+  omit [Fintype σ] in theorem ...
+
+Note: This linter can be disabled with `set_option linter.unusedSectionVars false`
+ScaledPolynomial.lean:156:52: warning: Used `tac1 <;> tac2` where `(tac1; tac2)` would suffice
+
+Note: This linter can be disabled with `set_option linter.unnecessarySeqFocus false`
+ScaledPolynomial.lean:158:0: warning: automatically included section variable(s) unused in theorem `ScaledPolynomial.encode_decode`:
+  [Fintype σ]
+consider restructuring your `variable` declarations so that the variables are not in scope or explicitly omit them:
+  omit [Fintype σ] in theorem ...
+
+Note: This linter can be disabled with `set_option linter.unusedSectionVars false`
+ScaledPolynomial.lean:162:52: warning: Used `tac1 <;> tac2` where `(tac1; tac2)` would suffice
+
+Note: This linter can be disabled with `set_option linter.unnecessarySeqFocus false`
+ScaledPolynomial.lean:175:0: warning: automatically included section variable(s) unused in theorem `ScaledPolynomial.scaledRow_bits`:
+  [Fintype σ]
+consider restructuring your `variable` declarations so that the variables are not in scope or explicitly omit them:
+  omit [Fintype σ] in theorem ...
+
+Note: This linter can be disabled with `set_option linter.unusedSectionVars false`
+ScaledPolynomial.lean:243:0: warning: automatically included section variable(s) unused in theorem `ScaledPolynomial.grid_coordinates`:
+  [Fintype σ]
+consider restructuring your `variable` declarations so that the variables are not in scope or explicitly omit them:
+  omit [Fintype σ] in theorem ...
+
+Note: This linter can be disabled with `set_option linter.unusedSectionVars false`
+ScaledPolynomial.lean:259:50: warning: Used `tac1 <;> tac2` where `(tac1; tac2)` would suffice
+
+Note: This linter can be disabled with `set_option linter.unnecessarySeqFocus false`
+ScaledPolynomial.lean:296:0: warning: automatically included section variable(s) unused in theorem `ScaledPolynomial.commonDen_pos`:
+  [DecidableEq σ]
+consider restructuring your `variable` declarations so that the variables are not in scope or explicitly omit them:
+  omit [DecidableEq σ] in theorem ...
+
+Note: This linter can be disabled with `set_option linter.unusedSectionVars false`
+ScaledPolynomial.lean:299:0: warning: automatically included section variable(s) unused in theorem `ScaledPolynomial.denominator_dvd`:
+  [DecidableEq σ]
+consider restructuring your `variable` declarations so that the variables are not in scope or explicitly omit them:
+  omit [DecidableEq σ] in theorem ...
+
+Note: This linter can be disabled with `set_option linter.unusedSectionVars false`
+ScaledPolynomial.lean:316:0: warning: automatically included section variable(s) unused in theorem `ScaledPolynomial.size_prod_le`:
+  [Fintype σ]
+consider restructuring your `variable` declarations so that the variables are not in scope or explicitly omit them:
+  omit [Fintype σ] in theorem ...
+
+Note: This linter can be disabled with `set_option linter.unusedSectionVars false`
+ScaledPolynomial.lean:406:54: warning: Variable name `hC` is not explicitly referenced.
+
+Hint: The binding can be removed (if unused) or named `_` (if used implicitly). Alternatively, prefix the name with `_` to silence this warning:
+  [apply] _hC
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+ScaledPolynomial.lean:473:4: warning: `push_neg` has been deprecated. Prefer using `push Not` instead.
+If you'd rather continue using `push_neg` in your project, you can implement it as follows:
+```
+open Lean.Parser.Tactic in
+macro "push_neg" cfg:optConfig loc:(location)? : tactic =>
+  `(tactic| push $cfg:optConfig Not $[$loc]?)
+```
+ScaledPolynomial.lean:488:0: warning: automatically included section variable(s) unused in theorem `ScaledPolynomial.slack_magnitude_bound`:
+  [DecidableEq σ]
+consider restructuring your `variable` declarations so that the variables are not in scope or explicitly omit them:
+  omit [DecidableEq σ] in theorem ...
+
+Note: This linter can be disabled with `set_option linter.unusedSectionVars false`
+ScaledPolynomial.lean:489:18: warning: Variable name `hR` is not explicitly referenced.
+
+Hint: The binding can be removed (if unused) or named `_` (if used implicitly). Alternatively, prefix the name with `_` to silence this warning:
+  [apply] _hR
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+ScaledPolynomial.lean:589:0: warning: automatically included section variable(s) unused in theorem `ScaledPolynomial.basis_lcm_spec`:
+  [Fintype σ]
+  [DecidableEq σ]
+consider restructuring your `variable` declarations so that the variables are not in scope or explicitly omit them:
+  omit [Fintype σ] [DecidableEq σ] in theorem ...
+
+Note: This linter can be disabled with `set_option linter.unusedSectionVars false`
+
+
+CoverAssembly.lean:164:15: warning: `if_pos` has been deprecated: Use `ite_eq_left` instead
+CoverAssembly.lean:170:15: warning: `if_neg` has been deprecated: Use `ite_eq_right` instead
+CoverAssembly.lean:357:5: warning: Variable name `hx` is not explicitly referenced.
+
+Hint: The binding can be removed (if unused) or named `_` (if used implicitly). Alternatively, prefix the name with `_` to silence this warning:
+  [apply] _hx
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+CoverAssembly.lean:658:53: warning: `Set.mem_setOf_eq` has been deprecated: Use `Set.mem_ofPred_eq` instead
+
+ChamberInsertion.lean:62:2: warning: Used `tac1 <;> tac2` where `(tac1; tac2)` would suffice
+
+Note: This linter can be disabled with `set_option linter.unnecessarySeqFocus false`
+ChamberInsertion.lean:251:8: warning: `push_neg` has been deprecated. Prefer using `push Not` instead.
+If you'd rather continue using `push_neg` in your project, you can implement it as follows:
+```
+open Lean.Parser.Tactic in
+macro "push_neg" cfg:optConfig loc:(location)? : tactic =>
+  `(tactic| push $cfg:optConfig Not $[$loc]?)
+```
+
+'ChamberInsertion.mem_patterns' depends on axioms: [propext, Classical.choice, Quot.sound]
+'ChamberInsertion.patterns_mono' depends on axioms: [propext, Classical.choice, Quot.sound]
+'ChamberInsertion.sign_cell_convex' depends on axioms: [propext, Classical.choice, Quot.sound]
+'ChamberInsertion.crossing_witness' depends on axioms: [propext, Classical.choice, Quot.sound]
+'ChamberInsertion.split_patterns_subset_section' depends on axioms: [propext, Classical.choice, Quot.sound]
+'ChamberInsertion.insertion_inequality' depends on axioms: [propext, Classical.choice, Quot.sound]
+'ChamberInsertion.patterns_cons' depends on axioms: [propext, Classical.choice, Quot.sound]
+'ChamberInsertion.patterns_head_card' depends on axioms: [propext, Classical.choice, Quot.sound]
+'ChamberInsertion.patterns_succ_card' depends on axioms: [propext, Classical.choice, Quot.sound]
+'ChamberInsertion.section_patterns' depends on axioms: [propext, Classical.choice, Quot.sound]
+'ChamberInsertion.section_convex' depends on axioms: [propext, Classical.choice, Quot.sound]
+'ChamberInsertion.kernel_dimension' depends on axioms: [propext, Classical.choice, Quot.sound]
+'ChamberInsertion.zero_insertion' depends on axioms: [propext, Classical.choice, Quot.sound]
+'ChamberInsertion.bound_mono_hyperplanes' depends on axioms: [propext, Classical.choice, Quot.sound]
+'ChamberInsertion.arrangement_count_bound' depends on axioms: [propext, Classical.choice, Quot.sound]
+'ChamberInsertion.patterns_reindex' depends on axioms: [propext, Classical.choice, Quot.sound]
+'ChamberInsertion.finite_arrangement_bound' depends on axioms: [propext, Classical.choice, Quot.sound]
+'ChamberInsertion.closed_chamber_count' depends on axioms: [propext, Classical.choice, Quot.sound]
+'ChamberInsertion.slackInterior_convex' depends on axioms: [propext, Classical.choice, Quot.sound]
+'ChamberInsertion.bound_mono' depends on axioms: [propext, Classical.choice, Quot.sound]
+'ChamberInsertion.shifted_chamber_count' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+PASS: 21 theorems; no custom axioms or sorryAx.
