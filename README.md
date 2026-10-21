@@ -1,5 +1,9 @@
 # Polynomial optimization by reflecting cells
 
+![Dyadic slack cells in a pentagon, illustrating polynomial optimization by reflecting cells.](docs/assets/repository-banner.png)
+
+**[Explore the interactive guide →](https://roberthildebrand.github.io/FPTAS-Polynomial-Optimization/)**
+
 **A short proof of a range-relative FPTAS for polynomial integer optimization over bounded polyhedra.**
 
 Refine dyadic intervals for the constraint slacks, find one feasible integer representative in each cell, and return the representative with the best objective value. Reflecting geometry supplies long integer progressions; Markov’s polynomial derivative inequality controls the approximation error. The dimension is fixed, and the feasible polyhedron is bounded.
@@ -8,14 +12,14 @@ Refine dyadic intervals for the constraint slacks, find one feasible integer rep
 
 | If you want to… | Open |
 | --- | --- |
-| Explore the algorithm visually | [Interactive field guide](docs/index.html) — open locally in a browser |
+| Explore the algorithm visually | [Interactive field guide](https://roberthildebrand.github.io/FPTAS-Polynomial-Optimization/) — live on GitHub Pages |
 | Read the concise proof | [Short paper](reflecting_cells_fptas_short.tex) |
 | See details and provenance | [Extended paper](reflecting_cells_fptas.tex) |
 | Check the mathematics by hand | [Annotated review draft](reflecting_cells_fptas_review.tex) |
 | Find the corresponding Lean theorems | [Verification guide](verification/README.md) |
 | Inspect the reference checks | [Reference audit](verification/reference_audit.txt) |
 
-The interactive guide runs offline with no installation or external libraries. Download or clone the repository, then open `docs/index.html`. GitHub’s file viewer displays HTML source; it does not run the guide. The page includes a pentagonal cell explorer, quadratic/cubic/quartic objectives, exhaustive comparisons on a small lattice, and an interactive symmetrization plot. [Demo details and tests](docs/README.md).
+The interactive guide is available on GitHub Pages and also runs offline with no installation or external libraries. Download or clone the repository, then open `docs/index.html`. GitHub’s file viewer displays HTML source; it does not run the guide. The page includes a pentagonal cell explorer, quadratic/cubic/quartic objectives, exhaustive comparisons on a small lattice, and an interactive symmetrization plot. [Demo details and tests](docs/README.md).
 
 ## What is verified?
 

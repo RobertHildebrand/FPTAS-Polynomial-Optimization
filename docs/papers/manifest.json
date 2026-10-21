@@ -1,0 +1,14 @@
+{
+  "reflecting_cells_fptas_short": {
+    "source_sha256": "c25ffe4a998f3a1169e232738161a0d7ae054e79af78cd0bb6a48c7dcbd76a35",
+    "pdf_sha256": "d3afe28b0ba3ea6c16eeb02a956d2144f8a0272b90bd7b9ec76c369aa27dd625"
+  },
+  "reflecting_cells_fptas": {
+    "source_sha256": "044a56303b910f6b850120eb56980cfe6ab694fb635d1ff7890c879826bd8eb0",
+    "pdf_sha256": "283ee1859e8c8941f3a20675b124e97316e9589094624a52d76249e435a49681"
+  },
+  "reflecting_cells_fptas_review": {
+    "source_sha256": "52dd9b45a47f47baa31157b43b2193ffc50435b87674293cda74b3b922cb2eda",
+    "pdf_sha256": "82ace24f24d7b2fcbdb1f9ad6ad114d0de0bfe4ad9e4466fce7b983dde968012"
+  }
+}

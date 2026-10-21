@@ -7,7 +7,7 @@ The guide has two interactive views:
 - **Pentagonal cells:** change the refinement, choose an objective, inspect slack intervals, and compare representatives against the exhaustive optimum. Keyboard users can choose an inspection point from the disclosure under the controls.
 - **Symmetrization:** vary a cubic's odd coefficient and the integer progression length; the even part stays quadratic.
 
-The instance is `0 <= x,y <= 16`, `x+y <= 24`. It has 253 feasible lattice points. Thresholds follow the manuscript with Phi=5, which suffices for this specific example. The displayed cell count is the number of occupied groups after deterministic boundary assignment, not the total number of chambers. Some closed cells overlap. The demo does not implement the paper's chamber enumerator or integer-feasibility oracle.
+The instance is `0 <= x,y <= 64`, `x+y <= 96`. It has 3,697 feasible lattice points. Thresholds follow the manuscript with Phi=7, which suffices for this specific example. The displayed cell count is the number of occupied groups after deterministic boundary assignment, not the total number of chambers. Some closed cells overlap. The demo does not implement the paper's chamber enumerator or integer-feasibility oracle.
 
 The page distinguishes exploratory refinements from those satisfying `ell >= D^2` and `D^2/ell^2 <= epsilon`. Its geometry uses floating-point arithmetic; the exact rational experiments in `../experiments/` provide separate finite-instance checks. Neither demo is a formal proof.
 
@@ -38,3 +38,5 @@ Visit `http://127.0.0.1:8000/docs/`. Serve the repository root so the paper and 
 - `explorer.test.js`: dependency-free Node tests.
 
 When formal coverage changes, update the theorem count here and in `index.html` to match the audit. Test the controls, keyboard inspection, browser console, and narrow layout after presentation changes. Mathematical wording should remain consistent with the short manuscript and verification guide.
+
+The guide links to compiled papers in `papers/`. Rebuild them with `python3 docs/build_papers.py` after changing manuscript sources. The browser guide also explains how to run the full Lean audit and what its hypotheses and trust boundary mean.
