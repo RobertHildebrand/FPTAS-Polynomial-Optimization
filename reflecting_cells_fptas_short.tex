@@ -26,7 +26,10 @@
 \newcommand{\osc}{\operatorname{osc}}
 \newcommand{\bits}{\operatorname{bits}}
 \newcommand{\norm}[1]{\lVert#1\rVert}
-\journal{Operations Research Letters}
+% Keep the preprint neutral about submission status, including with older elsarticle versions.
+\makeatletter
+\let\ps@pprintTitle\ps@plain
+\makeatother
 \begin{document}
 \begin{frontmatter}
 \title{A short proof of a range-relative FPTAS for polynomial integer optimization over bounded polyhedra}
@@ -110,7 +113,7 @@ Under the encoding convention above and for fixed dimension $d$, a range-relativ
 Its running time is polynomial in the total input encoding size $\varphi$ and $1/\eps$. The polynomial may depend on the fixed dimension. This is the fully polynomial-time weak-approximation notion of~\cite{DHKW08}. The maximization definition uses $f_{\max}-f(\mathbf{x}_{\eps})$ on the left.
 \end{definition}
 
-All complexity statements below count bit operations. The function $\poly$ denotes a polynomial with an absolute exponent, independent of $d,D,\eps$; different occurrences may denote different polynomials. Logs are base two unless indicated otherwise.
+Running times are measured in bit operations; oracle calls and arithmetic operations are counted separately where stated. The function $\poly$ denotes a polynomial with an absolute exponent, independent of $d,D,\eps$; different occurrences may denote different polynomials. Logs are base two unless indicated otherwise.
 
 \begin{theorem}[Polynomial approximation by reflecting cells]\label{thm:main}
 Let $d\ge1$ and let $P=\{\mathbf{x}\in\R^d:A\mathbf{x}\le\mathbf b\}$ be bounded, with $A\in\Z^{m\times d}$ and $\mathbf b\in\Z^m$ (rational rows are normalized in Section~2), let $f\in\Z[x_1,\ldots,x_d]$, and put $D=\max\{1,\deg f\}$, with $D=1$ when $f\equiv0$. For rational $0<\eps\le1$, let $\varphi=\langle A,\mathbf b,f,\eps\rangle$ be the total input encoding size.
@@ -123,7 +126,7 @@ bit operations, with an absolute constant in the $O(d)$ exponent.
 
 Since the input explicitly lists the $m$ inequalities in $d$ variables, $m,d\le\varphi$; their separate factors in the detailed running-time bound are therefore absorbed into the base $\varphi$ and the $O(d)$ exponent in~\eqref{eq:runtime-coarse}. The dependence on dimension remains explicit in that exponent. More precisely, for fixed $P,D,d$, the algorithm makes $O(\eps^{-d/2})$ integer-feasibility queries; the detailed running-time bound in the proof retains the factor $\max\{D^2,D/\sqrt\eps\}$.
 
-Rational inequalities can be normalized to integral data in polynomial time, as detailed below. Rational objective coefficients can likewise be reduced to integer coefficients by clearing denominators in polynomial time; positive scaling preserves the approximation guarantee, as in~\cite[Section~5]{DHKW08}. The remaining construction parameters and the exact feasibility-query count are introduced in the proof. For fixed $d$, the bound is polynomial in $\varphi$ and $1/\eps$, hence gives an FPTAS in Definition~\ref{def:fptas}. The same explicit bound remains valid for binary-encoded exponents, but then its numerical dependence on $D$ does not assert an FPTAS in the sparse binary input size.
+Rational inequalities can be normalized to integral data in polynomial time, as detailed below. Rational objective coefficients can likewise be reduced to integer coefficients by clearing denominators in polynomial time; positive scaling preserves the approximation guarantee, as in~\cite[Section~5]{DHKW08}. The remaining construction parameters and an explicit upper bound on the number of feasibility queries are introduced in the proof. For fixed $d$, the bound is polynomial in $\varphi$ and $1/\eps$, hence gives an FPTAS in Definition~\ref{def:fptas}. The same explicit bound remains valid for binary-encoded exponents, but then its numerical dependence on $D$ does not assert an FPTAS in the sparse binary input size.
 
 The following nonnegative-maximization guarantee was established by De Loera et al.~\cite[Theorem~1.1]{DHKW06}; it follows from our range-relative bound by the same elementary conversion.
 
@@ -150,9 +153,9 @@ where the extrema are over $P\cap(\R^{d_c}\times\Z^{d_i})$. For nonnegative $f$ 
 bit operations, with an absolute constant in the exponent.
 \end{corollary}
 
-\paragraph{Comparison with prior algorithms.}
+\paragraph{Comparison with prior algorithms}
 
-The short rational generating functions used by De Loera et al. build on Barvinok's lattice-point counting algorithm~\cite{Barvinok}. Their approach~\cite{DHKW06,DHKW08} computes weighted sums involving $f^q$, where $q=O(1+\eps^{-1}\log N)$ and $N=|P\cap\Z^d|$. The standard Barvinok counting bound is $\langle A,\mathbf b\rangle^{O(d\log(d+1))}$~\cite[Theorem~2.3]{PakPanova}; our entire algorithm has bound $\varphi^{O(d)}$ for fixed $D,\eps$. This compares available upper bounds, not a runtime separation: counting alone does not describe their FPTAS, and our potentially large cell count does not establish practical superiority.
+The short rational generating functions used by De Loera et al. build on Barvinok's lattice-point counting algorithm~\cite{Barvinok}. Their approach~\cite{DHKW06,DHKW08} computes weighted sums involving $f^q$, where $q=O(1+\eps^{-1}\log N)$ and $N=|P\cap\Z^d|$. The standard Barvinok counting bound is $\langle A,\mathbf b\rangle^{O(d\log(d+1))}$~\cite[Theorem~2.5]{PakPanova}; our entire algorithm has bound $\varphi^{O(d)}$ for fixed $D,\eps$. This compares available upper bounds, not a runtime separation: counting alone does not describe their FPTAS, and our potentially large cell count does not establish practical superiority.
 
 Del Pia's quadratic scheme~\cite[Proposition~3 and Section~6.2]{DelPia} uses affine optimization over boxes after geometric preprocessing, with flatness recursion in the remaining cases. For fixed quadratic rank $k$ and integer dimension $p$, it uses $O_{k,p}(1+\eps^{-k/2})$ MILP subproblems and allows variable continuous dimension. Our feasibility-call exponent matches $k/2$ at $k=d$, but our enumeration costs an additional factor of order $\eps^{-1/2}$. Our advantages are arbitrary degree and objective-independent representatives; we do not recover his low-rank dependence.
 
@@ -296,12 +299,12 @@ if either slack is zero, both must be zero. Our cells have positive shifted slac
 The integer progression property is the geometric input to approximation. Closed chambers are defined by non-strict linear inequalities; rounding the slack bounds below removes threshold denominators without changing the integer points.
 
 \begin{lemma}[Number, encoding, and enumeration of cells]\label{lem:arrangement}
-The closed cells can be enumerated deterministically in $(\varphi\ell)^{O(d)}$ bit operations, and their number is at most $(\varphi\ell)^{O(d)}$. Each cell has a description by at most $2m$ non-strict linear inequalities of total encoding size $\poly(\varphi)$. Rounding its slack bounds as specified below gives a rational polytope $\widehat C\subseteq C$ with exactly the same integer points, described by at most $2m$ inequalities whose coefficient bit lengths are $O(\tau+\Phi+1)$, independent of $\ell$.
+The closed cells can be enumerated deterministically in $(\varphi\ell)^{O(d)}$ bit operations, and their number is at most $(\varphi\ell)^{O(d)}$. Each cell has a description by at most $2m$ non-strict linear inequalities of total encoding size $\poly(\varphi,\log(\ell+1))$, hence $\poly(\varphi)$ for the prescribed refinement~\eqref{eq:HT}. Rounding its slack bounds as specified below gives a rational polytope $\widehat C\subseteq C$ with exactly the same integer points, described by at most $2m$ inequalities whose coefficient bit lengths are $O(\tau+\Phi+1)$, independent of $\ell$.
 \end{lemma}
 \begin{proof}
 With $H=m((\Phi+2)\ell+1)$, the standard arrangement bound gives $R_d(H)$ chambers~\cite{Stanley}; intersecting with convex $Q$ cannot increase their number. The thresholds have denominator dividing $4\ell$ and numerator bit length $O(\Phi+\log(\ell+1))$.
 
-Incrementally split each closed cell into its two closed halfspace intersections, retaining only those with nonempty interior. These cover the parent, including the splitting hyperplane. At most $R_d(H)$ cells occur at each stage. Their constraints compress to two bounds per original row. Interior is tested by maximizing $\delta\in[0,1]$ with a common margin $\delta$ in every inequality; positivity is equivalent to nonempty interior since zero normals were removed. Thus $O((H+1)R_d(H))$ rational LP tests suffice. Since $m,d,\tau=O(\varphi)$, $\Phi=O(d^3(\tau+1))$, and $\log(\ell+1)=O(\log(D+1)+\langle\eps\rangle)$, each test has polynomial encoding size and the total enumeration cost is $(\varphi\ell)^{O(d)}$.
+Incrementally split each closed cell into its two closed halfspace intersections, retaining only those with nonempty interior. These cover the parent, including the splitting hyperplane. At most $R_d(H)$ cells occur at each stage. Their constraints compress to two bounds per original row. Interior is tested by maximizing $\delta\in[0,1]$ with a common margin $\delta$ in every inequality; positivity is equivalent to nonempty interior since zero normals were removed. Thus $O((H+1)R_d(H))$ rational LP tests suffice. Since $m,d,\tau=O(\varphi)$ and $\Phi=O(d^3(\tau+1))$, each test has encoding size $\poly(\varphi,\log(\ell+1))$ and the total enumeration cost is $(\varphi\ell)^{O(d)}$. For~\eqref{eq:HT}, $\log(\ell+1)=O(\log(D+1)+\langle\eps\rangle)$, giving the stated $\poly(\varphi)$ size under unary exponent encoding.
 
 Finally, replace $a\le s_i(\mathbf{x})\le c$ by
 \[
@@ -394,23 +397,23 @@ Algorithm~\ref{alg:sampling} enumerates the refined cells and compares their rep
 \textbf{Refined-cell sampling}\par\smallskip
 \textbf{Input:} bounded rational $P$, polynomial $f$, degree bound $D\ge\max\{1,\deg f\}$, accuracy $0<\eps\le1$.
 \begin{enumerate}[leftmargin=1.5em,itemsep=2pt,topsep=4pt]
-\item Clear row denominators. If $f$ is constant, solve integer feasibility and return a feasible point or \textsf{INFEASIBLE}. Otherwise, if $P=\varnothing$, return \textsf{INFEASIBLE}.
+\item Clear row denominators. If $P=\varnothing$, return \textsf{INFEASIBLE}; otherwise remove zero constraint rows. If $f$ is constant, solve integer feasibility and return a feasible point or \textsf{INFEASIBLE}.
 \item Form the shifted slacks, compute $\Phi$, set $\ell=\max\{D^2,\lceil D/\sqrt\eps\rceil\}$, and construct the thresholds~\eqref{eq:thresholds}.
 \item Enumerate closed chambers in $Q$, obtaining cells $C$. Form $\widehat C$ by rounding slack bounds; if integer-feasible, obtain $\mathbf z_C\in\widehat C\cap\Z^d$.
 \item If no representative exists, return \textsf{INFEASIBLE}; otherwise return one minimizing $f(\mathbf z_C)$, evaluated exactly.
 \end{enumerate}
 \end{minipage}};
 \end{tikzpicture}
-\caption{The cover and representatives depend only on $P,D,\eps$.}
+\caption{The full sampling construction depends only on $P,D,\eps$. The constant-objective shortcut returns one feasible point without constructing the reusable representative set.}
 \label{alg:sampling}
 \end{algorithm}
 
 \begin{proof}[Correctness in Theorem~\ref{thm:main}]
-Every integer-feasible cell contributes a feasible representative, and the closed cells cover $P\cap\Z^d$. Thus $Y=\varnothing$ if and only if $P\cap\Z^d=\varnothing$. Otherwise, Proposition~\ref{prop:extrema} and $\ell=\max\{D^2,\lceil D/\sqrt\eps\rceil\}$ give
+The constant-objective shortcut is exact. Otherwise, every integer-feasible cell contributes a feasible representative, and the closed cells cover $P\cap\Z^d$. Thus $Y=\varnothing$ if and only if $P\cap\Z^d=\varnothing$. Otherwise, Proposition~\ref{prop:extrema} and $\ell=\max\{D^2,\lceil D/\sqrt\eps\rceil\}$ give
 \[
  0\le\min_Y f-f_{\min}\le \frac{D^2}{\ell^2}(f_{\max}-f_{\min})\le\eps (f_{\max}-f_{\min}).
 \]
-The algorithm returns a minimizer on $Y$. The cover and representatives depend only on $P,D,\eps$, so the same set works for every polynomial of degree at most $D$.
+The algorithm returns a minimizer on $Y$. In the full sampling construction, the cover and representatives depend only on $P,D,\eps$, so the same set works for every polynomial of degree at most $D$.
 \end{proof}
 
 It remains to account for bit operations. There are three costs: constructing the arrangement, producing integer representatives, and evaluating the objective. The distinction between the number of cells and the sizes of their descriptions is important: refinement increases the former polynomially in $1/\sqrt\eps$, whereas it increases the threshold bit lengths only logarithmically.
@@ -421,7 +424,7 @@ Each of at most $R_d(H)$ queries has $d$ integer variables and a total encoding 
 \begin{equation}\label{eq:ilp-size}
  S_C=O\!\left(m(d+1)(\tau+\Phi+1)+d+m\right).
 \end{equation}
-Fixed-dimensional integer linear feasibility with witness production takes $2^{O(d\log(d+1))}S_C^{O(1)}$ bit operations using Kannan's algorithm~\cite{Kannan}, improving the dimension dependence of Lenstra's algorithm~\cite{Lenstra}. Every integer point returned from a shifted cell belongs to the original bounded polytope. Accordingly, every returned coordinate has at most $\Phi+O(1)$ bits by~\eqref{eq:integer-bounds}; its bit length grows logarithmically with its magnitude. Notice also that~\eqref{eq:ilp-size} has no dependence on $\ell$ other than the number of cells, because the threshold inequalities have already been rounded to integer slack bounds.
+Fixed-dimensional integer linear feasibility with witness production takes $2^{O(d\log(d+1))}\poly(S_C)$ bit operations using Kannan's algorithm~\cite{Kannan}, improving the dimension dependence of Lenstra's algorithm~\cite{Lenstra}. Every integer point returned from a shifted cell belongs to the original bounded polytope. Accordingly, every returned coordinate has at most $\Phi+O(1)$ bits by~\eqref{eq:integer-bounds}; its bit length grows logarithmically with its magnitude. Notice also that~\eqref{eq:ilp-size} has no dependence on $\ell$ other than the number of cells, because the threshold inequalities have already been rounded to integer slack bounds.
 
 Finally, the coordinate bound ensures that exact objective evaluation also has polynomial bit cost, even though feasible coordinates can be numerically large.
 The integer coefficients of $f$ have bit length at most $\langle f\rangle$. If $\mathbf{x}\in P\cap\Z^d$, every monomial has absolute value at most $2^{D\Phi}$. Each value of $f(\mathbf{x})$, and the intermediates obtained by evaluating monomials and summing them, has $O(\langle f\rangle+D\Phi+\log(|\mathcal A|+1))$ bits. Repeated squaring evaluates the explicit exponent vectors in a number of arithmetic operations polynomial in $\langle f\rangle+d+\log(D+1)$. Even schoolbook integer arithmetic therefore gives
@@ -430,9 +433,19 @@ The integer coefficients of $f$ have bit length at most $\langle f\rangle$. If $
 \end{equation}
 bit operations per representative. The case of the zero polynomial is immediate. Returning an exact integer objective value also fits this bound. No unit-cost assumption on rational arithmetic is used.
 
+Combining enumeration, integer feasibility, and evaluation gives the bit-operation bound
+\[
+\begin{aligned}
+ T\le{}&O((H+1)R_d(H))\,
+          \poly(\varphi,\log(\ell+1))\\
+       &+R_d(H)\,2^{O(d\log(d+1))}\poly(\varphi)\\
+       &+R_d(H)\,\poly(\langle f\rangle+d+D\Phi).
+\end{aligned}
+\]
+
 By Lemma~\ref{lem:arrangement}, the number of cells and enumeration steps is $(\varphi\ell)^{O(d)}$, since $m,d,\tau=O(\varphi)$ and $\Phi=O(d^3(\tau+1))$. Under our unary-exponent encoding, $D=O(\varphi)$ and all auxiliary bit lengths are polynomially bounded in $\varphi$. Each enumeration test and objective evaluation therefore has polynomial bit cost, and each integer-feasibility query takes $2^{O(d\log(d+1))}\poly(\varphi)$ bit operations. Substituting $\ell=\max\{D^2,\lceil D/\sqrt\eps\rceil\}$ gives the total running time $(\varphi D/\eps)^{O(d)}$, proving Theorem~\ref{thm:main}. For binary-encoded exponents, the per-query and evaluation bounds instead retain a factor $\poly(\varphi,D)$, which is also absorbed into this total bound.
 
-For fixed $P,D,d$, the number of integer-feasibility queries is $O(\eps^{-d/2})$. Objective coefficients enter only through exact evaluation~\eqref{eq:eval}. Normalization preserves polynomial encoding size, so the bound also applies to rational inequalities.
+For fixed $P,D,d$, there are $O(\eps^{-d/2})$ integer-feasibility queries and $O(\eps^{-(d+1)/2})$ LP enumeration tests. These are call counts, not bit-operation bounds. Objective coefficients enter only through exact evaluation~\eqref{eq:eval}. Normalization preserves polynomial encoding size, so the bound also applies to rational inequalities.
 
 \begin{proof}[Proof of Corollary~\ref{cor:max}]
 Applying Proposition~\ref{prop:extrema} to $-f$ gives $f_{\max}-f(\mathbf{x}_{\eps})\le\eps (f_{\max}-f_{\min})$. Nonnegativity on $P\cap\Z^d$ implies $f_{\max}-f_{\min}\le f_{\max}$.
@@ -493,7 +506,9 @@ For a supplied factorization $f(\mathbf{x})=g(B\mathbf{x})+\mathbf c^\top\mathbf
 For continuous extensions, Pierzcha\l a~\cite[Theorem~1.4]{Pierzchala} proves that polynomial images of compact Markov sets remain Markov sets when the map has full generic rank in the target. Combined with~\cite[Proposition~2]{PV}, this supplies norming meshes on further continuous sets. It does not supply integer representatives or uniform encoding bounds for the Markov constants, and hence does not by itself extend our integer FPTAS.
 
 \section*{AI assistance and formal verification}
-Robert Hildebrand posed the approximation question, proposed using the CHKM decomposition from the Ari--Hildebrand work, and directed the mathematical scope, encoding analysis, comparisons, and revisions. OpenAI's Codex assistant contributed mathematical exploration, proposed arguments, literature searches, drafting, and computational checks. The extended manuscript records these contributions in detail; responsibility for the manuscript remains with the human author.
+The author used OpenAI's Codex assistant extensively in developing this paper. The starting point was the author's proposal to apply the CHKM reflecting-set decomposition, as used in the Ari--Hildebrand work, to polynomial approximation. The author contributed the problem formulation and choice of geometric approach, supplied relevant literature, and worked through the proposed arguments in an ongoing exchange with the assistant. He also guided the encoding and complexity analysis and the presentation of the results.
+
+The assistant helped develop and revise proofs, carry out calculations, investigate related literature, and prepare the manuscript, Lean formalizations, and computational examples. Reviews from additional AI-assisted discussions were used to identify points requiring further examination and to suggest improvements. AI assistance therefore included substantive mathematical work as well as exposition. The author selected and revised the material included in the paper and is responsible for its claims and attribution. The formal checks provide additional evidence for the specific statements described below; they do not certify the entire manuscript.
 
 The accompanying Lean development contains 256 checked results. These include the symmetrization identity and degree bound, sampled Markov estimate, affine line restriction, refinement parameter, and representative selection. Verified geometry includes coverage and relative widths of the actual shifted-slack chamber closures, their rational descriptions, compression to two bounds per row, the LP interior criterion, and the geometric chamber-count bound. These are connected to the integer approximation guarantee. The mixed-integer reduction combines verified convex rounding, grid membership, polynomial scaling, and error transfer, conditional on published integral-slice and Carath\'eodory data and the scaled solver guarantee. Complete LP query encoding and its polynomial-size bound, threshold and cell encoding bounds, polynomial and constraint encoding bounds, rational denominator clearing, determinant and slack estimates, the translation of assumed CHKM estimates to $\Phi$, and runtime arithmetic are also checked under their stated hypotheses. Classical Markov inequalities, published geometric inputs, oracle implementations, chamber enumeration, and full bit complexity remain external. Sources, reproducible axiom audits, and a detailed statement of the verification scope accompany the extended manuscript.
 
