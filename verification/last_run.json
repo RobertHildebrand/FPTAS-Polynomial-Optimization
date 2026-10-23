@@ -1,5 +1,5 @@
 {
-  "started_utc": "2026-10-20T23:32:42.037781+00:00",
+  "started_utc": "2026-10-21T10:03:19.794468+00:00",
   "success": true,
   "toolchain": "leanprover/lean4:v4.34.0-rc2",
   "sha256": {
@@ -23,13 +23,13 @@
     "verification/lean/check_chamber_insertion.py": "e1f8a56580efbfc40d186cf4292da74b7d39704fd33c5b4cfa4c240efbb458a4",
     "verification/lean/check_cell_encoding.py": "8bbf8bc80d8272b3f08c29bf94ae1ec94f060349e1940543d7addf49b70eeb20",
     "verification/check_all.py": "6389029e1eb75fbc8080df4b25df4d8fe87bad0428484c97a6f11e4851f096f0",
-    "verification/make_review_draft.py": "685d42fdf1bf8a8d953794c8223896eea04f5dbc70231e17675e4423ee4d4a0d",
+    "verification/make_review_draft.py": "98204df30ef88731a40c3eb4c3bc547669af6a0002cda734b1684e113b985dee",
     "verification/README.md": "2b0b97242cbb460e03d71d98ba126eff189082e1533015e87cdea5cb73802f0e",
-    "verification/reference_audit.txt": "15c4a986b93de022a5ec8e86b1bf3a092d6cf0fc4b04aefa347c040439a57be4",
-    "README.md": "5f39731cb8b928ad1bd81ae1e74a9d92ac652d11ab439fef94dd8f7eda81a0e2",
-    "reflecting_cells_fptas_review.tex": "52dd9b45a47f47baa31157b43b2193ffc50435b87674293cda74b3b922cb2eda",
-    "reflecting_cells_fptas_short.tex": "c25ffe4a998f3a1169e232738161a0d7ae054e79af78cd0bb6a48c7dcbd76a35",
-    "reflecting_cells_fptas.tex": "044a56303b910f6b850120eb56980cfe6ab694fb635d1ff7890c879826bd8eb0"
+    "verification/reference_audit.txt": "5d29e4d10e5ecdf009b1beab7b686e4b4459c125157f5f28099377684d5110cb",
+    "README.md": "957dc1606fa8b0a07bba200fc5d02499a82f4ac293fff2a0ae8ca6e011ed292a",
+    "reflecting_cells_fptas_review.tex": "2e774dc0d1c68faf783b1ad5c589e336b54edb3b71fba743270e1b65d96f3cec",
+    "reflecting_cells_fptas_short.tex": "26a37a7ad5cfd6463bbe041bec9d32240b5ae5dcf9eff0c387f1c370ee4c3a2a",
+    "reflecting_cells_fptas.tex": "a37d3aa0b1a83b1973df13cbf172809be5b5579de7423c092790368471feda64"
   },
   "checks": [
     {
@@ -65,5 +65,5 @@
       "exit_code": 0
     }
   ],
-  "finished_utc": "2026-10-20T23:35:20.444117+00:00"
+  "finished_utc": "2026-10-21T10:05:47.143864+00:00"
 }

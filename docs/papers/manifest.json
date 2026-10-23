@@ -1,14 +1,14 @@
 {
   "reflecting_cells_fptas_short": {
-    "source_sha256": "c25ffe4a998f3a1169e232738161a0d7ae054e79af78cd0bb6a48c7dcbd76a35",
-    "pdf_sha256": "d3afe28b0ba3ea6c16eeb02a956d2144f8a0272b90bd7b9ec76c369aa27dd625"
+    "source_sha256": "13d5c7925dc41dbf523e6b142ddedaef588956a97c5a7769383c31cd490aa753",
+    "pdf_sha256": "a0214255a626fe01fd26b3b0e38b70ab3eec84310cb08fb5d0b877918b0c8da5"
   },
   "reflecting_cells_fptas": {
-    "source_sha256": "044a56303b910f6b850120eb56980cfe6ab694fb635d1ff7890c879826bd8eb0",
-    "pdf_sha256": "283ee1859e8c8941f3a20675b124e97316e9589094624a52d76249e435a49681"
+    "source_sha256": "a8435b61f115c5953d1ddacabab3e8ccec7349730a86c39257bf9ebc86267779",
+    "pdf_sha256": "d15f55b32a7390b2f25c80841e312904d80f27353d10d97ccb8a7f24af0ebba7"
   },
   "reflecting_cells_fptas_review": {
-    "source_sha256": "52dd9b45a47f47baa31157b43b2193ffc50435b87674293cda74b3b922cb2eda",
-    "pdf_sha256": "82ace24f24d7b2fcbdb1f9ad6ad114d0de0bfe4ad9e4466fce7b983dde968012"
+    "source_sha256": "a638cf43d1758fa95255f66b9167698af8faf6cff9a777c8d316f4371fb5917a",
+    "pdf_sha256": "6bb96b68ce268f98559248721d57d8782471ab6b8132bdc5f14ce16bd2b12f5d"
   }
 }

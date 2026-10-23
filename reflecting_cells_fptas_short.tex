@@ -33,12 +33,13 @@
 \begin{document}
 \begin{frontmatter}
 \title{A short proof of a range-relative FPTAS for polynomial integer optimization over bounded polyhedra}
-\author{Robert Hildebrand}
+\author{Robert Hildebrand\corref{cor1}}
+\cortext[cor1]{Corresponding author.}
 \ead{rhil@vt.edu}
 \affiliation{organization={Grado Department of Industrial and Systems Engineering, Virginia Tech},
-  city={Blacksburg}, state={Virginia}, country={USA}}
+  city={Blacksburg}, state={Virginia}, postcode={24061}, country={USA}}
 \begin{abstract}
-We give a short proof of a fully polynomial-time range-relative approximation scheme for polynomial optimization over the integer points of a bounded rational polyhedron in fixed dimension. Boundedness supplies a finite slack decomposition and a finite integer objective range. The proof combines the reflecting-set decomposition of Cook, Hartmann, Kannan, and McDiarmid with Markov's polynomial derivative inequality and uses one integer linear feasibility query per refined cell. The running time is polynomial in the input encoding size, the numerical degree, and the reciprocal accuracy.
+We give a short proof of a fully polynomial-time range-relative approximation scheme for polynomial optimization over the integer points of a bounded rational polyhedron in fixed dimension. The proof combines the reflecting-set decomposition of Cook, Hartmann, Kannan, and McDiarmid with Markov's polynomial derivative inequality and uses one integer linear feasibility query per refined cell. The running time is polynomial in the input encoding size, numerical degree, and reciprocal accuracy.
 \end{abstract}
 \begin{keyword}
 Integer programming \sep Polynomial optimization \sep Approximation schemes \sep Fixed dimension \sep Reflecting cells
@@ -155,7 +156,7 @@ bit operations, with an absolute constant in the exponent.
 
 \paragraph{Comparison with prior algorithms}
 
-The short rational generating functions used by De Loera et al. build on Barvinok's lattice-point counting algorithm~\cite{Barvinok}. Their approach~\cite{DHKW06,DHKW08} computes weighted sums involving $f^q$, where $q=O(1+\eps^{-1}\log N)$ and $N=|P\cap\Z^d|$. The standard Barvinok counting bound is $\langle A,\mathbf b\rangle^{O(d\log(d+1))}$~\cite[Theorem~2.5]{PakPanova}; our entire algorithm has bound $\varphi^{O(d)}$ for fixed $D,\eps$. This compares available upper bounds, not a runtime separation: counting alone does not describe their FPTAS, and our potentially large cell count does not establish practical superiority.
+The short rational generating functions used by De Loera et al. build on Barvinok's lattice-point counting algorithm~\cite{Barvinok}. Their approach~\cite{DHKW06,DHKW08} computes weighted sums involving $f^q$, where $q=O(1+\eps^{-1}\log N)$ and $N=|P\cap\Z^d|$. The standard Barvinok counting bound is $\langle A,\mathbf b\rangle^{O(d\log(d+1))}$~\cite[Theorem~2.5]{PakPanova} (under their arithmetic-cost convention; see Section~8.8); our entire algorithm has bound $\varphi^{O(d)}$ for fixed $D,\eps$. This compares available upper bounds, not a runtime separation: counting alone does not describe their FPTAS, and our potentially large cell count does not establish practical superiority.
 
 Del Pia's quadratic scheme~\cite[Proposition~3 and Section~6.2]{DelPia} uses affine optimization over boxes after geometric preprocessing, with flatness recursion in the remaining cases. For fixed quadratic rank $k$ and integer dimension $p$, it uses $O_{k,p}(1+\eps^{-k/2})$ MILP subproblems and allows variable continuous dimension. Our feasibility-call exponent matches $k/2$ at $k=d$, but our enumeration costs an additional factor of order $\eps^{-1/2}$. Our advantages are arbitrary degree and objective-independent representatives; we do not recover his low-rank dependence.
 
@@ -178,10 +179,8 @@ In Schrijver's encoding convention~\cite[Section~2.1]{Schrijver}, each normalize
 
 Following the outward perturbation in~\cite[proof of Theorem~2.1, p.~29]{CHKM}, define
 \[
-\begin{gathered}
- \widetilde P=\{\mathbf{x}:A\mathbf{x}\le\mathbf b+\tfrac12\mathbf1\},\\
- s_i(\mathbf{x})=b_i+\tfrac12-\mathbf a_i^\top\mathbf{x}.
-\end{gathered}
+ \widetilde P:=\{\mathbf{x}:A\mathbf{x}\le\mathbf b+\tfrac12\mathbf1\},\quad
+ s_i(\mathbf{x}):=b_i+\tfrac12-\mathbf a_i^\top\mathbf{x}.
 \]
 Since $A,\mathbf b$ are integral, $\widetilde P\cap\Z^d=P\cap\Z^d$. Every integer point of $P$ has $s_i\ge1/2$. We will extrapolate real segments in $\widetilde P$ and use integrality to return their integer samples to $P$. This shift is applied only to the pure-integer problem, including the scaled integer problem in the mixed-integer reduction.
 
@@ -497,20 +496,18 @@ For any refinement $\ell\ge1$, the representatives include every vertex of the i
 
 The reflecting cover is independent of objective coefficients, so its representatives can be reused for any polynomial of degree at most $D$. Multiplicative slack bins connect the construction to approximate Pareto methods~\cite{PY} and affine slicing~\cite{HWZ}; Markov-based norming meshes provide the continuous sampling analogue~\cite[Propositions~1--3]{PV}. Our error certificate uses feasible integer samples and the integer objective range.
 
-Cook, Hartmann, Kannan, and McDiarmid also give a fully polynomial-time approximation scheme for lattice-point counting in fixed dimension~\cite[Theorem~3.1]{CHKM}. Its dense-lattice case uses volume estimates, while its thin case recurses on lower-dimensional slices. Combining this architecture with Markov estimates suggests an alternative route to polynomial optimization, replacing volume estimates by feasible sampling. Establishing the range-relative guarantee and bit complexity would require further analysis; the refined reflecting cover gives the direct proof used here.
+CHKM also give a lattice-point counting FPTAS~\cite[Theorem~3.1]{CHKM}, combining volume estimates with recursion on lower-dimensional slices. Replacing volume estimates by Markov-controlled sampling suggests another route to polynomial optimization, but its guarantee and bit complexity require further analysis.
 
-A simple principle allows other local procedures: if $|f-h_C|\le\delta_C$ on the feasible part of each cell and a feasible candidate minimizes $h_C$ there within $\eta_C$, selecting the best candidate has error at most $2\delta_{C^*}+\eta_{C^*}$, where $C^*$ contains a global optimum. Indeed, compare the candidate to that optimum through $h_{C^*}$ and apply the two residual bounds. An FPTAS also needs polynomial bounds on construction, local computation, and encoding.
+More generally, if $|f-h_C|\le\delta_C$ on each feasible cell and a candidate minimizes $h_C$ within $\eta_C$, choosing the best candidate gives error at most $2\delta_{C^*}+\eta_{C^*}$, where $C^*$ contains an optimum. This follows by comparing through $h_{C^*}$ and applying the two residual bounds. An FPTAS additionally requires polynomial construction, local computation, and encoding costs.
 
-For a supplied factorization $f(\mathbf{x})=g(B\mathbf{x})+\mathbf c^\top\mathbf{x}$ with few rows in $B$, affine optimization could handle the remaining directions without refinement. Obtaining a rank-sensitive cover with sufficient feasible samples is an open direction for this approach; changing the oracle alone does not reduce our cell count. Likewise, extension to a bounded nonpolyhedral set requires a cover supporting the same feasible progressions and integer-feasibility queries solvable in polynomial time for fixed dimension. An outer polyhedral relaxation alone does not ensure that reflected points remain feasible.
-
-For continuous extensions, Pierzcha\l a~\cite[Theorem~1.4]{Pierzchala} proves that polynomial images of compact Markov sets remain Markov sets when the map has full generic rank in the target. Combined with~\cite[Proposition~2]{PV}, this supplies norming meshes on further continuous sets. It does not supply integer representatives or uniform encoding bounds for the Markov constants, and hence does not by itself extend our integer FPTAS.
+For $f(\mathbf{x})=g(B\mathbf{x})+\mathbf c^\top\mathbf{x}$ with few rows in $B$, affine optimization might handle the remaining directions. A rank-sensitive cover with sufficient feasible samples remains open; changing the oracle alone does not reduce our cell count. Nonpolyhedral extensions likewise require feasible progressions and efficient integer-feasibility queries; an outer polyhedral relaxation alone is insufficient. For continuous sets, polynomial images of compact Markov sets remain Markov under a full-generic-rank hypothesis~\cite[Theorem~1.4]{Pierzchala}, yielding further norming meshes~\cite[Proposition~2]{PV}. This supplies neither integer representatives nor uniform encoding bounds for the Markov constants.
 
 \section*{AI assistance and formal verification}
 The author used OpenAI's Codex assistant extensively in developing this paper. The starting point was the author's proposal to apply the CHKM reflecting-set decomposition, as used in the Ari--Hildebrand work, to polynomial approximation. The author contributed the problem formulation and choice of geometric approach, supplied relevant literature, and worked through the proposed arguments in an ongoing exchange with the assistant. He also guided the encoding and complexity analysis and the presentation of the results.
 
 The assistant helped develop and revise proofs, carry out calculations, investigate related literature, and prepare the manuscript, Lean formalizations, and computational examples. Reviews from additional AI-assisted discussions were used to identify points requiring further examination and to suggest improvements. AI assistance therefore included substantive mathematical work as well as exposition. The author selected and revised the material included in the paper and is responsible for its claims and attribution. The formal checks provide additional evidence for the specific statements described below; they do not certify the entire manuscript.
 
-The accompanying Lean development contains 256 checked results. These include the symmetrization identity and degree bound, sampled Markov estimate, affine line restriction, refinement parameter, and representative selection. Verified geometry includes coverage and relative widths of the actual shifted-slack chamber closures, their rational descriptions, compression to two bounds per row, the LP interior criterion, and the geometric chamber-count bound. These are connected to the integer approximation guarantee. The mixed-integer reduction combines verified convex rounding, grid membership, polynomial scaling, and error transfer, conditional on published integral-slice and Carath\'eodory data and the scaled solver guarantee. Complete LP query encoding and its polynomial-size bound, threshold and cell encoding bounds, polynomial and constraint encoding bounds, rational denominator clearing, determinant and slack estimates, the translation of assumed CHKM estimates to $\Phi$, and runtime arithmetic are also checked under their stated hypotheses. Classical Markov inequalities, published geometric inputs, oracle implementations, chamber enumeration, and full bit complexity remain external. Sources, reproducible axiom audits, and a detailed statement of the verification scope accompany the extended manuscript.
+The accompanying Lean development contains 256 checked results covering the sampled approximation bound, reflecting-cell geometry, mixed-integer reduction, and encoding and runtime calculations under explicit hypotheses. Classical Markov inequalities, published geometric inputs, oracle implementations, and the complete algorithmic bit-complexity analysis remain external; the full FPTAS is not formally verified. The supplementary verification guide maps the paper to the Lean statements, assumptions, and reproduction steps; the \href{https://github.com/RobertHildebrand/FPTAS-Polynomial-Optimization/tree/main/verification}{repository} provides the source and detailed verification scope.
 
 \begin{thebibliography}{99}
 \bibitem{DHKW06} J.~A.~De~Loera, R.~Hemmecke, M.~K\"oppe, and R.~Weismantel.

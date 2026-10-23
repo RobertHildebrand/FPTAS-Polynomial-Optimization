@@ -1,0 +1,13 @@
+{
+  "date": "2026-10-21",
+  "source": "reflecting_cells_fptas_short.tex",
+  "sha256": "13d5c7925dc41dbf523e6b142ddedaef588956a97c5a7769383c31cd490aa753",
+  "pages": 8,
+  "status": "Eight-page draft; finalize personal declarations.",
+  "supplement_pages": 7,
+  "supplement_source_sha256": "e4ec0cd3afa18210690a495bf07d2244bc5d978f30d06440df5eefdf896c15ba",
+  "lean_baseline_commit": "c056413fdc1ffb75934a57326803490fd548d92e",
+  "audit_record_sha256": "d3d62267392ebddebc29b56d06ed26c03856ae122f47d0a11fe6de106a37f636",
+  "arxiv_source_sha256": "df78fa6a1d82d4469b0d0336bc8db7a76f6e4b02f53bd40834ca64f9d806273a",
+  "arxiv_layout": "Journal text width preserved; text block shifted 20pt right for arXiv stamp."
+}

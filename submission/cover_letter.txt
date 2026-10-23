@@ -1,0 +1,26 @@
+October 21, 2026
+
+Editors
+Operations Research Letters
+
+Dear Editors,
+
+Please consider my manuscript, "A short proof of a range-relative FPTAS for polynomial integer optimization over bounded polyhedra," for publication in Operations Research Letters. The paper builds on the polynomial approximation schemes of De Loera, Hemmecke, Koeppe, and Weismantel, established in Mathematics of Operations Research (2006) and Mathematical Programming (2008), and gives a short geometric proof of their range-relative guarantee for the bounded integer problem. I suggest the Mixed Integer Optimization area.
+
+The contribution is a different proof and algorithmic construction in fixed dimension: refined reflecting cells from the Cook-Hartmann-Kannan-McDiarmid decomposition supply long feasible integer progressions, and Markov's polynomial derivative inequality controls objective variation on those progressions. The algorithm requires only one integer linear feasibility query per cell, followed by exact objective evaluation.
+
+The analysis provides an explicit encoding-sensitive running-time bound and distinguishes the number of integer feasibility queries from the cost of enumerating cells. A mixed-integer consequence combines the integral-slice scaling of De Loera, Hemmecke, Koeppe, and Weismantel with a Markov-based rounding estimate. Thus the paper offers an alternative geometric route to their approximation results, with explicit complexity accounting.
+
+I believe the focused proof and its connection between polyhedral geometry and polynomial approximation are well suited to the journal's methodological readership. The public companion repository contains an interactive explanation, computational examples, and partial Lean formalizations, with the verified statements and remaining hypotheses identified explicitly:
+https://github.com/RobertHildebrand/FPTAS-Polynomial-Optimization
+
+The manuscript discloses the use of AI assistance in its mathematical development, writing, and supporting code. The Lean development verifies specified conditional statements, rather than the entire algorithm or its implementation. I take responsibility for the submitted work.
+
+Thank you for considering the manuscript.
+
+Sincerely,
+Robert Hildebrand
+Grado Department of Industrial and Systems Engineering
+Virginia Tech
+Blacksburg, Virginia 24061, USA
+rhil@vt.edu

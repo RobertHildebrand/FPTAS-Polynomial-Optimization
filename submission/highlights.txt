@@ -1,0 +1,4 @@
+- Refined reflecting cells give a short proof of a polynomial approximation scheme.
+- One integer feasibility query per cell suffices for polynomial approximation.
+- Markov inequalities control error relative to the integer objective range.
+- A Markov-based grid reduction yields a mixed-integer consequence.

@@ -1,0 +1,52 @@
+SUBMISSION INSTRUCTIONS - October 21, 2026
+
+READINESS
+The freshly compiled short manuscript is 8 pages, with all references included and no overfull boxes. ORL's current guide limits articles to eight journal pages; a local elsarticle count is an estimate, not a publisher guarantee. Inspect the publisher-generated PDF too. The package includes the tightened definitions, shorter Lean verification summary, and condensed discussion. Personal declarations still need finalization.
+
+The supplied current ORL guide confirms: single-anonymized review; editable LaTeX source; 250-word maximum abstract; 1-7 keywords; optional 3-5 highlights, each at most 85 characters; a competing-interest Word document generated through Elsevier's declarations tool. The manuscript's abstract and five keywords meet those numerical requirements. The affiliation now includes Blacksburg, Virginia 24061, USA, and the author is explicitly marked as corresponding author. No funding has been confirmed; the no-funding text is in declarations.txt. Competing interests and absence of another active journal submission remain unconfirmed.
+
+
+
+ARXIV
+1. Use your arXiv author account: https://arxiv.org/user . Complete registration/endorsement if requested. Recommended primary category: math.OC. cs.DS is an optional cross-list, not a requirement.
+2. Choose the version you want to make public. I recommend the clean short paper for consistency with the journal submission; keep the extended and annotated versions in the repository. Do not submit the annotated review draft as the main paper.
+3. Upload arxiv_source.zip (one top-level .tex file). It contains the current short source with embedded bibliography and TikZ figures, plus the verification supplement in anc/ as an ancillary PDF. Select only reflecting_cells_fptas_short.tex as the main TeX file. No external figures or .bbl are needed by the main source. Do not upload the whole repository, local paths, downloaded reference PDFs, build files, or multiple competing top-level manuscripts. arXiv requires the source for a LaTeX-authored paper, rather than only its PDF.
+4. Let arXiv detect the main .tex and choose PDFLaTeX if needed. Inspect its generated PDF, equations, figures, references, and log. Local success does not guarantee identical arXiv output.
+5. Enter title, author and abstract from metadata.txt. Update the comments/page count if changed. Leave journal reference and DOI blank. A cover letter is not needed for arXiv.
+6. Choose a license yourself. The arXiv perpetual, non-exclusive license is an available conservative option; CC BY is another option if you intend broader reuse. The license for an already posted version is irrevocable. Check any applicable institutional obligations before selecting it.
+7. Review the submission agreement and submit yourself. Posting is subject to moderation. Once announced, use the assigned arXiv link in the journal submission. Later revisions should replace the same arXiv record, not create a new one.
+
+OPERATIONS RESEARCH LETTERS
+1. Start at the official journal page and use "Submit your article": https://www.sciencedirect.com/journal/operations-research-letters . This avoids relying on an old portal URL. Log in as author; choose a regular research submission, not a special issue unless intended.
+2. Choose Mixed Integer Optimization if the portal requests an area. Approximation Algorithms for Combinatorial Optimization Problems is a reasonable alternative. Keep the author's identity on the manuscript: the current guide specifies single-anonymized review.
+3. Supply the title, abstract, five keywords, author, full affiliation/postal address, corresponding email and ORCID (if requested). Use the confirmed no-funding statement. Complete the interests tool and exclusive-submission declarations truthfully.
+4. Upload the final clean manuscript PDF for review and editable LaTeX source in the file categories the portal requests. Rebuild the PDFs/sources if you make further manuscript edits. The review draft and extended paper are not substitutes for the main article.
+5. Upload cover_letter.pdf or paste cover_letter.txt where requested. Add the no-other-journal sentence only after confirming it. Add an arXiv identifier only after one exists. Edit the date if submitting later.
+6. Highlights are encouraged, not mandatory. Copy highlights.txt into a separate editable document named highlights.docx if that file type is required by the portal. Each supplied bullet meets the 85-character maximum. This file is not a mandatory graphical abstract; the repository banner is not a submission requirement.
+7. Upload the Word declaration produced by Elsevier's declarations tool. Add funding and data/code availability statements where the portal requests them and to the manuscript as appropriate. Preserve the existing AI disclosure; align its heading/placement with the guide.
+8. Upload verification_supplement.pdf as supplementary material, with verification_supplement.tex as its editable source if requested. Caption: "Scope and reproduction of the partial Lean verification: paper-to-theorem map, explicit assumptions and exclusions, and pinned reproduction instructions." The main manuscript now references it. Keep the repository link for the full Lean development. If uploading a supplementary archive, use a minimal reproducible package, describe its scope and assumptions, and cite it in the manuscript. Do not claim end-to-end formal certification. Do not upload .lake caches or third-party copyrighted PDFs.
+9. If reviewers are requested, propose genuine subject experts only after checking recent collaborations and other conflicts. No reviewer list is fabricated in this package.
+10. Inspect the publisher-generated combined PDF and its page count. Confirm that the article is at most the journal's eight-page limit and that declarations/source files are included. Read and accept the submission terms yourself. Save the submission number. Do not submit to another journal while ORL is considering it.
+
+PUBLIC ACCESS AND COSTS
+The supplied ORL guide permits preprints. Posting to arXiv does not by itself constitute prohibited prior journal publication. ORL supports open access, but do not assume an open-access fee is required or covered; select a publication route after reviewing current options and institutional eligibility. No paid services or submissions have been authorized or purchased here.
+
+PROVENANCE AND CHECKS
+The manuscript PDF in this folder is a fresh build of the current short source, not the older PDF linked by the site. The source snapshot hash is in manifest.json. The existing Lean audit record may predate manuscript edits. Rerun verification/check_all.py before describing the entire submission snapshot as matching a fresh audit. No mathematical Lean changes were made or new Lean audit run in this packaging task.
+
+SOURCES
+Current ORL Guide for Authors, supplied by the author October 21, 2026:
+https://www.sciencedirect.com/journal/operations-research-letters/publish/guide-for-authors
+Official ORL scope and eight-page limit:
+https://shop.elsevier.com/journals/operations-research-letters/0167-6377
+arXiv submission/source instructions:
+https://info.arxiv.org/help/submit/index.html
+https://info.arxiv.org/help/submit_tex.html
+arXiv licenses:
+https://info.arxiv.org/help/license/index.html
+Elsevier AI policy:
+https://www.elsevier.com/about/policies-and-standards/generative-ai-policies-for-journals
+Elsevier highlights:
+https://www.elsevier.support/publishing/answer/how-do-i-include-highlights-with-my-manuscript
+
+ArXiv layout: arxiv_source.zip contains an arXiv-specific copy of the short source, shifted 20pt right to leave room for the margin stamp. The journal PDF keeps its original layout. Preview: manuscript_arxiv.pdf. Regenerate with python3 submission/build_arxiv.py; check arXiv's stamped preview after upload.

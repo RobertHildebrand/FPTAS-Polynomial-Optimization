@@ -1,0 +1,20 @@
+Title: A short proof of a range-relative FPTAS for polynomial integer optimization over bounded polyhedra
+Author and corresponding author: Robert Hildebrand
+Affiliation: Grado Department of Industrial and Systems Engineering, Virginia Tech
+City/state/postcode/country: Blacksburg, Virginia 24061, USA
+Email: rhil@vt.edu
+Manuscript affiliation follows the supplied journal example: department, institution, city, state, postal code, country; no street address.
+ORCID: enter your existing identifier if requested; not supplied here.
+
+Abstract (copied from the current manuscript; 69 whitespace-delimited words):
+We give a short proof of a fully polynomial-time range-relative approximation scheme for polynomial optimization over the integer points of a bounded rational polyhedron in fixed dimension. The proof combines the reflecting-set decomposition of Cook, Hartmann, Kannan, and McDiarmid with Markov's polynomial derivative inequality and uses one integer linear feasibility query per refined cell. The running time is polynomial in the input encoding size, numerical degree, and reciprocal accuracy.
+
+Keywords: Integer programming; Polynomial optimization; Approximation schemes; Fixed dimension; Reflecting cells
+
+Recommended arXiv primary category: math.OC (Optimization and Control).
+Optional cross-list: cs.DS, only if you judge the algorithms readership appropriate.
+Suggested arXiv comments: 8 pages; companion code, interactive illustrations, and partial Lean verification available at https://github.com/RobertHildebrand/FPTAS-Polynomial-Optimization
+Update the page count if the manuscript is shortened. Leave Journal reference and DOI blank until there is an actual publication.
+
+Recommended ORL area: Mixed Integer Optimization.
+Alternative: Approximation Algorithms for Combinatorial Optimization Problems.

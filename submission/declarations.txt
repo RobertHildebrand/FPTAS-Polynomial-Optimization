@@ -1,0 +1,22 @@
+FUNDING - confirmed by Robert Hildebrand on October 21, 2026
+This research did not receive any specific grant from funding agencies in the public, commercial, or not-for-profit sectors.
+
+DATA AND CODE AVAILABILITY - proposed text
+The Lean formalizations, verification instructions, computational examples, and interactive illustrations supporting this work are publicly available at https://github.com/RobertHildebrand/FPTAS-Polynomial-Optimization. The scope and hypotheses of the partial formal verification are documented in the repository. No external empirical dataset was used.
+
+COMPETING INTERESTS - author confirmation still needed
+Complete Elsevier's declarations tool. If accurate, select "I have nothing to declare" and upload the resulting Word file. No-funding status does not establish absence of competing interests. Do not upload this template as a substitute for the tool-generated declaration.
+
+EXCLUSIVE SUBMISSION AND APPROVAL - author confirmation still needed
+Before final submission, confirm that the work is not under consideration at another journal, has not previously been formally published, and has all required author/institutional approvals. A preprint is permitted by the supplied ORL guide. If true, the following sentence may be added to the cover letter:
+"This manuscript has not been published in a peer-reviewed venue and is not under consideration by another journal."
+
+PREPRINT STATUS
+The manuscript is publicly available through the companion GitHub repository. If posted to arXiv before journal submission, add the actual arXiv identifier and URL to the cover letter/submission form; do not invent an identifier or journal reference.
+
+AI DISCLOSURE
+Retain the manuscript's substantive disclosure of AI assistance and partial verification. It already names the tool, describes its role and human responsibility. The guide recommends a separate pre-reference section titled "Declaration of generative AI and AI-assisted technologies in the manuscript preparation process." Preserve the detailed account of mathematical/code assistance; do not replace it with a language-editing-only claim. Keep Robert Hildebrand as the sole author. Check the current Elsevier policy for the appropriate placement of research/code and illustration disclosures.
+
+OPTIONAL CRediT DRAFT - author to verify roles
+Robert Hildebrand: Conceptualization, Methodology, Formal analysis, Investigation, Validation, Writing - original draft, Writing - review and editing.
+Do not claim Funding acquisition. Add Software or Visualization only if those accurately describe your contribution; AI assistance is disclosed separately, not as a coauthor.
